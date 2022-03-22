@@ -63,4 +63,7 @@ input[type="checkbox"] {
     position: relative;
     top: 2px;
 }
+.submit {
+    text-align: center;
+}
 </style>

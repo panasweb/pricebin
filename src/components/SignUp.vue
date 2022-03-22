@@ -24,6 +24,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue"
 import { validateNewPassword } from "@/utils/validation"
+import {newUser} from '../firebase/auth'
 
 export default defineComponent({
 
@@ -35,13 +36,25 @@ export default defineComponent({
         const acceptedTerms = ref<boolean>(false);
                 const passwordError = ref<string>("");
 
-        function onSubmit() {
+        async function onSubmit() {
             passwordError.value = validateNewPassword(password.value);
 
             if (passwordError.value) {
                 console.log(passwordError.value) 
-            } else {
+            } 
+            else if (password.value !== confirmPassword.value) {
+                console.log("Las contraseñas no son iguales") 
+            }
+            else {
                 console.log("Submitted");
+                const res = await newUser(email.value, password.value);
+
+                if (res.error) {
+                    console.error("Algo salió mal:", res.error);
+                } else {
+                    // Redirigir a Home
+                }
+
             }
 
         }

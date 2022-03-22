@@ -4,9 +4,12 @@ import {
     signInWithEmailAndPassword,
     signOut
 } from "firebase/auth";
+
 import FirebaseAPIResponse from "@/types/FirebaseAPIResponse";
 
-const auth = getAuth();
+import app from './app'
+
+export const auth = getAuth(app);
 
 // Functions that return a Promise must be Awaited
 
@@ -16,7 +19,7 @@ export const newUser = (email: string, password: string): Promise<FirebaseAPIRes
             // Signed in 
             console.log("userCredential");
             console.dir(userCredential);
-            let response: FirebaseAPIResponse = {
+            const response: FirebaseAPIResponse = {
                 error: null,
                 success: 'Signed in succesfully'
             }
@@ -25,7 +28,7 @@ export const newUser = (email: string, password: string): Promise<FirebaseAPIRes
         .catch((error) => {
             const { code, message } = error;
 
-            let response: FirebaseAPIResponse = {
+            const response: FirebaseAPIResponse = {
                 error: message + ' (' + code + ')',
                 success: null
             }
@@ -41,7 +44,7 @@ export const logIn = (email: string, password: string): Promise<FirebaseAPIRespo
             console.log("userCredential");
             console.dir(userCredential);
 
-            let response: FirebaseAPIResponse = {
+            const response: FirebaseAPIResponse = {
                 error: null,
                 success: 'Signed in succesfully'
             }
@@ -50,7 +53,7 @@ export const logIn = (email: string, password: string): Promise<FirebaseAPIRespo
         .catch((error) => {
             const { code, message } = error;
 
-            let response: FirebaseAPIResponse = {
+            const response: FirebaseAPIResponse = {
                 error: message + ' (' + code + ')',
                 success: null
             }
@@ -62,7 +65,7 @@ export const logIn = (email: string, password: string): Promise<FirebaseAPIRespo
 export const logOut = (): Promise<FirebaseAPIResponse> => {
     return signOut(auth).then(() => {
         // Sign-out successful.
-        let response: FirebaseAPIResponse = {
+        const response: FirebaseAPIResponse = {
             error: null,
             success: 'Logged out',
         }
@@ -70,7 +73,7 @@ export const logOut = (): Promise<FirebaseAPIResponse> => {
 
     }).catch((error) => {
         // An error happened.
-        let response: FirebaseAPIResponse = {
+        const response: FirebaseAPIResponse = {
             error: JSON.stringify(error),
             success: null,
         }
