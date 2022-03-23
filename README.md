@@ -1,4 +1,9 @@
-# apprice
+# PriceBin
+
+## Si no tienes yarn instalado:
+```
+npm install --global yarn
+```
 
 ## Project setup
 ```
