@@ -5,13 +5,15 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAaqfSLXvjKdrx5zlp0KlnyTdBiovUg0Qo",
-  authDomain: "pricerice-app.firebaseapp.com",
-  projectId: "pricerice-app",
-  storageBucket: "pricerice-app.appspot.com",
-  messagingSenderId: "149697253000",
-  appId: "1:149697253000:web:051b2c0f962bfda255d93d"
+  apiKey: "AIzaSyAMffnbHwxaR_9imPkZRPPKZzaU-17Qwp0",
+  authDomain: "pricebin-app.firebaseapp.com",
+  projectId: "pricebin-app",
+  storageBucket: "pricebin-app.appspot.com",
+  messagingSenderId: "477369254750",
+  appId: "1:477369254750:web:37c25089fae6152b5645cf"
 };
-const app = initializeApp(firebaseConfig);
+
 // Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 export default app;

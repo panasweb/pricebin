@@ -32,13 +32,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import {auth} from '../firebase/auth'
 
 export default defineComponent({
   name: 'HelloWorld',
-  props: {
-    msg: String,
-  },
+
+  setup() {
+    const msg = ref<string>("Welcome to PriceBin");
+
+    onMounted(() => {
+      console.log("Mounted!");
+      if (auth.currentUser?.displayName) {
+        msg.value = `Welcome to Pricebin, ${auth.currentUser.displayName}!`
+      }
+    })
+
+    return {
+      msg
+    }
+  }
 });
 </script>
 

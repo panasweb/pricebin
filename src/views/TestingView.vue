@@ -40,7 +40,7 @@ export default defineComponent({
 
         async function doLogin() {
             console.log('logging in...');
-            const res = await logIn('geebproject@gmail.com', '123456');
+            const res = await logIn('ericjardon@hotmail.com', '1234567');
             console.log(res);
         }
 

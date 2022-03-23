@@ -2,8 +2,11 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut
+    signOut,
+    updateProfile
 } from "firebase/auth";
+
+import { getGravatarURL } from "@/utils/misc";
 
 import FirebaseAPIResponse from "@/types/FirebaseAPIResponse";
 
@@ -15,15 +18,23 @@ export const auth = getAuth(app);
 
 export const newUser = (email: string, password: string): Promise<FirebaseAPIResponse> => {
     return createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in 
-            console.log("userCredential");
-            console.dir(userCredential);
-            const response: FirebaseAPIResponse = {
-                error: null,
-                success: 'Signed in succesfully'
-            }
-            return response;
+        .then( 
+            async (userCredential) => {
+                // Signed in 
+                console.log("userCredential");
+                console.dir(userCredential);
+
+                // Set Name and PhotoURL
+                const displayName = email.split('@')[0]
+                const photoURL = getGravatarURL(email);
+
+                await updateProfile(userCredential.user, {displayName, photoURL});
+
+                const response: FirebaseAPIResponse = {
+                    error: null,
+                    success: 'Signed in succesfully'
+                }
+                return response;
         })
         .catch((error) => {
             const { code, message } = error;
