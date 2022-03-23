@@ -1,4 +1,4 @@
-# apprice
+# PriceBin
 
 ## Si no tienes yarn instalado:
 ```
