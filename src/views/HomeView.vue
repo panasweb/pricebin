@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" src="../assets/logo.svg" class="logo">
     <HelloWorld />
   </div>
 </template>
@@ -16,3 +16,15 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.logo{
+  width: 80%;
+  align-self: center;
+}
+
+.home{
+  display: flex;
+  flex-direction: column;
+}
+</style>

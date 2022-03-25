@@ -7,7 +7,7 @@
         <label for="password">Contraseña:</label>
         <input type="password" name="password" required v-model="password" />
         <div class="submit">
-            <button type="submit">Iniciar Sesión</button>
+            <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
         </div>
     </form>
 

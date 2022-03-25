@@ -11,8 +11,8 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SignUp from '../components/SignUp.vue'
-import LogIn from '../components/LogIn.vue'
+import SignUp from './SignUpView.vue'
+import LogIn from './LogInView.vue'
 
 export default defineComponent({
   name: 'HomeView',
