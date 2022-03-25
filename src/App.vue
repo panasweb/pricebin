@@ -1,9 +1,16 @@
 <template>
 <header>
-<router-link to="/">Home</router-link> 
-  <nav>
-    <router-link to="/about">About</router-link> 
-    <router-link to="/onboarding">Onboarding</router-link>
+
+  <nav class="navbar">
+    <div class="container">
+      <router-link to="/" class="navbar-brand">
+        <img class="logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
+      </router-link> 
+        <div class="nav-elements">
+          <router-link to="/about" class="nav-link">Ver Productos</router-link> 
+          <router-link to="/onboarding" class="nav-link cta">Registrate en PriceBin</router-link>
+        </div>
+    </div>
   </nav>
 </header>
   <div class="container">
