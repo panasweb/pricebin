@@ -2,6 +2,7 @@
 
 :root {
   --salmon: #f76d66;
+  --salmon-light: #f9a8a8;
   --white: #ffffff;
   --light-purple: #595c88;
   --darkish-purple: #46178f;
@@ -24,8 +25,8 @@ header .navbar {
 }
 
 header .navbar .logo {
-  width: 250%;
-  vertical-align: super;
+  width: 200%;
+  padding-top: 0.1rem;
 }
 
 nav .nav-elements {
@@ -37,6 +38,15 @@ nav .nav-elements .nav-link {
   font-weight: bold;
   margin-left: 1rem;
   color: var(--white);
+}
+
+nav .nav-elements .nav-link:hover {
+  opacity: 0.8;
+}
+
+nav .nav-link.cta:hover {
+  opacity: 1;
+  background-color: var(--salmon-light);
 }
 
 nav .nav-elements .nav-link.cta {

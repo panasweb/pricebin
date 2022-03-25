@@ -4,7 +4,7 @@
   <nav class="navbar">
     <div class="container">
       <router-link to="/" class="navbar-brand">
-        <img class="logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
+        <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
       </router-link> 
         <div class="nav-elements">
           <router-link to="/about" class="nav-link">Ver Productos</router-link> 
