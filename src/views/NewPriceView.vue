@@ -30,6 +30,7 @@
 import { defineComponent, ref } from 'vue'
 import Product from '@/types/Product'
 import ProductType from '@/types/ProductType'
+import {exampleProducts} from '../models/products'
 
 export default defineComponent({
     setup() {
@@ -37,7 +38,7 @@ export default defineComponent({
         const productList = ref<Product[]>([]);
 
         function fetchProducts() {
-
+            productList.value = exampleProducts
         }
 
         function onSubmit() {
