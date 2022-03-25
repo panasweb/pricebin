@@ -44,7 +44,7 @@ export default defineComponent({
         function onSubmit() {
             console.log("New price")
         }
-        return {onSubmit}
+        return {productList, onSubmit}
     }
 })
 </script>

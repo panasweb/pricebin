@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <h1>{{ msg }}</h1>
-    <a class="btn btn-primary" href="/producto" role="button"><h3>Comparar productos</h3></a>
+    <a class="btn btn-primary" href="/product" role="button"><h3>Comparar productos</h3></a>
   </div>
 </template>
 

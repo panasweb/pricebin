@@ -3,7 +3,7 @@
 
         <div class="container">
 
-            <div class="row"></div>
+            <div class="row"><img src="../../src/assets/AtunDolores.svg" width="80px" height="50px"></div>
             <div class="row">
                 <div class="col"><h4>Dolores</h4></div> 
                 <div class="col"><img src="../../src/assets/heart.svg"> </div>
@@ -17,6 +17,22 @@
                 </div>
                 <div class="col">
                     $18.00
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src="../../src/assets/Soriana.svg" width="80px" height="50px">
+                </div>
+                <div class="col">
+                    $19.90
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img src="../../src/assets/Oxxo.svg" width="80px" height="50px">
+                </div>
+                <div class="col">
+                    $22.00
                 </div>
             </div>
 
