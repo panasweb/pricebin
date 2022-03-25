@@ -7,7 +7,7 @@
         <label for="password">Contraseña:</label>
         <input type="password" name="password" required v-model="password" />
         <div class="submit">
-            <button type="submit">Iniciar Sesión</button>
+            <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
         </div>
     </form>
 
@@ -16,15 +16,33 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
+import {useRouter} from "vue-router"
+import {logIn} from '../firebase/auth'
 
 export default defineComponent({
 
-    setup() {
+    setup(props, ctx) {
+        const router = useRouter();
+
         const email = ref<string>("");
         const password = ref<string>("");
 
-        function onSubmit() {
-            console.log("Submitted!");
+        async function onSubmit() {
+        console.log('logging in...');
+        const res = await logIn(email.value, password.value);
+
+        function redirect() {
+            router.push({ name: 'home', replace: true })
+        }
+        
+        if (res.success) {
+            redirect();
+
+        } else {
+            console.error("Error logging in", res.error);
+            // show feedback
+        }
+
         }
 
         return { email, password, onSubmit }
