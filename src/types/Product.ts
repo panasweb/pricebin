@@ -2,28 +2,20 @@ import ProductType from './ProductType'
 import Price from './Price'
 import { exampleProducts } from '@/models/products';
 
-// interface Product {
-//     name: string,
-//     type: ProductType,
-//     prices: Price[],
-// }
-
-class Product {
+export default class Product {
     
     name: string;
     brand: string;
     type: ProductType;
     prices: Price[];
-    id?: string;
 
     static dbName = 'products';
 
-    constructor(name: string, brand: string, type: ProductType, prices: Price[], id?:string) {
+    constructor(name: string, brand: string, type: ProductType, prices: Price[]) {
         this.name = name;
         this.brand = brand;
         this.type = type;
         this.prices = prices;
-        this.id = id;
     }
 
     public static createProduct() {
@@ -49,14 +41,14 @@ class Product {
         console.log("Products at", storeId);
     }
 
-    public static findById(productId: string) : Product|null {
-        const res: Product | undefined = exampleProducts.find(p => p.id == productId);
+    // public static findById(productId: string) : Product|null {
+    //     const res: Product | undefined = exampleProducts.find((p:Product) => p.id == productId);
 
-        return res || null;
-    }
+    //     return res || null;
+    // }
 
     public static findProductByNameAndBrand(productName: string, brandName: string) : Product|null {
-        const res: Product | undefined = exampleProducts.find(p => 
+        const res: Product | undefined = exampleProducts.find((p:Product) => 
             p.name === productName && p.brand === brandName);
 
         return res || null;
@@ -64,4 +56,3 @@ class Product {
 
 }
 
-export default Product
