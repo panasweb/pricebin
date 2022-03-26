@@ -1,5 +1,5 @@
 import StoreLogo from './StoreLogo'
-
+/* eslint-disable */
 
 export default class Store {
     name:string;
