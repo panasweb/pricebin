@@ -24,7 +24,7 @@ export default class PurchaseLog {
         this.nWeeks = 1;
     }
 
-    setBeginning(newDate: Date) {
+    setBeginning(newDate: Date) : void {
         this.start = newDate;
     }
 
@@ -67,10 +67,10 @@ export default class PurchaseLog {
     }
 
 
-
     getSummaryStats() : LogSummaryStats {
         return {weekly: this.weeklyAverage, monthly: this.monthlyAverage, n_lists: this.log.length};
     }
+
     
 }
 
