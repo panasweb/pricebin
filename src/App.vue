@@ -8,7 +8,8 @@
       </router-link> 
         <div class="nav-elements">
           <router-link to="/about" class="nav-link">Ver Productos</router-link> 
-          <router-link to="/onboarding" class="nav-link cta">Registrate en PriceBin</router-link>
+          <router-link to="/login" class="nav-link">Login</router-link> 
+          <router-link to="/register" class="nav-link cta">Unete a PriceBin</router-link>
         </div>
     </div>
   </nav>
