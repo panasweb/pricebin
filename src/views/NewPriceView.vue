@@ -5,14 +5,22 @@
             <h2>Registrar Precio</h2>
         </div>
 
+        <label for="productType">Tipo:</label>
+        <select name="productType" v-model="productTypeInput">
+            <option value="Despensa"></option>
+            <option value="Electrónicos"></option>
+            <option value="Farmacia"></option>
+            <option value="Baño y Limpieza"></option>
+        </select>
+
         <label for="product">Producto:</label>
-        <input type="text" name="product" list="productName" v-model="product" />
+        <input type="text" name="product" list="productName" v-model="productInput" />
         <datalist id="productName">
             <option v-for="p in productList" :value="p.name" :key="p.name">{{ p.name }}</option>
         </datalist>
 
         <label for="store">Tienda:</label>
-        <input type="text" name="store" list="storeName" v-model="store" />
+        <input type="text" name="store" list="storeName" v-model="storeInput" />
         <datalist id="storeName">
             <option v-for="s in storeList" :value="s.name" :key="s.name">{{ s.name }}</option>
         </datalist>
@@ -53,7 +61,9 @@ export default defineComponent({
 
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
-        const productInput = ref<string>(null);
+        const productInput = ref<string>('');
+        const productTypeInput = ref<string>('');
+
 
         function fetchProducts() : void {
             productList.value = exampleProducts
@@ -63,7 +73,7 @@ export default defineComponent({
             storeList.value = exampleStores
         }
 
-        async function onSubmit() : void {
+        function onSubmit() : void {
             console.log("New price")
             const amt = Number.parseFloat(amount.value);
             
@@ -77,12 +87,27 @@ export default defineComponent({
                 return;
             }
 
-            const product = Product.getProductByName(productInput.value);
-            const store = Store.getStoreByName(storeInput.value);
+            let storeName = storeInput.value.trim();
+            let productName = productInput.value.trim();
+
+            let store = Store.getStoreByName(storeName);
+            if (!store) {
+                console.log("Store not found. Creating store...");
+                store = new Store(storeName);
+                // store.save()
+            }
+
+            let product = Product.findProductByName(productName);
+            if (!product) {
+                console.log("Store not found. Creating product...");
+                product = new Product(productName, 'Despensa', [], );
+                // store.save()
+            }
+
 
             const price = new Price(amt, store, new Date(), 'MXN');
 
-            await product.addOrUpdatePrice(price);
+            // product.addOrUpdatePrice(price);
 
             console.log('New price');
             console.dir(price);
@@ -95,7 +120,7 @@ export default defineComponent({
             fetchStores();
         })
 
-        return { amount, productInput, storeInput, productList, storeList, onSubmit }
+        return { amount, productInput, productTypeInput, storeInput, productList, storeList, onSubmit }
     }
 })
 </script>

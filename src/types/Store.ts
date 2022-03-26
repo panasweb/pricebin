@@ -1,5 +1,5 @@
 import StoreLogo from './StoreLogo'
-
+import { exampleStores } from '@/models/stores';
 
 export default class Store {
     name:string;
@@ -16,5 +16,11 @@ export default class Store {
         this.logo= logo;  // TODO: default store icon
         this.branch= branch;
         this.id = id;       // database id
+    }
+
+    static getStoreByName(storeName: string) : Store|null {
+        const res = exampleStores.find(s => s.name == storeName);
+
+        return res || null;
     }
 }

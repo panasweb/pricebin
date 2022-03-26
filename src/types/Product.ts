@@ -53,6 +53,12 @@ class Product {
         return res || null;
     }
 
+    public static findProductByName(productName: string) : Product|null {
+        const res: Product | undefined = exampleProducts.find(p => p.name == productName);
+
+        return res || null;
+    }
+
 }
 
 export default Product
