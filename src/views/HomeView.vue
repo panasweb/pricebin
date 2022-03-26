@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <img alt="Vue logo" src="../assets/logo.svg" class="logo">
+    <HelloWorld />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
 export default defineComponent({
@@ -16,3 +16,16 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.logo{
+  width: 80%;
+  margin-top: 5%;
+  align-self: center;
+}
+
+.home{
+  display: flex;
+  flex-direction: column;
+}
+</style>

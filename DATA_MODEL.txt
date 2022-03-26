@@ -1,0 +1,26 @@
+STORE:
+    name,
+    branch,
+    lat,
+    lon,
+    logo
+
+PRICE:
+    amount,
+    date,
+    currency,
+    where -> points to STORE
+
+PRODUCT:
+    name,
+    type,
+    prices: nested Price list
+
+PROFILE:
+    uid,
+    name,
+    email,
+    log: nested PurchaseLog
+
+PURCHASELOG:
+    
