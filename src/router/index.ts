@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/prices/add',
     name: 'Add Price',
-    component: LogIn,
+    component: NewPrice,
   },
   {
     path: '/asayo',

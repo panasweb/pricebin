@@ -8,7 +8,7 @@ export default class Store {
     lon: number;
     logo: StoreLogo|null;
 
-    constructor(name:string, branch: string|null, lat: number=0, lon: number=0, logo:StoreLogo|null=null) {
+    constructor(name:string, branch: string|null, lat=0, lon=0, logo:StoreLogo|null=null) {
         this.name=name;
         this.branch=branch;
         this.lat=lat;
