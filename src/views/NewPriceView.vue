@@ -1,5 +1,6 @@
 <!-- Formulario para subir un precio a la base, sea para un producto existente o nuevo -->
 <template>
+<div class="container">
     <form @submit.prevent="onSubmit">
         <h3>Nuevo Precio</h3>
         <label for="email">Producto:</label>
@@ -24,6 +25,7 @@
             <button type="submit">Crear Cuenta</button>
         </div>
     </form>
+    </div>
 </template>
 
 <script lang="ts">

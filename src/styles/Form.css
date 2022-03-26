@@ -1,0 +1,78 @@
+.form-wrapper{
+    width: 100%;
+
+    background-color: var(--light-purple);
+    padding: 1rem 0 8rem 0;
+    
+}
+
+form {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--white);
+    text-align: left;
+    border-radius: 10px;
+    padding: 5rem 8rem ;
+}
+
+form .logo{
+    display: block;
+    margin: 0 auto;
+    width: 75%;
+    height: auto;
+}
+
+form .subtitle{
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--light-purple);
+}
+
+label {
+    color: #aaa;
+    display: inline-block;
+    margin-top: 2rem;
+    /*margin: 25px 0 15px;*/
+    font-size: 0.6em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+input, select {
+    display: block;
+    padding: 10px 6px;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    color: #555;
+}
+
+form .terms{
+    margin-top: 2rem;
+}
+
+form .form-check-label{
+    margin-top: 0;
+}
+
+form .btn{
+    margin-top: 2rem;
+}
+
+form .form-link{
+    text-align: center;
+    display: block;
+    margin: 2rem auto 0 auto;
+    text-decoration: none;
+    color: var(--light-purple);
+}
+
+form .form-link span{
+    text-decoration: underline;
+}
+
+.submit {
+    text-align: center;
+}
