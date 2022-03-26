@@ -100,7 +100,7 @@ export default defineComponent({
             let product = Product.findProductByName(productName);
             if (!product) {
                 console.log("Store not found. Creating product...");
-                product = new Product(productName, 'Despensa', [], );
+                //product = new Product(productName, 'Despensa', [], );
                 // store.save()
             }
 

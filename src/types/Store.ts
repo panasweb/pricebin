@@ -1,5 +1,6 @@
 import StoreLogo from './StoreLogo'
 import { exampleStores } from '@/models/stores';
+/* eslint-disable */
 
 export default class Store {
     name:string;
@@ -9,7 +10,7 @@ export default class Store {
     branch?: string;  // name specifier e.g. Coapa, Satélite
     logo?: StoreLogo;
 
-    constructor(name:string, lat=0, lon=0, id?:string, branch?:string,  logo?:StoreLogo) {
+    constructor(name:string, lat=0, lon=0, logo?:StoreLogo, id?:string, branch?:string) {
         this.name=name;
         this.lat=lat;
         this.lon=lon;

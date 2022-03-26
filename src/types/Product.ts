@@ -1,6 +1,6 @@
 import ProductType from './ProductType'
 import Price from './Price'
-import {exampleProducts} from '../models/products'
+import { exampleProducts } from '@/models/products';
 
 // interface Product {
 //     name: string,
@@ -11,14 +11,16 @@ import {exampleProducts} from '../models/products'
 class Product {
     
     name: string;
+    brand: string;
     type: ProductType;
     prices: Price[];
     id?: string;
 
     static dbName = 'products';
 
-    constructor(name: string, type: ProductType, prices: Price[], id?:string) {
+    constructor(name: string, brand: string, type: ProductType, prices: Price[], id?:string) {
         this.name = name;
+        this.brand = brand;
         this.type = type;
         this.prices = prices;
         this.id = id;
