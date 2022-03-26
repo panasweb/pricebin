@@ -9,7 +9,7 @@ PRICE:
     amount,
     date,
     currency,
-    where -> points to STORE
+    store -> id pointer to STORE
 
 PRODUCT:
     name,

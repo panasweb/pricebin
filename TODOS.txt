@@ -1,0 +1,3 @@
+/* -- list of quick wins -- */
+
+- Implement vuex context for currency changes

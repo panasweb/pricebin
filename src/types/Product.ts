@@ -1,5 +1,6 @@
 import ProductType from './ProductType'
 import Price from './Price'
+import {exampleProducts} from '../models/products'
 
 // interface Product {
 //     name: string,
@@ -12,13 +13,15 @@ class Product {
     name: string;
     type: ProductType;
     prices: Price[];
+    id?: string;
 
     static dbName = 'products';
 
-    constructor(name: string, type: ProductType, prices: Price[]) {
+    constructor(name: string, type: ProductType, prices: Price[], id?:string) {
         this.name = name;
         this.type = type;
         this.prices = prices;
+        this.id = id;
     }
 
     public static createProduct() {
@@ -42,6 +45,12 @@ class Product {
     public static productsAtStore(storeId: string) {
         // query for the products of a product whose id: name-type-store
         console.log("Products at", storeId);
+    }
+
+    public static findById(productId: string) : Product|null {
+        const res: Product | undefined = exampleProducts.find(p => p.id == productId);
+
+        return res || null;
     }
 
 }

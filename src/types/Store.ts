@@ -3,16 +3,18 @@ import StoreLogo from './StoreLogo'
 
 export default class Store {
     name:string;
-    branch: string|null;  // name specifier e.g. Coapa, Satélite
     lat: number;
     lon: number;
-    logo: StoreLogo|null;
+    id?: string;  
+    branch?: string;  // name specifier e.g. Coapa, Satélite
+    logo?: StoreLogo;
 
-    constructor(name:string, branch: string|null, lat=0, lon=0, logo:StoreLogo|null=null) {
+    constructor(name:string, lat=0, lon=0, id?:string, branch?:string,  logo?:StoreLogo) {
         this.name=name;
-        this.branch=branch;
         this.lat=lat;
         this.lon=lon;
-        this.logo=logo;
+        this.logo= logo;  // TODO: default store icon
+        this.branch= branch;
+        this.id = id;       // database id
     }
 }
