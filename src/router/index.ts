@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LogIn from '../views/LogInView.vue'
 import SignUp from '../views/SignUpView.vue'
+import NewPrice from '../views/NewPriceView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
