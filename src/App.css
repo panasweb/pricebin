@@ -1,33 +1,71 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 
-:root{
-    --salmon: #F76D66;
-    --white: #FFFFFF;
-    --light-purple: #595C88;
-    --darkish-pruple: #46178F;
+:root {
+  --salmon: #f76d66;
+  --salmon-light: #f9a8a8;
+  --white: #ffffff;
+  --light-purple: #595c88;
+  --darkish-purple: #46178f;
 }
 
 #app {
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-  }
+  font-family: "Lato", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+}
 
-  
-  nav {
-    padding: 30px;
-  }
-  
-  nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-  
-  nav a.router-link-exact-active {
-    color: #42b983;
-  }
-  
-  body {
-      margin: 0;
-  }
+header {
+  background-color: var(--light-purple);
+}
+
+header .navbar {
+  padding: 2rem 0;
+  align-items: center;
+}
+
+header .navbar .logo {
+  width: 200%;
+  padding-top: 0.1rem;
+}
+
+nav .nav-elements {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav-elements .nav-link {
+  font-weight: bold;
+  margin-left: 1rem;
+  color: var(--white);
+}
+
+nav .nav-elements .nav-link:hover {
+  opacity: 0.8;
+}
+
+nav .nav-link.cta:hover {
+  opacity: 1;
+  background-color: var(--salmon-light);
+}
+
+nav .nav-elements .nav-link.cta {
+  background-color: var(--salmon);
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+  color: var(--white);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+nav a {
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
+}
+
+body {
+  margin: 0;
+}
