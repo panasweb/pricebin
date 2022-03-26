@@ -1,4 +1,4 @@
-<!-- Formulario para subir un precio a la base, sea para un producto existente o nuevo -->
+<!-- Formulario para subir un precio/producto/marca a la base, sea para un producto existente o nuevo -->
 <template>
     <form @submit.prevent="onSubmit">
         <div class="headline">
@@ -17,6 +17,12 @@
         <input type="text" name="product" list="productName" v-model="productInput" />
         <datalist id="productName">
             <option v-for="p in productList" :value="p.name" :key="p.name">{{ p.name }}</option>
+        </datalist>
+
+        <label for="brand">Marca:</label>
+        <input type="text" name="brand" list="brandName" v-model="brandInput" />
+        <datalist id="brandName">
+            <option v-for="b in brandList" :value="b.name" :key="b.name">{{ b.name }}</option>
         </datalist>
 
         <label for="store">Tienda:</label>
@@ -50,18 +56,22 @@ import Product from '@/types/Product'
 import ProductType from '@/types/ProductType'
 import { exampleProducts } from '../models/products'
 import { exampleStores } from '@/models/stores'
+import {exampleBrands} from '@/models/brands'
 import Store from '@/types/Store'
 import Price from '@/types/Price'
+import Brand from '@/types/Brand'
 
 export default defineComponent({
     setup() {
 
         const productList = ref<Product[]>([]);
         const storeList = ref<Store[]>([]);
+        const brandList = ref<Brand[]>([]);
 
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
         const productInput = ref<string>('');
+        const brandInput = ref<string>('');
         const productTypeInput = ref<string>('');
 
 
@@ -71,6 +81,10 @@ export default defineComponent({
 
         function fetchStores() : void {
             storeList.value = exampleStores
+        }
+        
+        function fetchBrands() : void {
+            brandList.value = exampleBrands
         }
 
         function onSubmit() : void {
@@ -89,6 +103,7 @@ export default defineComponent({
 
             let storeName = storeInput.value.trim();
             let productName = productInput.value.trim();
+            let brandName = brandInput.value.trim();
 
             let store = Store.getStoreByName(storeName);
             if (!store) {
@@ -97,10 +112,10 @@ export default defineComponent({
                 // store.save()
             }
 
-            let product = Product.findProductByName(productName);
+            let product = Product.findProductByNameAndBrand(productName, brandName);
             if (!product) {
                 console.log("Store not found. Creating product...");
-                //product = new Product(productName, 'Despensa', [], );
+                product = new Product(productName, brandName, 'Despensa', []);
                 // store.save()
             }
 
@@ -118,9 +133,12 @@ export default defineComponent({
         onMounted(() => {
             fetchProducts();
             fetchStores();
+            fetchBrands();
         })
 
-        return { amount, productInput, productTypeInput, storeInput, productList, storeList, onSubmit }
+        return { amount, productInput, productTypeInput, brandInput, storeInput, 
+        productList, storeList, brandList,
+         onSubmit }
     }
 })
 </script>

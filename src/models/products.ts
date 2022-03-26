@@ -9,5 +9,5 @@ export const exampleProducts = [
 ]
 
 export const exampleProductRecords = [
-    {productName: "Atún Dolores (Lata 140g)", amount: 14.50, quantity: 2}, 
+    {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', amount: 14.50, quantity: 2}, 
 ]

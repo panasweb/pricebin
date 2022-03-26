@@ -55,8 +55,9 @@ class Product {
         return res || null;
     }
 
-    public static findProductByName(productName: string) : Product|null {
-        const res: Product | undefined = exampleProducts.find(p => p.name == productName);
+    public static findProductByNameAndBrand(productName: string, brandName: string) : Product|null {
+        const res: Product | undefined = exampleProducts.find(p => 
+            p.name === productName && p.brand === brandName);
 
         return res || null;
     }
