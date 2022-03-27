@@ -112,14 +112,13 @@ export default defineComponent({
                 // store.save()
             }
 
-            // let product = Product.findProductByNameAndBrand(productName, brandName);
+            // let product = findProductByNameAndBrand(productName, brandName);
             // if (!product) {
             //     console.log("Store not found. Creating product...");
             //     // product = new Product(productName, brandName, 'Despensa', []);
             //     // store.save()
             // }
-
-
+            
             const price = new Price(amt, store, new Date(), 'MXN');
 
             // product.addOrUpdatePrice(price);
