@@ -1,24 +1,28 @@
 import ProductType from './ProductType'
 import Price from './Price'
+// import { exampleProducts } from '@/models/products';
 
-// interface Product {
-//     name: string,
-//     type: ProductType,
-//     prices: Price[],
-// }
-
-class Product {
+export class Product {
     
     name: string;
+    brand: string;
     type: ProductType;
     prices: Price[];
+    id?: string;
+    img?: string;
 
     static dbName = 'products';
 
-    constructor(name: string, type: ProductType, prices: Price[]) {
+    public constructor(name: string, brand: string, type: ProductType, prices: Price[], id?:string) {
         this.name = name;
+        this.brand = brand;
         this.type = type;
-        this.prices = prices;
+        this.prices = prices;  // nested list is always sorted lowest to highest
+        this.id = id;
+    }
+
+    public setImg(img: string) {
+        this.img=img;
     }
 
     public static createProduct() {
@@ -44,6 +48,16 @@ class Product {
         console.log("Products at", storeId);
     }
 
+    public updatePriceList(price: Price) : void {
+        if (price.id < this.prices.length) {
+            // update price at price.id
+            this.prices[price.id] = price;
+        } else {
+            // add
+            this.prices.push(price);
+        }
+    }
+
+
 }
 
-export default Product

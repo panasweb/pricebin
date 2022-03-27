@@ -1,24 +1,18 @@
 import Store from './Store'
 
-// interface Price {
-//     amount: number,
-//     date?: Date,
-//     currency?: string,
-//     where: Store,
-//     // added-by: UserId
-// }
-
 class Price {
+    id: number; // index in a Product's array (denormalized)
     amount: number;
     date?: Date;
     currency?: string;
-    where: Store;
+    store: Store;
 
     static dbName = 'prices';
 
-    constructor(amount: number, where: Store, date?:Date, currency?:string) {
+    constructor(id: number, amount: number, store: Store, date?:Date, currency?:string) {
+        this.id = id;
         this.amount = amount;
-        this.where = where;
+        this.store = store;
         this.date = date;
         this.currency = currency;
     }

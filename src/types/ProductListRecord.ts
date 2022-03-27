@@ -1,5 +1,8 @@
+
 export default interface ProductListRecord {
     productName: string,
+    storeName: string, // store key
+    brandName: string,
     amount: number, 
     quantity: number,
 }
