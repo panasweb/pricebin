@@ -1,11 +1,12 @@
 import Price from "@/types/Price";
 import {Product} from "@/types/Product";
 import ProductListRecord from "@/types/ProductListRecord";
-import {tunaPrices, waterPrices} from './prices'
+import {tunaPrices, waterPrices, garatPrices} from './prices'
 
 export const exampleProducts = [
-    new Product('Atún Dolores (Lata 140g)', 'Dolores',  'Despensa', tunaPrices),
-    new Product('Garrafón Ciel (10lt)', 'Ciel','Despensa', waterPrices)
+    new Product('Atún Dolores (Lata 140g)', 'Dolores',  'Despensa', tunaPrices, '123'),
+    new Product('Garrafón Ciel (10lt)', 'Ciel','Despensa', waterPrices, '456'),
+    new Product('Café Garat Descafeinado (450g)', 'Garat', 'Despensa', garatPrices, '789')
 ]
 
 export const exampleProductRecords = [
@@ -30,4 +31,8 @@ export const addOrUpdatePrice = (product : Product, price: Price) => {
     console.log("New Product JSON")
     console.dir(product);
     console.log(JSON.stringify(product))
+}
+
+export const fetchProducts = () => {
+    console.log("Fetch products from db")
 }

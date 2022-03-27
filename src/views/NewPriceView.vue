@@ -70,18 +70,20 @@ export default defineComponent({
     components: {
         FormAlert,
     },
-    setup() {
-
+    setup(props: any) {
+        // DB data
         const productList = ref<Product[]>([]);
         const storeList = ref<Store[]>([]);
         const brandList = ref<Brand[]>([]);
 
+        // Form control
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
-        const productInput = ref<string>('');
+        const productInput = ref<string>(props.productName || '');
         const brandInput = ref<string>('');
         const productTypeInput = ref<ProductType>();
 
+        // Form Validation
         const alertMsg = ref<string>('');
 
         const router = useRouter();
@@ -147,10 +149,11 @@ export default defineComponent({
 
             console.log("Finish, redirect to product.id", product.id!);
             toObject(product);
-            // fetch the product and add the price to its list
+            // fetch the product and add the price to its list, redirect to product detail
         }
 
         onMounted(() => {
+            console.log("New price mounted!");
             fetchProducts();
             fetchStores();
             fetchBrands();

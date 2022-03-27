@@ -25,3 +25,8 @@ export default class Store {
         return res || null;
     }
 }
+
+
+export const fetchStores = () => {
+    console.log("Fetch stores from db")
+}
