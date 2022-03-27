@@ -11,7 +11,8 @@ export const exampleProducts = [
 ]
 
 export const exampleProductRecords = [
-    {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', storeName:exampleStores[0].name, amount: 14.50, quantity: 2}, 
+    {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', storeName:exampleStores[0].name, amount: 14.50, quantity: 2},
+    {productName: "Garrafón Ciel (10lt)", brandName: 'Ciel', storeName:exampleStores[1].name ,amount: 31.50, quantity: 3} 
 ]
 
 export const findById = (productId: string) : Product|null => {

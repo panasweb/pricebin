@@ -14,9 +14,10 @@
                 <h2>${{ total }}</h2>
             </div>
         </div>
-        <div v-for="product in products" :key="product.productName" class="row">
-            <ProductListRow :product="product"/>
+        <div v-for="p in products" :key="p.productName" class="row">
+            <ProductListRow :product="p"/>
         </div>
+
         <div class="row">
             <button class="btn btn-primary">Agregar producto</button> <!-- Debe enviar a Add product to List -->
         </div>
@@ -33,8 +34,8 @@ export default defineComponent({
     setup(){
         const total = ref<number>(0)
         const products = ref<ProductListRecord[]>(exampleProductRecords)
-
         onMounted(() =>{
+            // console.log("lista de productos", products.value)
             products.value.forEach(pr => {
                 total.value += (pr.amount * pr.quantity)
             }); 
