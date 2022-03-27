@@ -9,6 +9,7 @@ export class Product {
     type: ProductType;
     prices: Price[];
     id?: string;
+    img?: string;
 
     static dbName = 'products';
 
@@ -18,6 +19,10 @@ export class Product {
         this.type = type;
         this.prices = prices;  // nested list is always sorted lowest to highest
         this.id = id;
+    }
+
+    public setImg(img: string) {
+        this.img=img;
     }
 
     public static createProduct() {
@@ -43,7 +48,16 @@ export class Product {
         console.log("Products at", storeId);
     }
 
-   
+    public updatePriceList(price: Price) : void {
+        if (price.id < this.prices.length) {
+            // update price at price.id
+            this.prices[price.id] = price;
+        } else {
+            // add
+            this.prices.push(price);
+        }
+    }
+
 
 }
 

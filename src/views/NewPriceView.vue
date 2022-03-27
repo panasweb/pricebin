@@ -1,16 +1,16 @@
 <!-- Formulario para subir un precio/producto/marca a la base, sea para un producto existente o nuevo -->
 <template>
+<div class="container">
     <form @submit.prevent="onSubmit">
         <div class="headline">
-            <h2>Registrar Precio</h2>
+            <h2>Registrar un precio</h2>
         </div>
 
         <label for="productType">Tipo:</label>
         <select name="productType" v-model="productTypeInput">
-            <option value="Despensa"></option>
-            <option value="Electrónicos"></option>
-            <option value="Farmacia"></option>
-            <option value="Baño y Limpieza"></option>
+            <option v-for="t in PRODUCT_TYPES" :value="t" :key="t">
+                {{ t }}
+            </option >
         </select>
 
         <label for="product">Producto:</label>
@@ -44,36 +44,73 @@
             />
         </div>
 
+        <FormAlert :msg="alertMsg" />
+
         <div class="submit">
             <button class="btn btn-primary w-100" type="submit">Registrar Precio</button>
         </div>
     </form>
+    </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import FormAlert from '../components/FormAlert.vue'
+import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import {Product} from '@/types/Product'
-import ProductType from '@/types/ProductType'
-import { exampleProducts } from '../models/products'
+import { PRODUCT_TYPES } from '@/utils/constants'
+import { exampleProducts, findProductByNameAndBrand, addOrUpdatePrice } from '../models/products'
 import { exampleStores } from '@/models/stores'
+import {toObject} from '@/utils/serialize'
 import {exampleBrands} from '@/models/brands'
 import Store from '@/types/Store'
 import Price from '@/types/Price'
 import Brand from '@/types/Brand'
+import ProductType from '@/types/ProductType'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
-    setup() {
-
+    components: {
+        FormAlert,
+    },
+    setup(props: any) {
+        // DB data
         const productList = ref<Product[]>([]);
         const storeList = ref<Store[]>([]);
         const brandList = ref<Brand[]>([]);
 
+        // Prefill from route params
+        const route = useRoute();
+        let prefill:any = null;
+        if (route.params.prefill) {
+            prefill = JSON.parse(route.params.prefill as string);
+            console.log('prefill', prefill);
+        } else {
+            console.log("no prefill!");
+        }
+
+        // Form control
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
-        const productInput = ref<string>('');
-        const brandInput = ref<string>('');
-        const productTypeInput = ref<string>('');
+        const productInput = ref<string>(prefill?.productName || '');
+        const brandInput = ref<string>(prefill?.brandName || '');
+        const productTypeInput = ref<ProductType>(prefill?.productType as ProductType || null);
 
+        // Form Validation
+        const alertMsg = ref<string>('');
+        const router = useRouter();
+
+        // Hooks
+        onMounted(() => {
+            console.log("New price mounted!");
+            fetchProducts();
+            fetchStores();
+            fetchBrands();
+        })
+
+        // Methods
+        function redirect() {
+            router.push('/products')
+        }
 
         function fetchProducts() : void {
             productList.value = exampleProducts
@@ -88,16 +125,20 @@ export default defineComponent({
         }
 
         function onSubmit() : void {
+            alertMsg.value = '';
+
             console.log("New price")
             const amt = Number.parseFloat(amount.value);
             
             if (Number.isNaN(amt)){
                 console.error("Amount is not a number");
+                alertMsg.value = "Ingresa un monto válido."
                 return;
             }
 
             if (!storeInput.value) {
                 console.error("No Store selected");
+                alertMsg.value = "Selecciona el nombre de Tienda."
                 return;
             }
 
@@ -105,38 +146,34 @@ export default defineComponent({
             let productName = productInput.value.trim();
             let brandName = brandInput.value.trim();
 
+            console.log("look for store", storeName);
             let store = Store.getStoreByName(storeName);
             if (!store) {
                 console.log("Store not found. Creating store...");
                 store = new Store(storeName);
+                toObject(store);
                 // store.save()
             }
 
-            // let product = findProductByNameAndBrand(productName, brandName);
-            // if (!product) {
-            //     console.log("Store not found. Creating product...");
-            //     // product = new Product(productName, brandName, 'Despensa', []);
-            //     // store.save()
-            // }
+            let product = findProductByNameAndBrand(productName, brandName);
+            if (!product) {
+                console.log("Store not found. Creating product...");
+                product = new Product(productName, brandName, productTypeInput.value!, []);
+                // product = new Product(productName, brandName, 'Despensa', []);
+                // store.save()
+            }
             
-            const price = new Price(amt, store, new Date(), 'MXN');
+            const price = new Price(amt, product.prices.length, store, new Date(), 'MXN');
+            // price.save()
+            addOrUpdatePrice(product, price);
 
-            // product.addOrUpdatePrice(price);
-
-            console.log('New price');
-            console.dir(price);
-            // fetch the product and add the price to its list
-
+            console.log("Finish, redirect to product.id", product.id!);
+            toObject(product);
+            // fetch the product and add the price to its list, redirect to product detail
         }
 
-        onMounted(() => {
-            fetchProducts();
-            fetchStores();
-            fetchBrands();
-        })
-
         return { amount, productInput, productTypeInput, brandInput, storeInput, 
-        productList, storeList, brandList,
+        productList, storeList, brandList, PRODUCT_TYPES, alertMsg,
          onSubmit }
     }
 })

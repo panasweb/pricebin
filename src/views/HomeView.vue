@@ -1,8 +1,11 @@
 <template>
+<div class="container">
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.svg" class="logo">
     <HelloWorld />
   </div>
+</div>
+  
 </template>
 
 <script lang="ts">
