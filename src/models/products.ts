@@ -2,6 +2,7 @@ import Price from "@/types/Price";
 import {Product} from "@/types/Product";
 import ProductListRecord from "@/types/ProductListRecord";
 import {tunaPrices, waterPrices, garatPrices} from './prices'
+import {exampleStores} from './stores'
 
 export const exampleProducts = [
     new Product('Atún Dolores (Lata 140g)', 'Dolores',  'Despensa', tunaPrices, '123'),
@@ -10,7 +11,7 @@ export const exampleProducts = [
 ]
 
 export const exampleProductRecords = [
-    {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', amount: 14.50, quantity: 2}, 
+    {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', storeName:exampleStores[0].name, amount: 14.50, quantity: 2}, 
 ]
 
 export const findById = (productId: string) : Product|null => {
