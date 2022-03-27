@@ -2,7 +2,7 @@
 <template>
     <div>
         <div class="container">
-            <div class="row"><img src="@/assets/AtunDolores.svg" width="80px" height="50px"></div>
+            <div class="row"><img src="@/assets/AtunDolores.svg" class="productI"></div>
             <div class="row">
                 <div class="col"><h4>{{products[0].brand}}</h4></div> 
                 <div class="col"><img src="@/assets/heart.svg"> </div>
@@ -16,7 +16,7 @@
                     <p>{{p.store.name}}</p>
                 </div>
                 <div class="col">
-                    {{p.amount}}
+                    ${{p.amount}}
                 </div>
             </div>
 
@@ -54,5 +54,9 @@ export default defineComponent({
     .logo{
         height: 30px;
         margin-bottom: 10px;
+    }
+    .productI{
+        height: 100px;
+        margin-bottom: 15px;
     }
 </style>

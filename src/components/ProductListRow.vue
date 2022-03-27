@@ -50,4 +50,5 @@ export default defineComponent({
     .logo{
         height: 50px;
     }
+    
 </style>
