@@ -11,13 +11,13 @@ export const exampleProductRecords = [
     {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', amount: 14.50, quantity: 2}, 
 ]
 
-function findById(productId: string) : Product|null {
+export const findById = (productId: string) : Product|null => {
     const res: Product | undefined = exampleProducts.find((p:Product) => p.id == productId);
 
     return res || null;
 }
 
-function findProductByNameAndBrand(productName: string, brandName: string) : Product|null {
+export const findProductByNameAndBrand = (productName: string, brandName: string) : Product|null => {
     const res: Product | undefined = exampleProducts.find((p:Product) => 
         p.name === productName && p.brand === brandName);
 

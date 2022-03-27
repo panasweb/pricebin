@@ -16,7 +16,7 @@ export class Product {
         this.name = name;
         this.brand = brand;
         this.type = type;
-        this.prices = prices;
+        this.prices = prices;  // nested list is always sorted lowest to highest
         this.id = id;
     }
 

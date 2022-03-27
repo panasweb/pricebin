@@ -1,13 +1,5 @@
 import Store from './Store'
 
-// interface Price {
-//     amount: number,
-//     date?: Date,
-//     currency?: string,
-//     store: Store,
-//     // added-by: UserId
-// }
-
 class Price {
     amount: number;
     date?: Date;

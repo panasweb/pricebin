@@ -15,10 +15,10 @@
             </div>
         </div>
         <div v-for="product in products" :key="product.productName" class="row">
-            <ProductRecord :product="product"/>
+            <ProductListRow :product="product"/>
         </div>
         <div class="row">
-            <button class="btn btn-primary">Agregar nuevo producto</button>
+            <button class="btn btn-primary">Agregar producto</button> <!-- Debe enviar a Add product to List -->
         </div>
     </div>
 </template>
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import { exampleProductRecords} from '../models/products'
-import ProductRecord from '../components/ProductRecord.vue'
+import ProductListRow from '../components/ProductListRow.vue'
 import ProductListRecord from '../types/ProductListRecord'
 
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
         }
     },
     components:{
-        ProductRecord
+        ProductListRow
     }
 })
 </script>
