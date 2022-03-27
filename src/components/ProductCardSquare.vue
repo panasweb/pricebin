@@ -54,7 +54,6 @@ export default defineComponent({
         const productImg = ref<string>(props.product.img ?? DEFAULT_PRODUCT_IMG);
 
         const productFormData = ref<string>(JSON.stringify(objectData));
-        console.log("Product Form Data", productFormData.value);
         return { productFormData, productImg }
     }
 })
@@ -87,5 +86,24 @@ export default defineComponent({
     background-repeat: no-repeat;
     background-size:contain;
     background-position: center;
+}
+.card-info {
+    padding: 10px;
+    height: calc(100% - 250px);
+}
+.product-title {
+    font-size: 16px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
+    margin-bottom: 2px;
+    margin: 0 12px;
+    font-weight: 600;
+}
+.product-info {
+    width: 80%;
+    display: inline-flex;
+    justify-content: space-between;
 }
 </style>

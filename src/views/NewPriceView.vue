@@ -64,7 +64,7 @@ import Store from '@/types/Store'
 import Price from '@/types/Price'
 import Brand from '@/types/Brand'
 import ProductType from '@/types/ProductType'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 export default defineComponent({
     components: {
@@ -76,15 +76,22 @@ export default defineComponent({
         const storeList = ref<Store[]>([]);
         const brandList = ref<Brand[]>([]);
 
+        // Prefill from route params
+        const route = useRoute();
+        let prefill:any = null;
+        if (route.params.prefill) {
+            prefill = JSON.parse(route.params.prefill as string);
+            console.log('prefill', prefill);
+        } else {
+            console.log("no prefill!");
+        }
+
         // Form control
-        console.log("props", props);
-        const prefill:any = {}; //JSON.parse(props.prefill);
-        console.log("prefill received", prefill);
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
-        const productInput = ref<string>(prefill.productName || '');
-        const brandInput = ref<string>(prefill.brandName || '');
-        const productTypeInput = ref<ProductType>(prefill.productType as ProductType || null);
+        const productInput = ref<string>(prefill?.productName || '');
+        const brandInput = ref<string>(prefill?.brandName || '');
+        const productTypeInput = ref<ProductType>(prefill?.productType as ProductType || null);
 
         // Form Validation
         const alertMsg = ref<string>('');
