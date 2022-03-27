@@ -2,3 +2,8 @@
     background-color: #F76D66;
     border: #F76D66;
 }
+
+div.headline {
+    text-align: center;
+    width: 100%;
+}

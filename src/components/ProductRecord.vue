@@ -24,7 +24,7 @@
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import { exampleProducts } from '../models/products'
 import ProductListRecord from '../types/ProductListRecord'
-import Product from '../types/Product'
+import {Product} from '../types/Product'
 
 
 export default defineComponent({
@@ -34,7 +34,7 @@ export default defineComponent({
     setup(props){
         const productData = ref()
         onMounted(() =>{
-            productData.value = Product.findProductByName(props.product.productName)
+            productData.value = Product.findProductByNameAndBrand(props.product.productName, props.product.brandName);
             console.log("Name:", props.product.productName)
             console.log("CTM AMLO ", productData.value)
         })

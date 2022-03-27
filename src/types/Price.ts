@@ -4,7 +4,7 @@ import Store from './Store'
 //     amount: number,
 //     date?: Date,
 //     currency?: string,
-//     where: Store,
+//     store: Store,
 //     // added-by: UserId
 // }
 
@@ -12,13 +12,13 @@ class Price {
     amount: number;
     date?: Date;
     currency?: string;
-    where: Store;
+    store: Store;
 
     static dbName = 'prices';
 
-    constructor(amount: number, where: Store, date?:Date, currency?:string) {
+    constructor(amount: number, store: Store, date?:Date, currency?:string) {
         this.amount = amount;
-        this.where = where;
+        this.store = store;
         this.date = date;
         this.currency = currency;
     }

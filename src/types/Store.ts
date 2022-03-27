@@ -1,18 +1,27 @@
 import StoreLogo from './StoreLogo'
+import { exampleStores } from '@/models/stores';
 /* eslint-disable */
 
 export default class Store {
     name:string;
-    branch: string|null;  // name specifier e.g. Coapa, Satélite
     lat: number;
     lon: number;
-    logo: StoreLogo|null;
+    id?: string;  
+    branch?: string;  // name specifier e.g. Coapa, Satélite
+    logo?: StoreLogo;
 
-    constructor(name:string, branch: string|null, lat: number=0, lon: number=0, logo:StoreLogo|null=null) {
+    constructor(name:string, lat=0, lon=0, logo?:StoreLogo, id?:string, branch?:string) {
         this.name=name;
-        this.branch=branch;
         this.lat=lat;
         this.lon=lon;
-        this.logo=logo;
+        this.logo= logo;  // TODO: default store icon
+        this.branch= branch;
+        this.id = id;       // database id
+    }
+
+    static getStoreByName(storeName: string) : Store|null {
+        const res = exampleStores.find(s => s.name == storeName);
+
+        return res || null;
     }
 }
