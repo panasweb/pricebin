@@ -37,10 +37,21 @@ export default defineComponent({
 
 <style>
 .price-container {
+    width:100%;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 20px;
+    padding: 20px 80px;
+}
+
+@media(max-width:426px) {
+    .price-container {
+        padding: 0;
+        flex-direction: column;
+        justify-content: center;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
 }
 
 </style>
