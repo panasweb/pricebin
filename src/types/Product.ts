@@ -43,7 +43,16 @@ export class Product {
         console.log("Products at", storeId);
     }
 
-   
+    public updatePriceList(price: Price) : void {
+        if (price.id < this.prices.length) {
+            // update price at price.id
+            this.prices[price.id] = price;
+        } else {
+            // add
+            this.prices.push(price);
+        }
+    }
+
 
 }
 

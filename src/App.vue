@@ -7,8 +7,8 @@
         <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
       </router-link> 
         <div class="nav-elements">
-          <router-link to="/about" class="nav-link">Ver Productos</router-link> 
-          <router-link to="/onboarding" class="nav-link cta">Registrate en PriceBin</router-link>
+          <router-link to="/products" class="nav-link">Ver Productos</router-link> 
+          <router-link to="/register" class="nav-link cta">Registrate en PriceBin</router-link>
         </div>
     </div>
   </nav>

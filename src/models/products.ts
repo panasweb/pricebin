@@ -1,3 +1,4 @@
+import Price from "@/types/Price";
 import {Product} from "@/types/Product";
 import ProductListRecord from "@/types/ProductListRecord";
 import {tunaPrices, waterPrices} from './prices'
@@ -22,4 +23,11 @@ export const findProductByNameAndBrand = (productName: string, brandName: string
         p.name === productName && p.brand === brandName);
 
     return res || null;
+}
+
+export const addOrUpdatePrice = (product : Product, price: Price) => {
+    product.updatePriceList(price);
+    console.log("New Product JSON")
+    console.dir(product);
+    console.log(JSON.stringify(product))
 }

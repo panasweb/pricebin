@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="price-container">
-
-        </div>
+        Hello
     </div>
 </template>
 
@@ -18,12 +16,6 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.price-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    padding: 10px 20px;
-}
+<style scoped>
 
 </style>
