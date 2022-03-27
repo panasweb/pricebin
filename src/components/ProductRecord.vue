@@ -24,7 +24,7 @@
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import { exampleProducts } from '../models/products'
 import ProductListRecord from '../types/ProductListRecord'
-import Product from '../types/Product'
+import {Product} from '../types/Product'
 
 
 export default defineComponent({

@@ -1,21 +1,23 @@
 import ProductType from './ProductType'
 import Price from './Price'
-import { exampleProducts } from '@/models/products';
+// import { exampleProducts } from '@/models/products';
 
-export default class Product {
+export class Product {
     
     name: string;
     brand: string;
     type: ProductType;
     prices: Price[];
+    id?: string;
 
     static dbName = 'products';
 
-    constructor(name: string, brand: string, type: ProductType, prices: Price[]) {
+    public constructor(name: string, brand: string, type: ProductType, prices: Price[], id?:string) {
         this.name = name;
         this.brand = brand;
         this.type = type;
         this.prices = prices;
+        this.id = id;
     }
 
     public static createProduct() {
@@ -41,18 +43,7 @@ export default class Product {
         console.log("Products at", storeId);
     }
 
-    // public static findById(productId: string) : Product|null {
-    //     const res: Product | undefined = exampleProducts.find((p:Product) => p.id == productId);
-
-    //     return res || null;
-    // }
-
-    public static findProductByNameAndBrand(productName: string, brandName: string) : Product|null {
-        const res: Product | undefined = exampleProducts.find((p:Product) => 
-            p.name === productName && p.brand === brandName);
-
-        return res || null;
-    }
+   
 
 }
 

@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import Product from '@/types/Product'
+import {Product} from '@/types/Product'
 import ProductType from '@/types/ProductType'
 import { exampleProducts } from '../models/products'
 import { exampleStores } from '@/models/stores'
@@ -112,12 +112,12 @@ export default defineComponent({
                 // store.save()
             }
 
-            let product = Product.findProductByNameAndBrand(productName, brandName);
-            if (!product) {
-                console.log("Store not found. Creating product...");
-                // product = new Product(productName, brandName, 'Despensa', []);
-                // store.save()
-            }
+            // let product = Product.findProductByNameAndBrand(productName, brandName);
+            // if (!product) {
+            //     console.log("Store not found. Creating product...");
+            //     // product = new Product(productName, brandName, 'Despensa', []);
+            //     // store.save()
+            // }
 
 
             const price = new Price(amt, store, new Date(), 'MXN');
