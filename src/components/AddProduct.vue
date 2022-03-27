@@ -21,7 +21,8 @@
 import FormAlert from './FormAlert.vue'
 import { defineComponent, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
+import {exampleProductRecords} from '@/models/products'
+import ProductList from '@/types/ProductList'
 
 export default defineComponent({
     components:{
@@ -39,7 +40,11 @@ export default defineComponent({
         const alertMsg = ref<string>('');
         const router = useRouter();
 
-        /* on OK of product, fetch prices and display in datalist */
+        /* Selecciona nombre de producto, si existente, jalar los precios y ponerlos en datalist */
+        // Si 
+
+        // Product -> Prices[], Price -> Store
+
 
         function onSubmit() {
             console.log("haha")
