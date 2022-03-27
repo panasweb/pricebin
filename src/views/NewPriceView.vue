@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import FormAlert from '../components/FormAlert.vue'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import {Product} from '@/types/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
 import { exampleProducts, findProductByNameAndBrand, addOrUpdatePrice } from '../models/products'
@@ -77,17 +77,28 @@ export default defineComponent({
         const brandList = ref<Brand[]>([]);
 
         // Form control
+        console.log("props", props);
+        const prefill:any = {}; //JSON.parse(props.prefill);
+        console.log("prefill received", prefill);
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
-        const productInput = ref<string>(props.productName || '');
-        const brandInput = ref<string>('');
-        const productTypeInput = ref<ProductType>();
+        const productInput = ref<string>(prefill.productName || '');
+        const brandInput = ref<string>(prefill.brandName || '');
+        const productTypeInput = ref<ProductType>(prefill.productType as ProductType || null);
 
         // Form Validation
         const alertMsg = ref<string>('');
-
         const router = useRouter();
 
+        // Hooks
+        onMounted(() => {
+            console.log("New price mounted!");
+            fetchProducts();
+            fetchStores();
+            fetchBrands();
+        })
+
+        // Methods
         function redirect() {
             router.push('/products')
         }
@@ -151,13 +162,6 @@ export default defineComponent({
             toObject(product);
             // fetch the product and add the price to its list, redirect to product detail
         }
-
-        onMounted(() => {
-            console.log("New price mounted!");
-            fetchProducts();
-            fetchStores();
-            fetchBrands();
-        })
 
         return { amount, productInput, productTypeInput, brandInput, storeInput, 
         productList, storeList, brandList, PRODUCT_TYPES, alertMsg,

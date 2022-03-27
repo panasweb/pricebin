@@ -33,14 +33,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/prices/add',
-    name: 'Add Price',
+    name: 'add price',
     component: NewPrice,
-    props: route => ({
-      productName: route.query.productName,
-      brandName: route.query.brandName,
-      productType: route.query.productType,
-      productId: route.query.productId
-    })
+    props: true,
   },
   {
     path: '/asayo',

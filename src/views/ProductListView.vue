@@ -40,7 +40,7 @@ export default defineComponent({
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 10px 20px;
+    padding: 20px;
 }
 
 </style>

@@ -14,7 +14,12 @@
 
                 <div class="card-actions">
                     <!-- Manda a Registrar Precio, pre-llenado -->
-                    <router-link :to="'/products/add?' + productQuery">
+                    <router-link :to="{
+                        name:'add price',
+                        params: {
+                            prefill: productFormData
+                        }
+                    }">
                         <button>Agregar precio</button>
                     </router-link>
                     <!-- Mostaría un modal con lista de precios a añadir -->
@@ -48,9 +53,9 @@ export default defineComponent({
 
         const productImg = ref<string>(props.product.img ?? DEFAULT_PRODUCT_IMG);
 
-        const productQuery = ref<string>(new URLSearchParams(objectData).toString());
-        console.log('Product Query formed', productQuery.value);
-        return { productQuery, productImg }
+        const productFormData = ref<string>(JSON.stringify(objectData));
+        console.log("Product Form Data", productFormData.value);
+        return { productFormData, productImg }
     }
 })
 </script>
