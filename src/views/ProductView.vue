@@ -11,7 +11,7 @@
 
             <div class="row">
                 <div class="col">
-                    <img src="@/assets/logos/Walmart.svg" width="80px" height="50px">
+                    <img src="logos/Walmart.svg" width="80px" height="50px">
                 </div>
                 <div class="col">
                     $18.00
@@ -19,7 +19,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <img src="@/assets/logos/Soriana.svg" width="80px" height="50px">
+                    <img src="logos/Soriana.svg" width="80px" height="50px">
                 </div>
                 <div class="col">
                     $19.90
@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <img src="@/assets/logos/Oxxo.svg" width="80px" height="50px">
+                    <img src="logos/Oxxo.svg" width="80px" height="50px">
                 </div>
                 <div class="col">
                     $22.00

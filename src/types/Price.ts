@@ -1,6 +1,7 @@
 import Store from './Store'
 
 class Price {
+    id: number; // index in a Product's array (denormalized)
     amount: number;
     date?: Date;
     currency?: string;
@@ -8,7 +9,8 @@ class Price {
 
     static dbName = 'prices';
 
-    constructor(amount: number, store: Store, date?:Date, currency?:string) {
+    constructor(id: number, amount: number, store: Store, date?:Date, currency?:string) {
+        this.id = id;
         this.amount = amount;
         this.store = store;
         this.date = date;

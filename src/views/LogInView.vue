@@ -1,6 +1,8 @@
 <template>
+    <div class="form-wrapper">
     <form @submit.prevent="onSubmit">
-        <h3>Inicia sesión</h3>
+        <img class="logo" src="../assets/logo.svg" alt="Pricebin logo">
+        <h4 class="subtitle">Inicia sesión</h4>
         <label for="email">Email:</label>
         <input type="email" name="email" required v-model="email" />
 
@@ -9,10 +11,13 @@
         <div class="submit">
             <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
         </div>
+                     <router-link to="/login" class="form-link">¿Nuevo en el barrio? <span>Registrate</span></router-link> 
     </form>
-
+    </div>
 </template>
-
+<style scoped>
+    @import '../styles/Form.css';
+</style>>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
