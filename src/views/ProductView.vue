@@ -4,13 +4,13 @@
         <div class="container">
             <div class="row"><img src="@/assets/AtunDolores.svg" class="productI"></div>
             <div class="row">
-                <div class="col"><h4>{{products[0].brand}}</h4></div> 
+                <div class="col"><h4>{{currentP.brand}}</h4></div> 
                 <div class="col"><img src="@/assets/heart.svg"> </div>
-                <h3>{{products[0].name}}</h3>
-                <h3>Precio mas bajo: $<span>{{products[0].prices[0].amount}}</span></h3> 
+                <h3>{{currentP.name}}</h3>
+                <h3>Precio mas bajo: $<span>{{currentP.prices[0].amount}}</span></h3> 
             </div>
 
-            <div v-for="p in products[0].prices" :key="p.store" class="row">
+            <div v-for="p in currentP.prices" :key="p.id" class="row">
                 <div class="col">
                     <img :src="storeLogo" class="logo">
                     <p>{{p.store.name}}</p>
@@ -29,21 +29,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import { exampleProducts } from '../models/products'
 import {Product} from '../types/Product'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
+import {findById } from '../models/products'
+import {useRoute} from 'vue-router'
 
 export default defineComponent({
     setup(){
-        const products = ref<Product[]>(exampleProducts)
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
-
+        const route = useRoute()
+        const currentP = ref<Product | null>()
+        
+        onBeforeMount(() => {
+            currentP.value = findById(route.params.id as string)
+        }),
         onMounted(() =>{
-            console.log("lista de productos", products.value)
+            console.log("Logo ", storeLogo.value)
         })
         return {
-            products, 
+            currentP, 
             storeLogo
         }
     }
