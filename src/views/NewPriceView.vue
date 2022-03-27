@@ -1,8 +1,9 @@
 <!-- Formulario para subir un precio/producto/marca a la base, sea para un producto existente o nuevo -->
 <template>
+<div class="container">
     <form @submit.prevent="onSubmit">
         <div class="headline">
-            <h2>Registrar Precio</h2>
+            <h2>Registrar un precio</h2>
         </div>
 
         <label for="productType">Tipo:</label>
@@ -49,6 +50,7 @@
             <button class="btn btn-primary w-100" type="submit">Registrar Precio</button>
         </div>
     </form>
+    </div>
 </template>
 
 <script lang="ts">
