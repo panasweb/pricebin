@@ -4,7 +4,7 @@ import {exampleStores} from './stores'
 
 export const tunaPrices: Price[] = [
     new Price(14.50, exampleStores[0], new Date()),
-    new Price(14.50, exampleStores[1], new Date()),
+    new Price(16.50, exampleStores[1], new Date()),
 ]
 
 export const waterPrices: Price[] = [

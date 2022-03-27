@@ -1,36 +1,22 @@
+
 <template>
     <div>
         <div class="container">
             <div class="row"><img src="@/assets/AtunDolores.svg" width="80px" height="50px"></div>
             <div class="row">
-                <div class="col"><h4>Dolores</h4></div> 
+                <div class="col"><h4>{{products[0].brand}}</h4></div> 
                 <div class="col"><img src="@/assets/heart.svg"> </div>
-                <h3>Atun Dolores Atleta Amarilla en Agua 140g</h3>
-                <h3>Precio mas bajo: <span>$18.00</span></h3> 
+                <h3>{{products[0].name}}</h3>
+                <h3>Precio mas bajo: $<span>{{products[0].prices[0].amount}}</span></h3> 
             </div>
 
-            <div class="row">
+            <div v-for="p in products[0].prices" :key="p.store" class="row">
                 <div class="col">
-                    <img src="@/assets/logos/Walmart.svg" width="80px" height="50px">
+                    <img :src="storeLogo" class="logo">
+                    <p>{{p.store.name}}</p>
                 </div>
                 <div class="col">
-                    $18.00
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <img src="@/assets/logos/Soriana.svg" width="80px" height="50px">
-                </div>
-                <div class="col">
-                    $19.90
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <img src="@/assets/logos/Oxxo.svg" width="80px" height="50px">
-                </div>
-                <div class="col">
-                    $22.00
+                    {{p.amount}}
                 </div>
             </div>
 
@@ -43,24 +29,30 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { exampleProducts } from '../models/products'
+import {Product} from '../types/Product'
+import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 
 export default defineComponent({
-    setup () {
+    setup(){
+        const products = ref<Product[]>(exampleProducts)
+        const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
+
+        onMounted(() =>{
+            console.log("lista de productos", products.value)
+        })
         return {
-            
-        }
-    },
-    data () {
-        return{
-            products: exampleProducts
+            products, 
+            storeLogo
         }
     }
-    
 })
 </script>
 
 <style scoped>
-
+    .logo{
+        height: 30px;
+        margin-bottom: 10px;
+    }
 </style>

@@ -7,9 +7,10 @@
         </div>
         <div class="col-4">
             <!-- Render the image of the store -->
-            <img :src="storeLogo" />
+            <img :src="storeLogo" class="logo">
             <p>{{ productData.prices[0].store.name }}</p>
         </div>
+        
         <div class="col-4">
             <h2>
                 <!-- Render the price times the number of units -->
@@ -37,7 +38,7 @@ export default defineComponent({
 
         onMounted(() => {
             productData.value = findProductByNameAndBrand(props.product.productName, props.product.brandName);
-            console.log("Product Data", productData.value);
+            console.log("Product Data", productData.value); 
         })
 
         return { productData, storeLogo }
@@ -45,5 +46,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style scoped>
+    .logo{
+        height: 50px;
+    }
 </style>
