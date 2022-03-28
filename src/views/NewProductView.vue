@@ -1,17 +1,7 @@
 <template>
-    <!-- <div>
-        <p v-if="loggedIn">Logged in as {{currentEmail}}</p>
-        <p v-else>No current user</p>
-        <div class="">
-            <button>
-                <span v-show="loggedIn" @click="doLogout">Log out</span>
-                <span v-show="!loggedIn" @click="doLogin">Log in</span>
-            </button>
-        </div> -->
+
         <AddProduct />
 
-<!-- 
-    </div> -->
 </template>
 
 <script lang="ts">
@@ -20,9 +10,11 @@ import {auth, logIn, logOut} from '../firebase/auth';
 import AddProduct from '../components/AddProduct.vue'
 
 export default defineComponent({
+    name: 'NewProductView',
     components: {
         AddProduct
     },
+
     setup () {
         const loggedIn = ref<boolean>(false);
         const currentEmail = ref<string | null>(null);

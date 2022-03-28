@@ -19,7 +19,14 @@
         </div>
 
         <div class="row">
-            <button class="btn btn-primary">Agregar producto</button> <!-- Debe enviar a Add product to List -->
+            <router-link
+                :to="{
+                    name: 'create Product'
+                }"
+            >
+                <button class="btn btn-primary" >Agregar producto</button> 
+            </router-link>
+            
         </div>
     </div>
 </template>

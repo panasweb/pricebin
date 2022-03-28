@@ -10,7 +10,7 @@
             <input type="password" name="password" required v-model="password" />
 
             <label for="confirmPassword">Confirma Tu Contraseña:</label>
-            <input type="confirmPassword" name="confirmPassword" required v-model="confirmPassword" />
+            <input type="password" name="confirmPassword" required v-model="confirmPassword" />
 
             <div class="terms form-check">
                 <input class="form-check-input" name="terms" type="checkbox" v-model="acceptedTerms" />
@@ -19,7 +19,7 @@
             <div class="submit">
                 <button class="btn btn-primary w-100" type="submit">Crear Cuenta</button>
             </div>
-             <router-link to="/register" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link> 
+             <router-link to="/login" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link> 
         </form>
     </div>
 </template>

@@ -11,7 +11,7 @@
         <div class="submit">
             <button class="btn btn-primary w-100" type="submit">Iniciar Sesión</button>
         </div>
-                     <router-link to="/login" class="form-link">¿Nuevo en el barrio? <span>Registrate</span></router-link> 
+                     <router-link to="/register" class="form-link">¿Nuevo en el barrio? <span>Registrate</span></router-link> 
     </form>
     </div>
 </template>

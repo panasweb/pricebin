@@ -1,13 +1,15 @@
 <template>
   <div class="wrapper">
     <h1>{{ msg }}</h1>
-    <a class="btn btn-primary" href="/product" role="button"><h3>Comparar productos</h3></a>
+    <router-link :to="'/products'">
+      <button class="btn btn-primary btn-lg">Compara productos &rarr;</button>
+    </router-link>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import {auth} from '../firebase/auth'
+import { auth } from '../firebase/auth'
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -18,7 +20,7 @@ export default defineComponent({
     onMounted(() => {
       console.log("Mounted!");
       if (auth.currentUser?.displayName) {
-        msg.value = `¡Bienvenidx a, ${auth.currentUser.displayName}!`
+        msg.value = `¡Bienvenidx ${auth.currentUser.displayName}!`
       }
     })
 
@@ -31,13 +33,11 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-.wrapper{
+.wrapper {
   width: 100%;
 }
 
-.btn.btn-primary{
-    margin: 20px;
+.btn.btn-primary {
+  margin: 20px;
 }
-
 </style>
