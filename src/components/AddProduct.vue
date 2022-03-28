@@ -43,9 +43,9 @@
             />
         </div>
         <div class="quantity-wrapper">
-            <button class="more-less-button" v-on:click="quantity -= 1">-</button>
+            <div class="more-less-button" v-on:click="quantity -= 1">-</div>
             <input type="number" v-model="quantity" placeholder="1" style="text-align: center;"/>
-            <button class="more-less-button" v-on:click="quantity += 1">+</button>
+            <div class="more-less-button" v-on:click="quantity += 1">+</div>
         </div>
         
         <FormAlert :msg="alertMsg" />
@@ -159,7 +159,7 @@ export default defineComponent({
 
             let product = findProductByNameAndBrand(productName, brandName);
             if (!product) {
-                console.log("Store not found. Creating product...");
+                console.log("Product not found. Creating product...");
                 const price = new Price(amt, 0, store, new Date(), 'MXN');
                 product = new Product(productName, brandName, productTypeInput.value!, [price]);
                 addProduct(product)
@@ -191,10 +191,12 @@ export default defineComponent({
 
     .more-less-button{
         color: #595c88;
+        border: solid;
         border-color: #595c88;
         font-weight: bold;
         font-size: 25px;
         background-color: transparent;
+        text-align: center;
         min-width: 50px;
         height: 50px;
         border-radius: 5px;

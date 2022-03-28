@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LogIn from '../views/LogInView.vue'
 import SignUp from '../views/SignUpView.vue'
 import NewPrice from '../views/NewPriceView.vue'
+import NewProductView from '../views/NewProductView.vue'
 import ProductListView from '../views/ProductListView.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -45,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/create/product',
     name: 'create Product',
-    component: () => import('../views/NewProduct.vue')
+    component: NewProductView
   },
   {
     path: '/product/:id',

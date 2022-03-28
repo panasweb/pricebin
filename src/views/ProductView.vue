@@ -4,13 +4,13 @@
         <div class="container">
             <div class="row"><img src="@/assets/AtunDolores.svg" class="productI"></div>
             <div class="row">
-                <div class="marca" ><h4>{{currentP.brand}}</h4></div> 
+                <div class="marca" ><h4>{{currentP?.brand}}</h4></div> 
                 <div class="favoritos"><img src="@/assets/heart.svg"> </div>
-                <h3  style="font-weight: bold" >{{currentP.name}}</h3>
-                <h3>Precio mas bajo: <span> $ {{currentP.prices[0].amount}}</span></h3> 
+                <h3  style="font-weight: bold" >{{currentP?.name}}</h3>
+                <h3>Precio mas bajo: <span> $ {{currentP?.prices[0].amount}}</span></h3> 
             </div>
             <div class="prices-container">
-                <div v-for="p in currentP.prices" :key="p.id" class="row"  style="font-weight: bold">
+                <div v-for="p in currentP?.prices" :key="p.id" class="row"  style="font-weight: bold">
                     <div class="col">
                         <img :src="storeLogo" class="logo">
                         <p>{{p.store.name}}</p>
@@ -22,13 +22,13 @@
             </div>
             <router-link
                 :to="{
-                    name: 'add price',
+                    name: 'add price', 
                     params: {
                         prefill: productFormData
                     }
                 }"
             >
-                <button class="btn btn-primary" width="100%" >Agregar un precio</button>
+                <button class="btn btn-primary w-100" >Agregar un precio</button>
             </router-link>
             
 
@@ -46,32 +46,35 @@ import {Product} from '../types/Product'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 import {findById } from '../models/products'
 import {useRoute} from 'vue-router'
+import { propsToAttrMap } from '@vue/shared'
 
 export default defineComponent({
     setup(){
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
         const route = useRoute()
         const currentP = ref<Product | null>()
-        let productFormData = null;
-        if(currentP.value){
-            const objectData: any = {
-                productName: currentP.value.name,
-                brandName: currentP.value.brand,
-                productType: currentP.value.type,
-                productId: currentP.value.id || null
-            }
-            productFormData = ref<string>(JSON.stringify(objectData));
-        }
+        const productFormData= ref<string>('');  
+
         
         onBeforeMount(() => {
             currentP.value = findById(route.params.id as string)
+            const objectData: any = {
+                productName: currentP!.value?.name,
+                brandName: currentP!.value?.brand,
+                productType: currentP!.value?.type,
+                productId: route.params.id as string
+            }
+            productFormData.value = JSON.stringify(objectData);
+            console.log(objectData)
         }),
         onMounted(() =>{
             console.log("Logo ", storeLogo.value)
+            
         })
         return {
             currentP, 
-            storeLogo
+            storeLogo,
+            productFormData 
         }
     }
 })
@@ -117,6 +120,9 @@ export default defineComponent({
         text-align: right;
         font-weight: bold;
         font-size: 30px;
+    }
+    button{
+        text-align: center;
     }
     .row{
         width: 100%;
