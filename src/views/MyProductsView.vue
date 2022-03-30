@@ -35,12 +35,12 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { exampleProductRecords} from '../models/products'
 import ProductListRow from '../components/ProductListRow.vue'
-import ProductListRecord from '../types/ProductListRecord'
+import ListRecord from '../types/ListRecord'
 
 export default defineComponent({
     setup(){
         const total = ref<number>(0)
-        const products = ref<ProductListRecord[]>(exampleProductRecords)
+        const products = ref<ListRecord[]>(exampleProductRecords)
         onMounted(() =>{
             // console.log("lista de productos", products.value)
             products.value.forEach(pr => {

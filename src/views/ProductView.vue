@@ -42,7 +42,7 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import { exampleProducts } from '../models/products'
-import {Product} from '../types/Product'
+import {Product} from '../types/classes/Product'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 import {findById } from '../models/products'
 import {useRoute} from 'vue-router'

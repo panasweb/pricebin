@@ -1,17 +1,17 @@
-import ProductListRecord from "./ProductListRecord";
+import ListRecord from "../ListRecord";
 
 export default class ProductList {
-    list: ProductListRecord[];
+    list: ListRecord[];
     date: Date;
     total: number;
 
-    constructor(date: Date, list: ProductListRecord[] = []) {
+    constructor(date: Date, list: ListRecord[] = []) {
         this.list = list;
         this.date = date;
         this.total = this.getListTotal()
     }
 
-    addItem(record : ProductListRecord) {
+    addItem(record : ListRecord) {
         this.list.push(record);
         this.total += record.amount * record.quantity;
     }

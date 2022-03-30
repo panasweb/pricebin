@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts">
-import { Product } from '@/types/Product'
+import { Product } from '@/types/classes/Product'
 import { defineComponent, ref } from 'vue'
 import { DEFAULT_PRODUCT_IMG } from '@/utils/constants'
 

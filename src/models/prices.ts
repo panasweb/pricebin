@@ -1,4 +1,4 @@
-import Price from "@/types/Price"
+import Price from "@/types/classes/Price"
 import {exampleStores} from './stores'
 /* SAMPLE PRICES TO NEST IN PRODUCT ITEM */
 

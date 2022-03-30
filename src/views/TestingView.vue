@@ -1,5 +1,5 @@
 <template>
-    <!-- <div>
+    <div>
         <p v-if="loggedIn">Logged in as {{currentEmail}}</p>
         <p v-else>No current user</p>
         <div class="">
@@ -7,11 +7,9 @@
                 <span v-show="loggedIn" @click="doLogout">Log out</span>
                 <span v-show="!loggedIn" @click="doLogin">Log in</span>
             </button>
-        </div> -->
-        <AddProduct />
-
-<!-- 
-    </div> -->
+        </div>
+        <!-- <AddProduct /> -->
+    </div>
 </template>
 
 <script lang="ts">
@@ -21,7 +19,7 @@ import AddProduct from '../components/AddProduct.vue'
 
 export default defineComponent({
     components: {
-        AddProduct
+        // AddProduct
     },
     setup () {
         const loggedIn = ref<boolean>(false);
