@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
-import { auth } from '../firebase/auth'
+import { auth } from '../services/auth'
 
 export default defineComponent({
   name: 'HelloWorld',

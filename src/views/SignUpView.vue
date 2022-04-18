@@ -42,7 +42,7 @@
     } from "@/utils/validation"
     import {
         newUser
-    } from '../firebase/auth'
+    } from '../services/auth'
 
     export default defineComponent({
 
