@@ -1,5 +1,5 @@
 import ProductList from "./ProductList";
-import LogSummaryStats from "./LogSummaryStats";
+import LogSummaryStats from "../LogSummaryStats";
 import { WEEK_MILISECONDS } from "@/utils/constants";
 import { updatedAverage } from "@/utils/misc";
 export default class PurchaseLog {

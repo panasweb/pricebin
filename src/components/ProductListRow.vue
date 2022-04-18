@@ -22,15 +22,15 @@
 </template>
 
 <script lang ="ts">
-import { Product } from "@/types/Product";
+import { Product } from "@/types/classes/Product";
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import { findProductByNameAndBrand } from '../models/products'
-import ProductListRecord from '../types/ProductListRecord'
+import ListRecord from '../types/ListRecord'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 
 export default defineComponent({
     props: {
-        product: { type: Object as PropType<ProductListRecord>, required: true }
+        product: { type: Object as PropType<ListRecord>, required: true }
     },
     setup(props) {
         const productData = ref<Product|null>();

@@ -1,4 +1,4 @@
-import Store from "@/types/Store";
+import Store from "@/types/classes/Store";
 
 const img = '@/assets/logos/'
 

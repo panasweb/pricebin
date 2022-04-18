@@ -1,5 +1,5 @@
 <template>
-    <!-- <div>
+    <div>
         <p v-if="loggedIn">Logged in as {{currentEmail}}</p>
         <p v-else>No current user</p>
         <div class="">
@@ -7,21 +7,20 @@
                 <span v-show="loggedIn" @click="doLogout">Log out</span>
                 <span v-show="!loggedIn" @click="doLogin">Log in</span>
             </button>
-        </div> -->
-        <AddProduct />
-
-<!-- 
-    </div> -->
+        </div>
+        <!-- <AddProduct /> -->
+    </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue'
-import {auth, logIn, logOut} from '../firebase/auth';
+import {auth, logIn, logOut} from '../services/auth';
 import AddProduct from '../components/AddProduct.vue'
+
 
 export default defineComponent({
     components: {
-        AddProduct
+        // AddProduct
     },
     setup () {
         const loggedIn = ref<boolean>(false);
@@ -29,7 +28,7 @@ export default defineComponent({
 
         onBeforeMount(() => {
             // Setup a listener that persists throughout component lifecycle
-            auth.onAuthStateChanged(user => {
+            auth.onAuthStateChanged((user) => {
                 if (!user) {
                     loggedIn.value = false;
                 } else {

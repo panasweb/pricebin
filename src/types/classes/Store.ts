@@ -1,4 +1,4 @@
-import StoreLogo from './StoreLogo'
+import StoreLogo from '../StoreLogo'
 import { exampleStores } from '@/models/stores';
 /* eslint-disable */
 

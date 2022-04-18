@@ -1,9 +1,9 @@
-import Price from "@/types/Price";
-import {Product} from "@/types/Product";
-import ProductListRecord from "@/types/ProductListRecord";
+import Price from "@/types/classes/Price";
+import {Product} from "@/types/classes/Product";
+import ListRecord from "@/types/ListRecord";
 import {tunaPrices, waterPrices, garatPrices} from './prices'
 import {exampleStores} from './stores'
-import Store from "@/types/Store";
+import Store from "@/types/classes/Store";
 
 export const exampleProducts = [
     new Product('Atún Dolores (Lata 140g)', 'Dolores',  'Despensa', tunaPrices, '123'),

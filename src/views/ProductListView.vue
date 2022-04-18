@@ -12,7 +12,7 @@
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import ProductCardSquare from '../components/ProductCardSquare.vue'
 import { exampleProducts } from '@/models/products';
-import { Product } from '@/types/Product';
+import { Product } from '@/types/classes/Product';
 
 export default defineComponent({
     components: {

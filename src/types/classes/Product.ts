@@ -1,4 +1,4 @@
-import ProductType from './ProductType'
+import ProductType from '../ProductType'
 import Price from './Price'
 // import { exampleProducts } from '@/models/products';
 
