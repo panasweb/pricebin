@@ -1,6 +1,5 @@
-import ProductType from '../ProductType'
+import ProductType from '../../types/ProductType'
 import Price from './Price'
-// import { exampleProducts } from '@/models/products';
 
 export class Product {
     
@@ -57,7 +56,6 @@ export class Product {
             this.prices.push(price);
         }
     }
-
 
 }
 
