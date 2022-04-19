@@ -41,10 +41,9 @@
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
-import { exampleProducts } from '../models/products'
-import {Product} from '../types/classes/Product'
+import { exampleProducts, findById } from '../models/exampleProducts'
+import {Product} from '../models/classes/Product'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
-import {findById } from '../models/products'
 import {useRoute} from 'vue-router'
 import { propsToAttrMap } from '@vue/shared'
 

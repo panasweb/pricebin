@@ -4,9 +4,10 @@ import { User, UserToCreate } from "../types/interfaces/User";
 const url = 'http://localhost:3010/users/';
 
 const UserManager = {
-    createUser : async function(user: UserToCreate) : Promise<boolean> {
+    create : async function(user: UserToCreate) : Promise<boolean> {
+        console.log("Create user with email", user.email);
         try {
-            let response = await axios.post(url, user);
+            const response = await axios.post(url, user);
             console.log(response);
             return true;
         } catch (e) {

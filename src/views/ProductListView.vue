@@ -11,8 +11,8 @@
 <script lang="ts">
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import ProductCardSquare from '../components/ProductCardSquare.vue'
-import { exampleProducts } from '@/models/products';
-import { Product } from '@/types/classes/Product';
+import { exampleProducts } from '@/models/exampleProducts';
+import { Product } from '@/models/classes/Product';
 
 export default defineComponent({
     components: {

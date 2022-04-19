@@ -43,6 +43,7 @@
     import {
         newUser
     } from '../services/auth'
+    import Users from '../models/UserManager'
 
     export default defineComponent({
 
@@ -74,6 +75,9 @@
                     console.log("Las contraseñas no son iguales")
                 } else {
                     console.log("Submitted");
+                    // Try MongoDB first
+                    await Users.create({email: email.value});
+        
                     const res = await newUser(email.value, password.value);
 
                     if (res.error) {

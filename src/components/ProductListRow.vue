@@ -22,9 +22,9 @@
 </template>
 
 <script lang ="ts">
-import { Product } from "@/types/classes/Product";
+import { Product } from "@/models/classes/Product";
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
-import { findProductByNameAndBrand } from '../models/products'
+import { findProductByNameAndBrand } from '../models/exampleProducts'
 import ListRecord from '../types/ListRecord'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 
