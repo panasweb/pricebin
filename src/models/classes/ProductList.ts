@@ -1,4 +1,4 @@
-import ListRecord from "../ListRecord";
+import ListRecord from "../../types/ListRecord";
 
 export default class ProductList {
     list: ListRecord[];
