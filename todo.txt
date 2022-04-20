@@ -1,0 +1,1 @@
+- IDEA: an authenticator handler as an object to call in authorization-required methods

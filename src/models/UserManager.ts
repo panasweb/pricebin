@@ -4,15 +4,15 @@ import { User, UserToCreate } from "../types/interfaces/User";
 const url = 'http://localhost:3010/users/';
 
 const UserManager = {
-    create : async function(user: UserToCreate) : Promise<boolean> {
+    create : async function(user: UserToCreate) : Promise<[boolean, User | null]> {
         console.log("Create user with email", user.email);
         try {
-            const response = await axios.post(url, user);
-            console.log(response);
-            return true;
+            const {data} : any = await axios.post(url, user);
+            console.log(data);
+            return [true, data.newDoc as User];
         } catch (e) {
             console.log("API error creating user");
-            return false;
+            return [false, null];
         }
     },
     getUser : async function(id:string) : Promise<User | null> {
