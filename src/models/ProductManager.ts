@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import {Product} from '@/types/interfaces/Product'
 import Price from '@/types/interfaces/Price'
 
@@ -31,12 +31,14 @@ const ProductManager = {
         }
     },
     addPrice : async function(productId:string, price:Price) : Promise<[boolean, Product | null]> {
+        //TODO
         console.log("to implement!");
         return [false, null];
     },
     updatePrice : async function(productId:string, priceId:string, newAmount:number) : Promise<[boolean, Product | null]> {
-        // Finds the price by price id in given product, and updates the amount.
-        // Essentially you update how much it costs at a given Store.
+        // TODO
+        /* Finds the price by price id in given product, and updates the amount.
+        Essentially you update how much it costs at a given Store. */
         console.log("to implement!");
         return [false, null];
     }

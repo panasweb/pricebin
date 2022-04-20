@@ -1,7 +1,7 @@
 import Price from "@/models/classes/Price";
 import {Product} from "@/models/classes/Product";
 import ListRecord from "@/types/ListRecord";
-import {tunaPrices, waterPrices, garatPrices} from './prices'
+import {tunaPrices, waterPrices, garatPrices} from './examplePrices'
 import {exampleStores} from './exampleStores'
 import Store from "@/models/classes/Store";
 
