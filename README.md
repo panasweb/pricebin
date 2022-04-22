@@ -1,29 +1,28 @@
 # PriceBin
+## Correr el proyecto (desarrollo):
+```
+yarn serve
+```
 
 ## Si no tienes yarn instalado:
 ```
 npm install --global yarn
 ```
 
-## Project setup
+## Instalar dependencias
 ```
 yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
+### Compilar para Producción
 ```
 yarn build
 ```
 
-### Lints and fixes files
+### Lints / fixes
 ```
 yarn lint
 ```
+...
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[Configuration Reference](https://cli.vuejs.org/config/).
