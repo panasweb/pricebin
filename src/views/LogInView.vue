@@ -15,42 +15,39 @@
     </form>
     </div>
 </template>
-<style scoped>
-    @import '../styles/Form.css';
-</style>>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue"
-import {useRouter} from "vue-router"
-import {logIn} from '../services/auth'
 
-export default defineComponent({
+<script setup lang="ts">
 
-    setup(props, ctx) {
-        const router = useRouter();
+import { logIn } from "@/services/auth";
+import { ref } from "vue"
+import { useRouter } from "vue-router"
+const router = useRouter();
+const email = ref<string>("");
+const password = ref<string>("");
 
-        const email = ref<string>("");
-        const password = ref<string>("");
+function redirect() {
+    router.push({name: 'home', replace:true});
+}
 
-        async function onSubmit() {
-        console.log('logging in...');
-        const res = await logIn(email.value, password.value);
+async function onSubmit() {
+    console.log("Logging in", email);
+    
+    const loginResponse = await logIn(email.value, password.value);
 
-        function redirect() {
-            router.push({ name: 'home', replace: true })
-        }
-        
-        if (res.success) {
-            redirect();
-
-        } else {
-            console.error("Error logging in", res.error);
-            // show feedback
-        }
-
-        }
-
-        return { email, password, onSubmit }
+    if (loginResponse.success) {
+        redirect();
+    } else {
+        console.error("Error logging in", loginResponse.error);
     }
-})
+}
+
+/*
+script setup is syntactic sugar for better performance and less boilerplate
+defineProps and defineEmits are automatically available. No need to 'return' anything.
+  these are compiler macros only usable inside script setup.
+
+>> https://vuejs.org/api/sfc-script-setup.html#typescript-only-features
+
+*/
 </script>
