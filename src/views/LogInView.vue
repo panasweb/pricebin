@@ -27,10 +27,22 @@
 
 
 <script setup lang="ts">
-import { logIn } from "@/services/auth";
-import { ref } from "vue"
+import { auth, logIn } from "@/services/auth";
+import { onAuthStateChanged } from "@firebase/auth"
+import { ref, onBeforeMount } from "vue"
 import { useRouter } from "vue-router"
 import { NAlert, NSpin } from "naive-ui";
+
+onBeforeMount(() => {
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("already signed in");
+            redirect();
+        }
+    })
+})
+
 const router = useRouter();
 const email = ref<string>("");
 const password = ref<string>("");
