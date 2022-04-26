@@ -20,7 +20,7 @@ export default defineComponent({
     onMounted(() => {
       console.log("Mounted!");
       if (auth.currentUser?.displayName) {
-        msg.value = `¡Bienvenidx ${auth.currentUser.displayName}!`
+        msg.value = `¡Bienvenidx, ${auth.currentUser.displayName}!`
       }
     })
 
