@@ -26,6 +26,8 @@
                     {{ alertMessage }}
                 </n-alert>
             </div>
+            <n-alert v-show="showSuccess" title="¡Tu cuenta se creó exitosamente!" type="success">
+            </n-alert>
             <router-link to="/login" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link>
         </form>
     </div>
@@ -37,11 +39,34 @@
 
 
 <script setup lang="ts">
-import { defineComponent, ref } from "vue"
+import { defineComponent, onBeforeMount, ref } from "vue"
+import {auth} from '../services/auth'
+import { onAuthStateChanged } from "@firebase/auth"
 import { useRouter } from 'vue-router'
 import { validateNewPassword } from "@/utils/validation"
 import { newUser } from '../services/auth'
 import { NAlert, NSpin } from "naive-ui";
+
+
+
+function redirect() {
+    console.log("Redirecting")
+    router.push({
+        name: 'home',
+        replace: true
+    })
+}
+
+onBeforeMount(() => {
+    // a minor delay between page load and redirection, it can be improved
+    // by storing current user in app global store
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("already signed in");
+            redirect();
+        }
+    })
+})
 
 const router = useRouter();
 const email = ref<string>("");
@@ -52,16 +77,9 @@ const passwordError = ref<string>("");
 
 const alertMessage = ref<string>("");
 const showAlert = ref<boolean>(false);
+const showSuccess = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 
-
-function redirect() {
-    console.log("Redirecting")
-    router.push({
-        name: 'home',
-        replace: true
-    })
-}
 
 async function onSubmit() {
     if (isLoading.value) return;
@@ -76,11 +94,15 @@ async function onSubmit() {
     } else if (password.value !== confirmPassword.value) {
         showAlert.value = true;
         alertMessage.value = "Las contraseñas no coinciden :(";
+    } else if (!acceptedTerms.value) {
+        showAlert.value = true;
+        alertMessage.value = "Debes aceptar los términos y condiciones";
     } else {
         isLoading.value = true;
         console.log("Submitted");
         const res = await newUser(email.value, password.value);
         isLoading.value = false;
+        
         if (res.error) {
             showAlert.value = true;
             console.log("Error:", res.error);
@@ -91,7 +113,10 @@ async function onSubmit() {
             }
         } else {
             // Redirigir a Home
-            redirect()
+            showSuccess.value = true;
+            setTimeout(() => {
+                redirect()
+            }, 2000)
         }
     }
 }
