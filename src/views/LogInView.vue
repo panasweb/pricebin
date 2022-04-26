@@ -44,7 +44,7 @@ function redirect() {
 
 async function onSubmit() {
     if (isLoading.value) return;
-    console.log("Logging in", email);
+    console.log("Logging in", email.value);
     showAlert.value = false;
     isLoading.value = true;
 

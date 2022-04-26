@@ -17,7 +17,14 @@
                 <label class="form-check-label" for="terms">Acepto Los Términos y Condiciones</label>
             </div>
             <div class="submit">
-                <button class="btn btn-primary w-100" type="submit">Crear Cuenta</button>
+                <button class="btn btn-primary w-100" type="submit">
+                    <n-spin :show="isLoading" size="small" stroke="#fff">
+                        <p>Crear Cuenta</p>
+                    </n-spin>
+                </button>
+                <n-alert v-show="showAlert" title="Error Text" type="error">
+                    {{ alertMessage }}
+                </n-alert>
             </div>
              <router-link to="/login" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link> 
         </form>
@@ -29,70 +36,60 @@
 
 
 
-<script lang="ts">
-    import {
-        defineComponent,
-        ref
-    } from "vue"
-    import {
-        useRouter
-    } from 'vue-router'
-    import {
-        validateNewPassword
-    } from "@/utils/validation"
-    import {
-        newUser
-    } from '../services/auth'
+<script setup lang="ts">
+import { defineComponent, ref } from "vue"
+import { useRouter } from 'vue-router'
+import { validateNewPassword } from "@/utils/validation"
+import { newUser } from '../services/auth'
+import { NAlert, NSpin } from "naive-ui";
 
-    export default defineComponent({
+const router = useRouter();
+const email = ref < string > ("");
+const password = ref < string > ("");
+const confirmPassword = ref < string > ("");
+const acceptedTerms = ref < boolean > (false);
+const passwordError = ref < string > ("");
 
-        setup(props, ctx) {
-            const router = useRouter();
-
-            const email = ref < string > ("");
-            const password = ref < string > ("");
-            const confirmPassword = ref < string > ("");
-            const role = ref < string > ("developer")
-            const acceptedTerms = ref < boolean > (false);
-            const passwordError = ref < string > ("");
+const alertMessage = ref<string>("");
+const showAlert = ref<boolean>(false);
+const isLoading = ref<boolean>(false);
 
 
-            function redirect() {
-                console.log("Redirecting")
-                router.push({
-                    name: 'home',
-                    replace: true
-                })
-            }
-
-            async function onSubmit() {
-                passwordError.value = validateNewPassword(password.value);
-
-                if (passwordError.value) {
-                    console.log(passwordError.value)
-                } else if (password.value !== confirmPassword.value) {
-                    console.log("Las contraseñas no son iguales")
-                } else {
-                    console.log("Submitted");
-                    const res = await newUser(email.value, password.value);
-
-                    if (res.error) {
-                        console.error("Algo salió mal:", res.error);
-                    } else {
-                        // Redirigir a Home
-                        redirect()
-                    }
-                }
-            }
-
-            return {
-                email,
-                password,
-                confirmPassword,
-                role,
-                acceptedTerms,
-                onSubmit
-            }
-        }
+function redirect() {
+    console.log("Redirecting")
+    router.push({
+        name: 'home',
+        replace: true
     })
+}
+
+async function onSubmit() {
+    if (isLoading.value) return;
+    console.log("Sign up", email.value)
+    showAlert.value = false;
+
+    passwordError.value = validateNewPassword(password.value);
+
+    if (passwordError.value) {
+        showAlert.value = true;
+        alertMessage.value = "Sugerimos una contraseña mayor a 6 caracteres";
+    } else if (password.value !== confirmPassword.value) {
+        showAlert.value = true;
+        alertMessage.value = "Las contraseñas no coinciden :(";
+    } else {
+        isLoading.value = true;
+        console.log("Submitted");
+        const res = await newUser(email.value, password.value);
+        isLoading.value = false;
+        if (res.error) {
+        showAlert.value = true;
+        alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
+            console.error("Algo salió mal:", res.error);
+        } else {
+            // Redirigir a Home
+            redirect()
+        }
+    }
+}
+
 </script>

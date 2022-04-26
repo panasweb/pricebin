@@ -3,7 +3,8 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
-    updateProfile
+    updateProfile,
+    sendEmailVerification
 } from "firebase/auth";
 
 import { getGravatarURL } from "@/utils/misc";
@@ -11,8 +12,11 @@ import { getGravatarURL } from "@/utils/misc";
 import FirebaseAPIResponse from "@/types/FirebaseAPIResponse";
 
 import app from './app'
+import { FirebaseError } from "firebase/app";
+
 
 export const auth = getAuth(app);
+auth.useDeviceLanguage();
 
 // Functions that return a Promise must be Awaited
 
@@ -29,6 +33,13 @@ export const newUser = (email: string, password: string): Promise<FirebaseAPIRes
                 const photoURL = getGravatarURL(email);
 
                 await updateProfile(userCredential.user, {displayName, photoURL});
+
+                // send email verification
+                try {
+                    await sendEmailVerification(auth.currentUser!);
+                } catch {
+                    console.error("Could not send verification email to", auth.currentUser);
+                }
 
                 const response: FirebaseAPIResponse = {
                     error: null,
