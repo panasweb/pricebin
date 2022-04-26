@@ -22,16 +22,16 @@
                         <p>Crear Cuenta</p>
                     </n-spin>
                 </button>
-                <n-alert v-show="showAlert" title="Error Text" type="error">
+                <n-alert v-show="showAlert" title="Error" type="error">
                     {{ alertMessage }}
                 </n-alert>
             </div>
-             <router-link to="/login" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link> 
+            <router-link to="/login" class="form-link">¿Ya tienes una cuenta? <span>Ingresa</span></router-link>
         </form>
     </div>
 </template>
 <style scoped>
-    @import '../styles/Form.css';
+@import '../styles/Form.css';
 </style>>
 
 
@@ -44,11 +44,11 @@ import { newUser } from '../services/auth'
 import { NAlert, NSpin } from "naive-ui";
 
 const router = useRouter();
-const email = ref < string > ("");
-const password = ref < string > ("");
-const confirmPassword = ref < string > ("");
-const acceptedTerms = ref < boolean > (false);
-const passwordError = ref < string > ("");
+const email = ref<string>("");
+const password = ref<string>("");
+const confirmPassword = ref<string>("");
+const acceptedTerms = ref<boolean>(false);
+const passwordError = ref<string>("");
 
 const alertMessage = ref<string>("");
 const showAlert = ref<boolean>(false);
@@ -82,9 +82,13 @@ async function onSubmit() {
         const res = await newUser(email.value, password.value);
         isLoading.value = false;
         if (res.error) {
-        showAlert.value = true;
-        alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
-            console.error("Algo salió mal:", res.error);
+            showAlert.value = true;
+            console.log("Error:", res.error);
+            if (res.error === 'auth/email-already-in-use') {
+                alertMessage.value = "El correo " + email.value +" ya está en uso.";
+            } else {
+                alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
+            }
         } else {
             // Redirigir a Home
             redirect()

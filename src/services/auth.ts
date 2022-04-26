@@ -51,7 +51,7 @@ export const newUser = (email: string, password: string): Promise<FirebaseAPIRes
             const { code, message } = error;
 
             const response: FirebaseAPIResponse = {
-                error: message + ' (' + code + ')',
+                error: code,
                 success: null
             }
             return response;
