@@ -5,6 +5,7 @@ import SignUp from '../views/SignUpView.vue'
 import NewPrice from '../views/NewPriceView.vue'
 import NewProductView from '../views/NewProductView.vue'
 import ProductListView from '../views/ProductListView.vue'
+import NotFound from '../views/NotFoundView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -57,6 +58,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/myproducts',
     name: 'my products',
     component: () => import('../views/MyProductsView.vue')
+  },
+  // catch-all
+  {
+    path:'/:catchAll(.*)',
+    name:'404',
+    component: NotFound,
   }
 ]
 
