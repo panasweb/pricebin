@@ -8,9 +8,10 @@
         </router-link> 
           <div class="nav-elements">
             <router-link to="/products" class="nav-link">Ver Productos</router-link> 
-            <router-link to="/login" v-if="!loggedIn" class="nav-link">Login</router-link> 
-            <router-link to="/register"  v-if="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
-            <router-link to="/myproducts"  v-else class="nav-link cta">Ver mis productos</router-link>
+            <router-link to="/login" v-show="!loggedIn" class="nav-link">Login</router-link> 
+            <router-link to="/register"  v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
+            <router-link to="/myproducts"  v-show="loggedIn" class="nav-link cta">Ver mis productos</router-link>
+            <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
           </div>
       </div>
     </nav>
@@ -23,7 +24,7 @@
 <script lang="ts">
 import { User } from 'firebase/auth';
 import { defineComponent, onBeforeMount, ref } from 'vue'
-import {auth} from './services/auth';
+import { auth, logOut } from '@/services/auth';
 
 export default defineComponent({
   setup () {
@@ -42,7 +43,11 @@ export default defineComponent({
             }
         })
     })
-    return { loggedIn, currentEmail }
+    async function doLogout() {
+      const res = await logOut();
+      console.log(res);
+    }
+    return { loggedIn, currentEmail, doLogout }
   }
 })
 </script>
