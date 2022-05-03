@@ -42,11 +42,11 @@
                 aria-label="Dollar amount (with dot and two decimal places)"
             />
         </div>
-        <div class="quantity-wrapper">
+        <!-- <div class="quantity-wrapper">
             <div class="more-less-button" v-on:click="quantity -= 1">-</div>
             <input type="number" v-model="quantity" placeholder="1" style="text-align: center;"/>
             <div class="more-less-button" v-on:click="quantity += 1">+</div>
-        </div>
+        </div> -->
         
         <FormAlert :msg="alertMsg" />
 
@@ -60,17 +60,18 @@
 <script lang="ts">
 import FormAlert from '../components/FormAlert.vue'
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
-import {Product} from '@/models/classes/Product'
+import {Product} from '@/types/interfaces/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
-import { exampleProducts,  findProductByNameAndBrand, addProduct, addMyProduct } from '../models/exampleProducts'
+import { exampleProducts,  findProductByNameAndBrand, addProduct } from '../models/exampleProducts'
 import { exampleStores } from '@/models/exampleStores'
-import {toObject} from '@/utils/serialize'
+import StoreManager from '@/models/StoreManager'
 import {exampleBrands} from '@/models/exampleBrands'
-import Store from '@/models/classes/Store'
-import Price from '@/models/classes/Price'
+import Store from '@/types/interfaces/Store'
+import Price from '@/types/interfaces/Price'
 import Brand from '@/types/Brand'
 import ProductType from '@/types/ProductType'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
+import ProductManager from '@/models/ProductManager'
 
 export default defineComponent({
     components: {
@@ -84,8 +85,8 @@ export default defineComponent({
 
 
 
+        // const quantity = ref<number>(1);
         // Form control
-        const quantity = ref<number>(1);
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
         const productInput = ref<string>('');
@@ -109,19 +110,21 @@ export default defineComponent({
             router.push('/products')
         }
 
-        function fetchProducts() : void {
-            productList.value = exampleProducts
+        async function fetchProducts() : Promise<void> {
+            let response = await ProductManager.getAll();
+            console.log(response);
+            productList.value = response;
         }
 
-        function fetchStores() : void {
-            storeList.value = exampleStores
+        async function fetchStores() : Promise<void> {
+            storeList.value = await StoreManager.getAll();
         }
         
         function fetchBrands() : void {
             brandList.value = exampleBrands
         }
 
-        function onSubmit() : void {
+        async function onSubmit() : Promise<void> {
             alertMsg.value = '';
 
             console.log("New product")
@@ -138,44 +141,53 @@ export default defineComponent({
                 return;
             }
 
-            if (!quantity.value || quantity.value <= 0) {
-                console.error("No Store selected");
-                alertMsg.value = "Selecciona el número de productos."
-                return;
-            }
-
             let storeName = storeInput.value.trim();
             let productName = productInput.value.trim();
             let brandName = brandInput.value.trim();
 
-            console.log("look for store", storeName);
-            let store = Store.getStoreByName(storeName);
+            // Find store by name. Create if not exists
+            let store : Store | null = await StoreManager.getByName(storeName);
             if (!store) {
-                console.log("Store not found. Creating store...");
-                store = new Store(storeName);
-                toObject(store);
-                // store.save()
-            }
+                console.log(`Store ${storeName} not found. Creating store...`);
 
-            let product = findProductByNameAndBrand(productName, brandName);
+                const [created, newStore] = await StoreManager.create({name: storeName});
+
+                if (created) {
+                    store = newStore as Store;
+                } else {
+                    console.log("Error creating store");
+                    return;
+                }
+            }
+            console.log("Price for store", store);
+
+            let product : Product | null = null // ProductManager.findProductByNameAndBrand() //findProductByNameAndBrand(productName, brandName);
             if (!product) {
-                console.log("Product not found. Creating product...");
-                const price = new Price(amt, 0, store, new Date(), 'MXN');
-                product = new Product(productName, brandName, productTypeInput.value!, [price]);
-                addProduct(product)
-                // product = new Product(productName, brandName, 'Despensa', []);
-                // store.save()
-            }
-            addMyProduct(product, store, quantity.value)
-            
+                console.log("Creating product...");
+                const price : Price = {
+                    amount: amt,
+                    date: new Date(),
+                    currency: 'MXN',
+                    store: storeName,
+                    StoreKey: store._id!
+                };
 
+                product = {
+                    name: productName,
+                    brand: brandName,
+                    type: productTypeInput.value!,
+                    prices: [price]
+                } 
+                
+                await ProductManager.create(product);
+                console.log("Finish, redirect to product.id");
+            }
+            // addMyProduct(product, store, quantity.value)
             
-            console.log("Finish, redirect to product.id", product.id!);
             redirect()
-            // fetch the product and add the price to its list, redirect to product detail
         }
 
-        return { quantity, amount, productInput, productTypeInput, brandInput, storeInput, 
+        return { amount, productInput, productTypeInput, brandInput, storeInput, 
         productList, storeList, brandList, PRODUCT_TYPES, alertMsg,
          onSubmit }
     }

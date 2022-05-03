@@ -1,9 +1,7 @@
 <template>
     <div>
         <div class="price-container">
-            <ProductCardSquare v-for="p in products" :key="p.id" :product="p" />
-            <ProductCardSquare v-for="p in products" :key="p.id" :product="p" />
-            <ProductCardSquare v-for="p in products" :key="p.id" :product="p" />
+            <ProductCardSquare v-for="p in products" :key="p.name" :product="p" />
         </div>
     </div>
 </template>
@@ -12,7 +10,8 @@
 import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
 import ProductCardSquare from '../components/ProductCardSquare.vue'
 import { exampleProducts } from '@/models/exampleProducts';
-import { Product } from '@/models/classes/Product';
+import { Product } from '@/types/interfaces/Product';
+import ProductManager from '@/models/ProductManager';
 
 export default defineComponent({
     components: {
@@ -22,8 +21,8 @@ export default defineComponent({
 
         const products = ref<Product[]>([]);
         
-        function fetchProducts() {
-            products.value = exampleProducts;
+        async function fetchProducts() {
+            products.value = await ProductManager.getAll();
         }
 
         onBeforeMount(()=>{

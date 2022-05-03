@@ -1,6 +1,6 @@
 <template>
     <div class="dummy-container">
-        <router-link :to="`/product/${product.id}`">
+        <router-link :to="`/product/${product._id}`">
             <div class="price-card">
                 <div class="price-card-content">
                     <div class="card-image" :style="{ 'background-image': `url(${productImg})` }"></div>
@@ -43,25 +43,25 @@
 </template>
 
 <script lang="ts">
-import { Product } from '@/models/classes/Product'
 import { defineComponent, ref } from 'vue'
 import { DEFAULT_PRODUCT_IMG } from '@/utils/constants'
+import { Product } from '@/types/interfaces/Product';
 
 export default defineComponent({
     props: {
         product: {
-            type: Product,
+            type: Object as ()=> Product,
             required: true,
         }
     },
     setup(props) {
+        // collect information for adding price
         const objectData: any = {
             productName: props.product.name,
             brandName: props.product.brand,
             productType: props.product.type,
-            productId: props.product.id || null
+            productId: props.product._id || null
         }
-
         const productImg = ref<string>(props.product.img ?? DEFAULT_PRODUCT_IMG);
 
         const productFormData = ref<string>(JSON.stringify(objectData));

@@ -22,8 +22,8 @@ const StoreManager = {
             return null;
         }
         try {
-            const store = await axios.get(url + id) as Store;
-            return store;
+            const {data} = await axios.get(url + id);
+            return data.newDoc as Store;
         } catch (e) {
             console.log("API Error", e);
             return null;
@@ -41,8 +41,8 @@ const StoreManager = {
                 name
             }
 
-            const store = await axios.post(url + 'by-name', body) as Store;
-            return store;
+            const {data} = await axios.post(url + 'by-name', body);
+            return data as Store;
         } catch (e) {
             console.log("API Error", e);
             return null;
@@ -50,10 +50,13 @@ const StoreManager = {
 
     },
     getAll : async function() : Promise<Store[]> {
-        // axios.get(url)
-        // TODO
-        console.log("to implement!");
-        return [];
+        try {
+            const {data} = await axios.get(url); 
+            return data as Store[];
+        } catch (e) {
+            console.error("Error fetching stores", e);
+            return []   
+        }
     }
 }
 

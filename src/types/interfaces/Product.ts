@@ -7,7 +7,8 @@ export interface Product {
     brand?: string,
     type: ProductType,
     prices: Price[],
-    img?: string
+    img?: string,
+    _id?: string,
 }
 
 // TBA interface for ProductToCreate
