@@ -3,7 +3,7 @@
 <div class="container">
     <form @submit.prevent="onSubmit">
         <div class="headline">
-            <h2>Añadir producto</h2>
+            <h2>Registrar Precio</h2>
         </div>
 
         <label for="productType">Tipo:</label>
@@ -58,12 +58,10 @@
 </template>
 
 <script lang="ts">
-import FormAlert from '../components/FormAlert.vue'
-import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
+import FormAlert from './FormAlert.vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import {Product} from '@/types/interfaces/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
-import { exampleProducts,  findProductByNameAndBrand, addProduct } from '../models/exampleProducts'
-import { exampleStores } from '@/models/exampleStores'
 import StoreManager from '@/models/StoreManager'
 import {exampleBrands} from '@/models/exampleBrands'
 import Store from '@/types/interfaces/Store'

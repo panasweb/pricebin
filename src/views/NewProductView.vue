@@ -1,18 +1,18 @@
 <template>
 
-        <AddProduct />
+        <RegisterPrice />
 
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue'
 import {auth, logIn, logOut} from '../services/auth';
-import AddProduct from '../components/AddProduct.vue'
+import RegisterPrice from '../components/RegisterPrice.vue'
 
 export default defineComponent({
     name: 'NewProductView',
     components: {
-        AddProduct
+        RegisterPrice
     },
 
     setup () {

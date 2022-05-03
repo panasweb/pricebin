@@ -10,7 +10,7 @@
         </div>
         <h1>Products CRUD</h1>
         <div class="">
-            <AddProduct />
+            <RegisterPrice />
         </div>
         <div>
             Hello products
@@ -27,7 +27,7 @@ import ProductManager from '@/models/ProductManager';
 import { auth, logIn, logOut } from '../services/auth';
 import { Product } from '@/types/interfaces/Product';
 import ProductCardSquare from '@/components/ProductCardSquare.vue';
-import AddProduct from '@/components/AddProduct.vue';
+import RegisterPrice from '@/components/RegisterPrice.vue';
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
