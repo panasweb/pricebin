@@ -1,9 +1,9 @@
-import Price from "@/types/classes/Price";
-import {Product} from "@/types/classes/Product";
+import Price from "@/models/classes/Price";
+import {Product} from "@/models/classes/Product";
 import ListRecord from "@/types/ListRecord";
-import {tunaPrices, waterPrices, garatPrices} from './prices'
-import {exampleStores} from './stores'
-import Store from "@/types/classes/Store";
+import {tunaPrices, waterPrices, garatPrices} from './examplePrices'
+import {exampleStores} from './exampleStores'
+import Store from "@/models/classes/Store";
 
 export const exampleProducts = [
     new Product('Atún Dolores (Lata 140g)', 'Dolores',  'Despensa', tunaPrices, '123'),
@@ -15,6 +15,7 @@ export const exampleProductRecords = [
     {productName: "Atún Dolores (Lata 140g)", brandName:'Dolores', storeName:exampleStores[0].name, amount: 14.50, quantity: 2},
     {productName: "Garrafón Ciel (10lt)", brandName: 'Ciel', storeName:exampleStores[1].name ,amount: 31.50, quantity: 3} 
 ]  // podría instanciarse ProductList con esto...
+
 
 export const findById = (productId: string) : Product|null => {
     const res: Product | undefined = exampleProducts.find((p:Product) => p.id == productId);

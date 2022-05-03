@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
-import { exampleProductRecords} from '../models/products'
+import { exampleProductRecords} from '../models/exampleProducts'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
 

@@ -1,5 +1,5 @@
-import Price from "@/types/classes/Price"
-import {exampleStores} from './stores'
+import Price from "@/models/classes/Price"
+import {exampleStores} from './exampleStores'
 /* SAMPLE PRICES TO NEST IN PRODUCT ITEM */
 
 export const tunaPrices: Price[] = [

@@ -1,4 +1,4 @@
-import Store from "@/types/classes/Store";
+import Store from "@/models/classes/Store";
 
 // not useful; as store ids may be undefined. We should let the database handle ids for us
 export const toObject = (instance: any) : object => {
