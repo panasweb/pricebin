@@ -19,6 +19,7 @@
                     </div>
                     <div class="col price">
                         ${{p.amount}}
+                        <div class="priceVotes">Apoyo: {{priceVotes[p._id!]}}</div>
                     </div>
                 </div>
             </div>
@@ -37,23 +38,40 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref } from 'vue'
-import { exampleProducts, findById } from '../models/exampleProducts'
+import { onBeforeMount,  ref } from 'vue'
 import {Product} from '../types/interfaces/Product'
 import {DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG} from '../utils/constants' 
-import {useRoute} from 'vue-router'
-import { propsToAttrMap } from '@vue/shared'
+import {useRoute, useRouter} from 'vue-router'
+
 import ProductManager from '@/models/ProductManager'
+import VotesManager from '@/models/VotesManager'
+import Price from '@/types/interfaces/Price'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute()
 const currentP = ref<Product | null>()
 const productFormData= ref<string>('');  
+const priceVotes = ref<Record<string, number>>({});  
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
+const router = useRouter();
+
+function redirect() {
+    router.push({ name: '404', replace: true });
+}
 
 onBeforeMount(async () => {
-    currentP.value = await ProductManager.getProduct(route.params.id as string)//findById(route.params.id as string)
+    currentP.value = await ProductManager.getProduct(route.params.id as string)
     console.log("product", currentP.value);
+
+    if (!currentP.value) {
+        redirect();
+        return;
+    }
+
+    const priceIds = Array.from(currentP.value!.prices!, (price: Price) => price._id!);
+
+    const counts = await VotesManager.getVoteCounts(priceIds as string[]);
+    priceVotes.value = counts;
 
     if (currentP.value?.img) {
         productImg.value = currentP.value.img;
@@ -67,10 +85,6 @@ onBeforeMount(async () => {
     }
     productFormData.value = JSON.stringify(objectData);
     console.log("product", objectData)
-}),
-onMounted(() =>{
-    console.log("Logo ", storeLogo.value)
-    
 })
 
 </script>
@@ -118,6 +132,13 @@ onMounted(() =>{
         font-weight: bold;
         font-size: 30px;
     }
+
+    .priceVotes {
+        font-size: 11px;
+        text-align: inherit;
+        color: #444;
+    }
+
     button{
         text-align: center;
     }
