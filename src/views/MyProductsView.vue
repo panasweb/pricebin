@@ -32,20 +32,54 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { onBeforeMount, defineComponent, onMounted, ref } from 'vue'
 import { exampleProductRecords} from '../models/exampleProducts'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
+import { onAuthStateChanged } from "@firebase/auth"
+import ProductManager from '@/models/ProductManager';
+import UserManager from '@/models/UserManager'
+const loggedIn = ref<boolean>(false);
+const currentEmail = ref<string | null>(null);
+import { auth } from '../services/auth';
 
 export default defineComponent({
     setup(){
         const total = ref<number>(0)
-        const products = ref<ListRecord[]>(exampleProductRecords)
+        const products = ref<ListRecord[]>()
+        
+        async function fetchProducts(email: string ) {
+            let user = await UserManager.getByEmail(email)
+            console.log(user?.currentList.list)
+            if(user){
+                console.log(user.currentList.list)
+                products.value = user.currentList.list
+            }
+            
+        }
+
+        onBeforeMount(()=>{
+            auth.onAuthStateChanged((user) => {
+                if (!user) {
+                    loggedIn.value = false;
+                } else {
+                    loggedIn.value = true;
+                    currentEmail.value = user.email;
+                    if(currentEmail.value){
+                        fetchProducts(currentEmail.value);
+                    }
+                }
+            })
+            
+        })
         onMounted(() =>{
             // console.log("lista de productos", products.value)
-            products.value.forEach(pr => {
-                total.value += (pr.amount * pr.quantity)
-            }); 
+            if(products.value){
+                products.value.forEach(pr => {
+                    total.value += (pr.amount * pr.quantity)
+                });
+            }
+             
         })
         return {
             total, 

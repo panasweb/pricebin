@@ -64,6 +64,7 @@ import {toObject} from '@/utils/serialize'
 import {exampleBrands} from '@/models/exampleBrands'
 import Store from '@/models/classes/Store'
 import Price from '@/models/classes/Price'
+
 import Brand from '@/types/Brand'
 import ProductType from '@/types/ProductType'
 import { useRouter, useRoute } from 'vue-router'
@@ -81,6 +82,7 @@ export default defineComponent({
         // Prefill from route params
         const route = useRoute();
         let prefill:any = null;
+        
         if (route.params.prefill) {
             prefill = JSON.parse(route.params.prefill as string);
             console.log('prefill', prefill);
@@ -99,7 +101,6 @@ export default defineComponent({
         const alertMsg = ref<string>('');
         const router = useRouter();
 
-        // Hooks
         onMounted(() => {
             console.log("New price mounted!");
             fetchProducts();
@@ -177,6 +178,8 @@ export default defineComponent({
          onSubmit }
     }
 })
+
+
 </script>
 
 <style>

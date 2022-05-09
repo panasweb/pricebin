@@ -59,17 +59,27 @@
 
 <script lang="ts">
 import FormAlert from './FormAlert.vue'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, onBeforeMount, ref } from 'vue'
 import {Product} from '@/types/interfaces/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
 import StoreManager from '@/models/StoreManager'
 import {exampleBrands} from '@/models/exampleBrands'
+import UserManager from '@/models/UserManager'
 import Store from '@/types/interfaces/Store'
 import Price from '@/types/interfaces/Price'
 import Brand from '@/types/Brand'
 import ProductType from '@/types/ProductType'
 import { useRouter } from 'vue-router'
 import ProductManager from '@/models/ProductManager'
+
+//auth
+const loggedIn = ref<boolean>(false);
+const currentEmail = ref<string | null>(null);
+const user= ref <string>("random@email.com");
+import { User } from '@/types/interfaces/User'
+
+import { auth } from '../services/auth';
+import ListRecord from '@/types/ListRecord'
 
 export default defineComponent({
     components: {
@@ -96,6 +106,21 @@ export default defineComponent({
         const router = useRouter();
 
         // Hooks
+        async function saveUser(email: string){
+            user.value = email
+            console.log(user.value)
+        }
+        // Hooks
+        onBeforeMount(()=>{
+            auth.onAuthStateChanged((userCurrent) => {
+                if (!userCurrent) {
+                    console.log("no tiene usuario")
+                } else if(userCurrent.email){
+                    saveUser(userCurrent.email);
+                }
+            })
+            
+        })
         onMounted(() => {
             console.log("New price mounted!");
             fetchProducts();
@@ -160,6 +185,7 @@ export default defineComponent({
             console.log("Price for store", store);
 
             let product : Product | null = null // ProductManager.findProductByNameAndBrand() //findProductByNameAndBrand(productName, brandName);
+            let productRecord : ListRecord | null = null
             if (!product) {
                 console.log("Creating product...");
                 const price : Price = {
@@ -177,11 +203,19 @@ export default defineComponent({
                     prices: [price]
                 } 
                 
+                
                 await ProductManager.create(product);
                 console.log("Finish, redirect to product.id");
             }
             // addMyProduct(product, store, quantity.value)
-            
+            productRecord = {
+                    productName: productName,
+                    storeName: storeName,
+                    brandName: brandName,
+                    amount: amt,
+                    quantity: 1
+            } 
+            await UserManager.addProduct(productRecord, user.value );
             redirect()
         }
 

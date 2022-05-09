@@ -1,3 +1,4 @@
+import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
 import { User, UserToCreate } from "../types/interfaces/User";
 
@@ -65,6 +66,20 @@ const UserManager = {
         }
    
     },
+    addProduct : async function (product :ListRecord, email: string) : Promise <User | null>{
+        try {
+            const body = {
+                product,
+                email
+            }
+
+            const user = await axios.post(url + 'product/add/', body) as User;
+            return user;
+        } catch (e) {
+            console.log("API Error", e);
+            return null;
+        }
+    }
 }
 
 Object.freeze(UserManager);
