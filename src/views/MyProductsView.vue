@@ -14,82 +14,98 @@
                 <h2>${{ total }}</h2>
             </div>
         </div>
-        <div v-for="p in products" :key="p.productName" class="row">
-            <ProductListRow :product="p"/>
+        <div v-for="(p, i) in products" :key="i" class="row">
+            <ProductListRow :product="p" :onClick="()=>deleteRow(i)" />
+            <!-- <button @click="deleteRow(i)">X</button> -->
         </div>
 
         <div class="row">
-            <router-link
-                :to="{
-                    name: 'create Product'
-                }"
-            >
-                <button class="btn btn-primary" >Agregar producto</button> 
+            <router-link :to="{
+                name: 'create Product'
+            }">
+                <button class="btn btn-primary">Agregar producto</button>
             </router-link>
-            
+
+            <button class="btn btn-primary">Limpiar Lista</button>
+
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { onBeforeMount, defineComponent, onMounted, ref } from 'vue'
-import { exampleProductRecords} from '../models/exampleProducts'
+import { exampleProductRecords } from '../models/exampleProducts'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
 import { onAuthStateChanged } from "@firebase/auth"
 import ProductManager from '@/models/ProductManager';
 import UserManager from '@/models/UserManager'
-const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 import { auth } from '../services/auth';
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
-    setup(){
+    setup() {
         const total = ref<number>(0)
         const products = ref<ListRecord[]>([])
-        
-        async function fetchProducts(email: string ) {
+        const router = useRouter();
+
+        async function fetchProducts(email: string) {
             let user = await UserManager.getByEmail(email)
-            if(user){
+            if (user) {
                 products.value = user.currentList.list
             }
-            
+            // else, display error
         }
 
-        onBeforeMount(()=>{
+        async function deleteRow(index:number) {
+            let newList = products.value.filter((p, i) => i != index); // remove 1 element from index
+            if (!auth.currentUser) {
+                redirect();
+                return;
+            }
+            await UserManager.updateList(auth.currentUser.email!, newList);
+            await fetchProducts(auth.currentUser.email!);
+        }
+
+        function redirect() {
+            router.push({name:'/login', replace:true});
+        }
+
+        onBeforeMount(() => {
             auth.onAuthStateChanged(async (user) => {
                 if (!user) {
-                    loggedIn.value = false;
+                    redirect();
                 } else {
-                    loggedIn.value = true;
                     currentEmail.value = user.email;
-                    if(currentEmail.value){
+                    if (currentEmail.value) {
                         await fetchProducts(currentEmail.value);
                         products.value.forEach(pr => {
-                        total.value += (pr.amount * pr.quantity)
-                    });
+                            total.value += (pr.amount * pr.quantity)
+                        });
                     }
                 }
             })
-            
+
         })
 
         return {
-            total, 
-            products
+            total,
+            products,
+            deleteRow
         }
     },
-    components:{
+    components: {
         ProductListRow
     }
 })
 </script>
 
 <style scoped>
-    .division{
-        width: 100%;
-        height: 50%;
-        border-bottom: 3px solid black;
-        border-radius: 2px;
-    }
+.division {
+    width: 100%;
+    height: 50%;
+    border-bottom: 3px solid black;
+    border-radius: 2px;
+}
 </style>

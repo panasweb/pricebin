@@ -1,6 +1,6 @@
 import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
-import { User, UserToCreate } from "../types/interfaces/User";
+import { User, UserToCreate, CurrentList } from "../types/interfaces/User";
 
 const url = 'http://localhost:3010/users/';
 
@@ -66,16 +66,34 @@ const UserManager = {
         }
    
     },
-    addProduct : async function (product :ListRecord, email: string) : Promise <User | null>{
+    addProduct : async function (product:ListRecord, email: string) : Promise <User | null>{
+        // Receiva a product and append to list
         try {
             const body = {
                 product,
                 email
             }
 
-            const user = await axios.post(url + 'product/add/', body) as User;
-            return user;
+            const {data} = await axios.post(url + 'product/add/', body);
+            return data as User;
         } catch (e) {
+            console.log("API Error", e);
+            return null;
+        }
+    },
+    updateList: async function (email:string, list: ListRecord[]) : Promise<User | null> {
+        // updates the list to whatever new list we have. 
+        // For removal of a product, requesting View should filter by index.
+        try {
+            const body = {
+                email,
+                list,
+            }
+
+            const {data} = await axios.post(url + 'product/update', body)
+            return data as User;
+        }
+        catch (e) {
             console.log("API Error", e);
             return null;
         }

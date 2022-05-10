@@ -1,10 +1,15 @@
 <template>
 
-        <RegisterPrice />
+        <RegisterPrice :title="'Añadir a mi lista'"/>
 
 </template>
 
 <script lang="ts">
+/**
+ * 
+ * TEMPORARY VIEW TO ADD PRODUCTS TO A USER CURRENT LIST
+ * 
+ */
 import { defineComponent, onBeforeMount, ref } from 'vue'
 import {auth, logIn, logOut} from '../services/auth';
 import RegisterPrice from '../components/RegisterPrice.vue'
@@ -31,19 +36,8 @@ export default defineComponent({
             })
         })
 
-        async function doLogout() {
-            console.log('logging out...')
-            const res = await logOut();
-            console.log(res);
-        }
 
-        async function doLogin() {
-            console.log('logging in...');
-            const res = await logIn('ericjardon@hotmail.com', '1234567');
-            console.log(res);
-        }
-
-        return { loggedIn, currentEmail, doLogin, doLogout }
+        return { loggedIn, currentEmail }
     }
 })
 </script>

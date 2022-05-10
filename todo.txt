@@ -1,6 +1,6 @@
 0. Add buttons for clearlist and save list in my-products
 1. Update Product Square Card: remove add to list + button, 
 2. Implement "add+" buttons in every price of product view
-
+3. TEST save currentlist
 
 - IDEA: authenticator handler as an object to call in authorization-required methods

@@ -3,7 +3,7 @@
 <div class="container">
     <form @submit.prevent="onSubmit">
         <div class="headline">
-            <h2>Registrar Precio</h2>
+            <h2>{{title || 'Registrar Precio'}}</h2>
         </div>
 
         <label for="productType">Tipo:</label>
@@ -59,7 +59,7 @@
 
 <script lang="ts">
 import FormAlert from './FormAlert.vue'
-import { defineComponent, onMounted, onBeforeMount, ref } from 'vue'
+import { defineComponent, onMounted, onBeforeMount, ref, PropType } from 'vue'
 import {Product} from '@/types/interfaces/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
 import StoreManager from '@/models/StoreManager'
@@ -84,6 +84,9 @@ import ListRecord from '@/types/ListRecord'
 export default defineComponent({
     components: {
         FormAlert,
+    },
+    props: {
+        title: {type: String as PropType<string>, required:false}
     },
     setup(props: any) {
         // DB data

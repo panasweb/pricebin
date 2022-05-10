@@ -1,5 +1,5 @@
 /* Reflects User model from API */
-
+import ListRecord from '../ListRecord'
 interface UserLog {
     nLists: number,
     nWeeks:number,
@@ -10,14 +10,8 @@ interface UserLog {
     start: Date,
     globalTotal: number,
 }
-interface ListRecord{
-    productName: string, 
-    brandName: string, 
-    storeName: string, 
-    amount: number,
-    quantity: number
-}
-interface CurrentList {
+
+export interface CurrentList {
     list: ListRecord[], 
     total: number
 }
