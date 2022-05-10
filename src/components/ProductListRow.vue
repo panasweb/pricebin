@@ -1,14 +1,13 @@
 <template>
-    <div v-if="productData" class="row">
+    <div v-if="product" class="row">
         <div class="col-4">
             <!-- Render the image of every item -->
-            <img src="../assets/AtunDolores.svg" />
+            <img :src="productImg" class="row-img"/>
             <p>{{ product.productName }}</p>
         </div>
         <div class="col-4">
             <!-- Render the image of the store -->
-            <img :src="storeLogo" class="logo">
-            <p>{{ productData.prices[0].store.name }}</p>
+            <p>{{ product.storeName }}</p>
         </div>
         
         <div class="col-4">
@@ -16,7 +15,6 @@
                 <!-- Render the price times the number of units -->
                 ${{ product.amount }} x {{ product.quantity }}
             </h2>
-            <p>Encontrado en ${{ productData.prices[0].amount }}</p>
         </div>
     </div>
 </template>
@@ -27,21 +25,23 @@ import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import { findProductByNameAndBrand } from '../models/exampleProducts'
 import ListRecord from '../types/ListRecord'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
+import { DEFAULT_PRODUCT_IMG } from '@/utils/constants'
+
 
 export default defineComponent({
     props: {
         product: { type: Object as PropType<ListRecord>, required: true }
     },
     setup(props) {
-        const productData = ref<Product|null>();
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
+        const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 
-        onMounted(() => {
-            productData.value = findProductByNameAndBrand(props.product.productName, props.product.brandName);
-            console.log("Product Data", productData.value); 
-        })
+        // onMounted(() => {
+        //     product.value = props.product;
+        //     console.log("Product Data", product.value); 
+        // })
 
-        return { productData, storeLogo }
+        return { storeLogo, productImg /* , product,  */ }
     }
 })
 </script>

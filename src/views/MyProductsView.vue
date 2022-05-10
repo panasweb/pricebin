@@ -46,41 +46,34 @@ import { auth } from '../services/auth';
 export default defineComponent({
     setup(){
         const total = ref<number>(0)
-        const products = ref<ListRecord[]>()
+        const products = ref<ListRecord[]>([])
         
         async function fetchProducts(email: string ) {
             let user = await UserManager.getByEmail(email)
-            console.log(user?.currentList.list)
             if(user){
-                console.log(user.currentList.list)
                 products.value = user.currentList.list
             }
             
         }
 
         onBeforeMount(()=>{
-            auth.onAuthStateChanged((user) => {
+            auth.onAuthStateChanged(async (user) => {
                 if (!user) {
                     loggedIn.value = false;
                 } else {
                     loggedIn.value = true;
                     currentEmail.value = user.email;
                     if(currentEmail.value){
-                        fetchProducts(currentEmail.value);
+                        await fetchProducts(currentEmail.value);
+                        products.value.forEach(pr => {
+                        total.value += (pr.amount * pr.quantity)
+                    });
                     }
                 }
             })
             
         })
-        onMounted(() =>{
-            // console.log("lista de productos", products.value)
-            if(products.value){
-                products.value.forEach(pr => {
-                    total.value += (pr.amount * pr.quantity)
-                });
-            }
-             
-        })
+
         return {
             total, 
             products

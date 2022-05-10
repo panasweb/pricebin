@@ -58,8 +58,8 @@ const UserManager = {
                 email
             }
 
-            const user = await axios.post(url + 'by-email', body) as User;
-            return user;
+            const {data} = await axios.post(url + 'by-email', body);
+            return data as User;
         } catch (e) {
             console.log("API Error", e);
             return null;
