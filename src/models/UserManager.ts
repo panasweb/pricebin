@@ -97,7 +97,19 @@ const UserManager = {
             console.log("API Error", e);
             return null;
         }
-    }
+    },
+    clearList: async function (email:string) : Promise<User | null> {
+        // updates the list to whatever new list we have. 
+        // For removal of a product, requesting View should filter by index.
+        try {
+            const {data} = await axios.post(url + 'product/clear', {email})
+            return data as User;
+        }
+        catch (e) {
+            console.log("API Error", e);
+            return null;
+        }
+    },
 }
 
 Object.freeze(UserManager);

@@ -131,7 +131,7 @@ export default defineComponent({
             console.log("New price")
             const amt = Number.parseFloat(amount.value);
             
-            if (Number.isNaN(amt)){
+            if (Number.isNaN(amt) || amt <= 0){
                 console.error("Amount is not a number");
                 alertMsg.value = "Ingresa un monto válido."
                 return;

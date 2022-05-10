@@ -67,6 +67,9 @@ import ProductType from '@/types/ProductType'
 import { useRouter } from 'vue-router'
 import ProductManager from '@/models/ProductManager'
 
+//auth
+const loggedIn = ref<boolean>(false);
+const currentEmail = ref<string | null>(null);
 const user= ref <string>("random@email.com");
 import { User } from '@/types/interfaces/User'
 
@@ -86,9 +89,6 @@ export default defineComponent({
         const storeList = ref<Store[]>([]);
         const brandList = ref<Brand[]>([]);
 
-
-
-        // const quantity = ref<number>(1);
         // Form control
         const amount = ref<string>('0.00');
         const storeInput = ref<string>('');
@@ -125,7 +125,7 @@ export default defineComponent({
 
         // Methods
         function redirect() {
-            router.push('/products')
+            router.push('/myproducts')
         }
 
         async function fetchProducts() : Promise<void> {
@@ -145,8 +145,7 @@ export default defineComponent({
         async function onSubmit() : Promise<void> {
             alertMsg.value = '';
 
-            console.log("New product")
-
+            console.log("New product")            
 
             if (!productInput.value) {
                 console.error("No Store selected");
@@ -166,7 +165,6 @@ export default defineComponent({
                 alertMsg.value = "Ingresa un monto válido."
                 return;
             }
-            
 
             let storeName = storeInput.value.trim();
             let productName = productInput.value.trim();
@@ -191,30 +189,16 @@ export default defineComponent({
             let product : Product | null = null 
             let productRecord : ListRecord | null = null
 
-            // New product registry
-            if (!product) {
-                console.log("Creating product...");
-                const price : Price = {
+            // addMyProduct(product, store, quantity.value)
+            productRecord = {
+                    productName: productName,
+                    storeName: storeName,
+                    brandName: brandName,
                     amount: amt,
-                    date: new Date(),
-                    currency: 'MXN',
-                    store: storeName,
-                    StoreKey: store._id!
-                };
-
-                product = {
-                    name: productName,
-                    brand: brandName,
-                    type: productTypeInput.value!,
-                    prices: [price]
-                } 
-                
-                
-                await ProductManager.create(product);
-                console.log("Finish, redirect to product.id");
-                redirect()
-            }
-            
+                    quantity: 1
+            } 
+            await UserManager.addProduct(productRecord, user.value );
+            redirect()
         }
 
         return { amount, productInput, productTypeInput, brandInput, storeInput, 

@@ -30,7 +30,7 @@
                     prefill: productFormData
                 }
             }">
-                <button class="btn btn-primary w-100">Agregar un precio</button>
+                <button class="btn btn-primary w-100">Registrar un precio</button>
             </router-link>
             <!-- <router-link :to="{
                 name: 'add price',

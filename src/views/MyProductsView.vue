@@ -15,30 +15,26 @@
             </div>
         </div>
         <div v-for="(p, i) in products" :key="i" class="row">
-            <ProductListRow :product="p" :onClick="()=>deleteRow(i)" />
+            <ProductListRow :product="p" :onClick="() => deleteRow(i)" />
             <!-- <button @click="deleteRow(i)">X</button> -->
         </div>
-
-        <div class="row">
+        <div class="list-buttons">
             <router-link :to="{
                 name: 'create Product'
             }">
                 <button class="btn btn-primary">Agregar producto</button>
             </router-link>
-
-            <button class="btn btn-primary">Limpiar Lista</button>
-
+            <div>
+                <button class="btn btn-primary" @click="confirmClear">Limpiar Lista</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { onBeforeMount, defineComponent, onMounted, ref } from 'vue'
-import { exampleProductRecords } from '../models/exampleProducts'
+import { onBeforeMount, defineComponent, ref } from 'vue'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
-import { onAuthStateChanged } from "@firebase/auth"
-import ProductManager from '@/models/ProductManager';
 import UserManager from '@/models/UserManager'
 const currentEmail = ref<string | null>(null);
 import { auth } from '../services/auth';
@@ -58,7 +54,27 @@ export default defineComponent({
             // else, display error
         }
 
-        async function deleteRow(index:number) {
+        function redirect() {
+            router.push({ name: '/login', replace: true });
+        }
+
+        async function confirmClear() {
+            if( !auth.currentUser) {
+                redirect();
+                return;
+            }
+
+            if (confirm("¿Borrar toda la lista?") == true) {
+                // do clear
+                console.log("Clearing list...");
+                await UserManager.clearList(auth.currentUser.email!);
+            } else {
+                return;
+            }
+        }
+
+
+        async function deleteRow(index: number) {
             let newList = products.value.filter((p, i) => i != index); // remove 1 element from index
             if (!auth.currentUser) {
                 redirect();
@@ -68,9 +84,6 @@ export default defineComponent({
             await fetchProducts(auth.currentUser.email!);
         }
 
-        function redirect() {
-            router.push({name:'/login', replace:true});
-        }
 
         onBeforeMount(() => {
             auth.onAuthStateChanged(async (user) => {
@@ -92,7 +105,8 @@ export default defineComponent({
         return {
             total,
             products,
-            deleteRow
+            deleteRow,
+            confirmClear
         }
     },
     components: {

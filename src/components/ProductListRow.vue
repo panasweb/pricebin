@@ -1,24 +1,29 @@
 <template>
     <div v-if="product" class="row">
-        <div class="col-4">
+        <div class="col-2">
             <!-- Render the image of every item -->
             <img :src="productImg" class="row-img"/>
             <p>{{ product.productName }}</p>
         </div>
-        <div class="col-4">
+        <div class="col-2">
             <!-- Render the image of the store -->
             <p>{{ product.storeName }}</p>
         </div>
         
-        <div class="col-4">
+        <div class="col-2">
             <p>
                 <!-- Render the price times the number of units -->
-                ${{ product.amount }} x {{ product.quantity }}
+                ${{ formatAmt(product.amount) }}
             </p>
         </div>
-        <div class="col-4">
+        <div class="col-2">
+            <p>
+                {{ product.quantity }}
+            </p>
+        </div>
+        <div class="col-2">
             <button @click="onClick">
-                X
+                BORRAR
             </button>
         </div>
     </div>
@@ -29,7 +34,7 @@ import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import ListRecord from '../types/ListRecord'
 import {DEFAULT_LOGO_SVG} from '../utils/constants' 
 import { DEFAULT_PRODUCT_IMG } from '@/utils/constants'
-
+import { formatAmt } from "@/utils/misc";
 
 export default defineComponent({
     props: {
@@ -40,7 +45,7 @@ export default defineComponent({
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
         const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 
-        return { storeLogo, productImg }
+        return { storeLogo, productImg, formatAmt }
     }
 })
 </script>

@@ -1,6 +1,6 @@
 <template>
 
-        <RegisterPrice :title="'Añadir a mi lista'"/>
+        <AddToList :title="'Añadir a mi lista'"/>
 
 </template>
 
@@ -11,13 +11,13 @@
  * 
  */
 import { defineComponent, onBeforeMount, ref } from 'vue'
-import {auth, logIn, logOut} from '../services/auth';
-import RegisterPrice from '../components/RegisterPrice.vue'
+import {auth} from '../services/auth';
+import AddToList from '../components/AddToList.vue'
 
 export default defineComponent({
     name: 'NewProductView',
     components: {
-        RegisterPrice
+        AddToList
     },
 
     setup () {
