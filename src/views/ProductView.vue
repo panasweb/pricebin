@@ -32,14 +32,7 @@
             }">
                 <button class="btn btn-primary w-100">Registrar un precio</button>
             </router-link>
-            <!-- <router-link :to="{
-                name: 'add price',
-                params: {
-                    prefill: productFormData
-                }
-            }">
-                <button type="button" class="btn btn-dark">Ver precios</button>
-            </router-link> -->
+
         </div>
     </div>
 </template>
@@ -50,7 +43,7 @@ import { exampleProducts, findById } from '../models/exampleProducts'
 import { Product } from '../types/interfaces/Product'
 import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG } from '../utils/constants'
 import { useRoute } from 'vue-router'
-import { propsToAttrMap } from '@vue/shared'
+import { useRouter } from 'vue-router'
 import ProductManager from '@/models/ProductManager'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -58,9 +51,19 @@ const route = useRoute()
 const currentP = ref<Product | null>()
 const productFormData = ref<string>('');
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
+const router = useRouter();
+
+function redirect() {
+    router.push('/404');
+}
 
 onBeforeMount(async () => {
-    currentP.value = await ProductManager.getProduct(route.params.id as string)//findById(route.params.id as string)
+    currentP.value = await ProductManager.getProduct(route.params.id as string)
+
+    if (!currentP.value) {
+        redirect();
+    }
+
     console.log("product", currentP.value);
 
     if (currentP.value?.img) {

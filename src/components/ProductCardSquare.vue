@@ -63,6 +63,7 @@ export default defineComponent({
         const productImg = ref<string>(props.product.img ?? DEFAULT_PRODUCT_IMG);
 
         const productFormData = ref<string>(JSON.stringify(objectData));
+        
         return { productFormData, productImg }
     }
 })
