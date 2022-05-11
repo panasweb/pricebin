@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LogIn from '../views/LogInView.vue'
 import SignUp from '../views/SignUpView.vue'
-import NewPrice from '../views/NewPriceView.vue'
+import RegisterPrice from '@/components/RegisterPrice.vue';
 import NewProductView from '../views/NewProductView.vue'
 import ProductListView from '../views/ProductListView.vue'
 import NotFound from '../views/NotFoundView.vue'
@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/prices/add',
     name: 'add price',
-    component: NewPrice,
+    component: RegisterPrice,
     props: true,
   },
   {
