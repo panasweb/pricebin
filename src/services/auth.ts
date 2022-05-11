@@ -4,7 +4,8 @@ import {
     signInWithEmailAndPassword,
     signOut,
     updateProfile,
-    sendEmailVerification
+    sendEmailVerification,
+    GoogleAuthProvider
 } from "firebase/auth";
 
 import { getGravatarURL } from "@/utils/misc";
@@ -12,9 +13,8 @@ import { getGravatarURL } from "@/utils/misc";
 import FirebaseAPIResponse from "@/types/FirebaseAPIResponse";
 
 import app from './app'
-import { FirebaseError } from "firebase/app";
 
-
+const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);
 auth.useDeviceLanguage();
 

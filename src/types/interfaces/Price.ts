@@ -3,7 +3,8 @@ interface Price {
     date: Date,
     currency: string,
     store: string,  // store's name
-    StoreKey: string
+    StoreKey: string,
+    _id?:string
 }
 
 export default Price

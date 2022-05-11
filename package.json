@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@types/md5": "^2.3.2",
     "axios": "^0.26.1",
     "firebase": "^9.6.9",
     "md5": "^2.3.0",
@@ -16,6 +15,7 @@
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
+    "@types/md5": "^2.3.2",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
