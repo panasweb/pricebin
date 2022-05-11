@@ -10,7 +10,8 @@
             <router-link to="/products" class="nav-link">Ver Productos</router-link> 
             <router-link to="/login" v-show="!loggedIn" class="nav-link">Login</router-link> 
             <router-link to="/register"  v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
-            <router-link to="/myproducts"  v-show="loggedIn" class="nav-link cta">Ver mis productos</router-link>
+            <router-link to="/myproducts"  v-show="loggedIn" class="nav-link cta">Mi Lista</router-link>
+            <router-link to="/prices/add" class="nav-link cta">Registrar Producto</router-link>
             <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
           </div>
       </div>

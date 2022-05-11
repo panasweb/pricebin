@@ -77,3 +77,14 @@ p {
 .logout-btn {
   cursor: pointer;
 }
+
+.row-img {
+  max-width: 30px;
+}
+
+.list-buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 25px;
+}

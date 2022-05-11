@@ -17,6 +17,11 @@
                         <div class="card-actions">
                             <!-- Manda a Registrar Precio, pre-llenado -->
                             <router-link
+                                :to="`/product/${product._id}`"
+                            >
+                                <button type="button" class="btn btn-light">Ver precios</button>
+                            </router-link>
+                            <router-link
                                 :to="{
                                     name: 'add price',
                                     params: {
@@ -24,14 +29,7 @@
                                     }
                                 }"
                             >
-                                <button type="button" class="btn btn-light">Añadir precio</button>
-                            </router-link>
-                            <router-link
-                                :to="{
-                                    name: 'my products'
-                                }"
-                            >
-                                <button type="button" class="btn btn-dark">+ Mi lista</button>
+                                <button type="button" class="btn btn-dark">Registrar</button>
                             </router-link>
                         </div>
                     </div>
@@ -65,6 +63,7 @@ export default defineComponent({
         const productImg = ref<string>(props.product.img ?? DEFAULT_PRODUCT_IMG);
 
         const productFormData = ref<string>(JSON.stringify(objectData));
+        
         return { productFormData, productImg }
     }
 })

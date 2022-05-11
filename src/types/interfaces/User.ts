@@ -1,5 +1,5 @@
 /* Reflects User model from API */
-
+import ListRecord from '../ListRecord'
 interface UserLog {
     nLists: number,
     nWeeks:number,
@@ -11,12 +11,17 @@ interface UserLog {
     globalTotal: number,
 }
 
+export interface CurrentList {
+    list: ListRecord[], 
+    total: number
+}
 export interface User {
     username: string,
     email: string,
     UserLog: UserLog,
     rank: number,
-    points:number
+    points:number, 
+    currentList: CurrentList
 }
 
 export interface UserToCreate {
