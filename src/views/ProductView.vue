@@ -155,6 +155,11 @@ button {
 span {
     color: #1DC202;
 }
+.priceVotes {
+    font-size: 11px;
+    text-align: inherit;
+    color: #444;
+}
 
 @media only screen and (max-width: 700px) {
     .container {
@@ -185,12 +190,6 @@ span {
         text-align: right;
         font-weight: bold;
         font-size: 30px;
-    }
-
-    .priceVotes {
-        font-size: 11px;
-        text-align: inherit;
-        color: #444;
     }
 
     button{
