@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router'
 import { validateNewPassword } from "@/utils/validation"
 import { newUser } from '../services/auth'
 import { NAlert, NSpin } from "naive-ui";
+import UserManager from "@/models/UserManager"
 
 
 
@@ -101,6 +102,10 @@ async function onSubmit() {
         isLoading.value = true;
         console.log("Submitted");
         const res = await newUser(email.value, password.value);
+        let userToCreate = {
+            email: email.value,
+        }
+        const user = await UserManager.create(userToCreate)
         isLoading.value = false;
         
         if (res.error) {
