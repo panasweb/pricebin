@@ -79,6 +79,15 @@ onBeforeMount(async () => {
         redirect();
         return;
     }
+    auth.onAuthStateChanged((userCurrent) => {
+        if (!userCurrent) {
+            console.log("no tiene usuario")
+        } else if(userCurrent.email){
+            user.value = userCurrent.email
+            console.log("user value: ")
+            console.log(user.value)
+        }
+    })
 
     const priceIds = Array.from(currentP.value!.prices!, (price: Price) => price._id!);
 
@@ -104,15 +113,10 @@ async function addToList(price : Price): Promise <void>{
     let productRecord : ListRecord | null = null
     console.log("click")
     
-    auth.onAuthStateChanged((userCurrent) => {
-        if (!userCurrent) {
-            console.log("no tiene usuario")
-        } else if(userCurrent.email){
-            user.value = userCurrent.email
-            console.log(user.value)
-        }
-    })
-
+    
+    if (user.value === "random@email") {
+        redirect()
+    } 
 
     if(currentP.value){
         productRecord = {
@@ -124,7 +128,7 @@ async function addToList(price : Price): Promise <void>{
         }
         console.log(productRecord)
         await UserManager.addProduct(productRecord, user.value )
-        //redirectToList();
+        redirectToList();
         
     }
         
