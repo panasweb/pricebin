@@ -23,7 +23,7 @@
                         ${{p.amount}}
                         <div class="priceVotes">Apoyo: {{priceVotes[p._id!]}}</div>
                     </div>
-                    <button class="add col">+</button>
+                    <button class="add col" @click="addToList(p)">+</button>
 
                 </div>
             </div>
@@ -45,10 +45,15 @@ import { onBeforeMount,  ref } from 'vue'
 import {Product} from '../types/interfaces/Product'
 import {DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG} from '../utils/constants' 
 import {useRoute, useRouter} from 'vue-router'
+import { auth } from '../services/auth';
 
 import ProductManager from '@/models/ProductManager'
 import VotesManager from '@/models/VotesManager'
 import Price from '@/types/interfaces/Price'
+import UserManager from '@/models/UserManager'
+import ListRecord from '@/types/ListRecord'
+
+const user= ref <string>("random@email.com");
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute()
@@ -60,6 +65,9 @@ const router = useRouter();
 
 function redirect() {
     router.push({ name: '404', replace: true });
+}
+function redirectToList() {
+    router.push('/myproducts/');
 }
 
 onBeforeMount(async () => {
@@ -90,6 +98,39 @@ onBeforeMount(async () => {
     productFormData.value = JSON.stringify(objectData);
     console.log("product", objectData)
 })
+       
+async function addToList(price : Price): Promise <void>{
+
+    let productRecord : ListRecord | null = null
+    console.log("click")
+    
+    auth.onAuthStateChanged((userCurrent) => {
+        if (!userCurrent) {
+            console.log("no tiene usuario")
+        } else if(userCurrent.email){
+            user.value = userCurrent.email
+            console.log(user.value)
+        }
+    })
+
+
+    if(currentP.value){
+        productRecord = {
+            productName: currentP!.value?.name,
+            storeName:  price.store,
+            brandName: currentP!.value?.brand,
+            amount: price.amount,
+            quantity: 1
+        }
+        console.log(productRecord)
+        await UserManager.addProduct(productRecord, user.value )
+        //redirectToList();
+        
+    }
+        
+    
+}
+
 
 </script>
 
