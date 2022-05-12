@@ -23,6 +23,8 @@
                         ${{p.amount}}
                         <div class="priceVotes">Apoyo: {{priceVotes[p._id!]}}</div>
                     </div>
+                    <button class="add col">+</button>
+
                 </div>
             </div>
             <router-link :to="{
@@ -142,6 +144,16 @@ onBeforeMount(async () => {
     font-weight: bold;
     font-size: 30px;
 }
+
+.add {
+    color: #f76d66;
+    font-weight: bolder;
+    font-size: 50px;
+    background-color: transparent;
+    border-color: transparent;
+    max-width: 50px;
+    margin: 5px;
+} 
 
 button {
     text-align: center;
