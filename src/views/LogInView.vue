@@ -14,8 +14,9 @@
                         <p>Iniciar Sesión</p>
                     </n-spin>
                 </button>
-                
-                <GoogleSignInButton @click="googleSignIn"/>
+                <div style="margin-top: 20px;">
+                    <GoogleSignInButton @click="googleSignIn" type="button"/>
+                </div>
 
                 <n-alert v-show="showAlert" title="Error Text" type="error">
                     {{ alertMessage }}
@@ -28,7 +29,7 @@
 
 
 <script setup lang="ts">
-import { auth, logIn } from "@/services/auth";
+import { auth, logIn, logInGooglePopUp } from "@/services/auth";
 import { onAuthStateChanged } from "@firebase/auth"
 import { ref, onBeforeMount } from "vue"
 import { useRouter } from "vue-router"
@@ -75,6 +76,14 @@ async function onSubmit() {
 
 async function googleSignIn() {
     console.log("Sign in Google");
+    const loginResponse = await logInGooglePopUp();
+    if (loginResponse.success) {
+        //redirect();
+    } else {
+        showAlert.value = true;
+        alertMessage.value = "Usuario / Contraseña incorrectos"
+        console.error("Error logging in", loginResponse.error);
+    }
 }
 
 /*
