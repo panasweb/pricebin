@@ -114,25 +114,28 @@ onBeforeMount(async () => {
 })
        
 
-function vote(priceId: string): void{
+async function vote(priceId: string): Promise<void>{
     // Change svg id to voted 
 
     // Find a way to set the svg id to vote or unvoted if the user has voted that product
+    const userVote = await checkUserVote(priceId)
 
-    // Fix bug, first time you can vote two times
-    if (document.getElementById("unvoted")){
+    if (userVote.doc === null){
         console.log("votando")
         document.getElementById("unvoted").id = "voted";
         VotesManager.addVote(user.value, priceId)
-    }else if(document.getElementById('voted')){
+    }else if(userVote.doc !== null){
         document.getElementById('voted').id = 'unvoted';
         console.log("eliminar voto ")
         VotesManager.deleteVote(user.value, priceId)
     }
     
-
     // Check if reload the page is the best way to update the counter of votes. 
     // location.reload()
+}
+
+function checkUserVote(priceId:string): object{
+    return VotesManager.checkUserVote(user.value, priceId)
 }
 
 async function addToList(price : Price): Promise <void>{

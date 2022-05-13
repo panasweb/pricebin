@@ -26,6 +26,19 @@ const VotesManager = {
             return "Error"
         }
     },
+
+    checkUserVote: async function(UserKey: string, PriceKey: string) : Promise<string>{
+        try{
+            const {data} = await axios.get(
+                url + 'user/' + UserKey + '/' + PriceKey
+            );
+            return data
+        }
+        catch(e){
+            console.error("Error getting user vote", e);
+            return "Error"
+        }
+    },
     
     deleteVote: async function(UserKey: string, PriceKey: string) : Promise<string>{
         try{
