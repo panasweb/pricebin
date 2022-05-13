@@ -15,64 +15,43 @@
         </h3>
       </div>
       <div class="prices-container">
-        <div
-          v-for="p in currentP?.prices"
-          :key="p.store"
-          class="row"
-          style="font-weight: bold"
-        >
+        <div v-for="p in currentP?.prices" :key="p.store" class="row" style="font-weight: bold">
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
           </div>
           <div class="col price">
             ${{ p.amount }}
-            <div v-if="!hasvoted[p._id]" class="priceVotes">
-              <span @click="vote(p._id)">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+            <div v-if="!hasvoted[p._id!]" class="priceVotes">
+              <span @click="vote(p._id!)">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="unvoted"
-                  />
+                    id="unvoted" />
                 </svg>
               </span>
-              x{{priceVotes[p._id!]}}
+              x{{ priceVotes[p._id!] }}
             </div>
             <div v-else class="priceVotes">
-              <span @click="unvote(p._id)">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              <span @click="unvote(p._id!)">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="voted"
-                  />
+                    id="voted" />
                 </svg>
               </span>
-              x{{priceVotes[p._id!]}}
+              x{{ priceVotes[p._id!] }}
             </div>
           </div>
           <button class="add col" @click="addToList(p)">+</button>
         </div>
       </div>
-      <router-link
-        :to="{
-          name: 'add price',
-          params: {
-            prefill: productFormData,
-          },
-        }"
-      >
+      <router-link :to="{
+        name: 'add price',
+        params: {
+          prefill: productFormData,
+        },
+      }">
         <button class="btn btn-primary w-100">Registrar un precio</button>
       </router-link>
     </div>
@@ -107,6 +86,9 @@ let userVoted = false;
 function redirect() {
   router.push({ name: "404", replace: true });
 }
+function redirectToLogin() {
+  router.push({ name: "login" });
+}
 function redirectToList() {
   router.push("/myproducts/");
 }
@@ -127,16 +109,19 @@ onBeforeMount(async () => {
     (price: Price) => price._id!
   );
 
-    // Get booleans has User Voted?
-    onAuthStateChanged(auth, user => {
-      let result : boolean;
-        priceIds.forEach(async (pid) => {
-            result = await checkUserVote(user.email, pid);
-            hasvoted.value[pid] = result
-        });
+  // Get booleans has User Voted?
+  onAuthStateChanged(auth, user => {
+    let result: boolean;
+    if (user) {
+      priceIds.forEach(async (pid) => {
+        result = await checkUserVote(user.email!, pid);
+        hasvoted.value[pid] = result
+      });
+    }
+    console.log("User has voted");
+    console.log(hasvoted)
   })
-  
-  console.log("Has voted", hasvoted);
+
 
   const counts = await VotesManager.getVoteCounts(priceIds as string[]);
   priceVotes.value = counts;
@@ -152,41 +137,48 @@ onBeforeMount(async () => {
     productId: route.params.id as string,
   };
   productFormData.value = JSON.stringify(objectData);
-  console.log("product", objectData);
+  console.log("product", objectData.name);
+  console.log("prices", currentP.value.prices);
 });
 
 
 
 async function vote(priceId: string): Promise<void> {
-    console.log("currentUser", auth.currentUser);
+  console.log("currentUser", auth.currentUser);
 
   // Change svg id to voted
   priceVotes.value[priceId] += 1;
   hasvoted.value[priceId] = true
   console.log("votando");
-  VotesManager.addVote(auth.currentUser.email, priceId);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
+  await VotesManager.addVote(auth.currentUser.email!, priceId);
 }
 
 async function unvote(priceId: string): Promise<void> {
-    console.log("currentUser", auth.currentUser.email);
+  console.log("currentUser", auth.currentUser!.email);
   priceVotes.value[priceId] -= 1;
-    hasvoted.value[priceId] = false  
+  hasvoted.value[priceId] = false
   console.log("eliminar voto ");
-  VotesManager.deleteVote(auth.currentUser.email, priceId);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
+  await VotesManager.deleteVote(auth.currentUser.email!, priceId);
 }
 
 async function checkUserVote(userEmail: string, priceId: string): Promise<boolean> {
-
-    let voted : boolean = await VotesManager.checkUserVote(userEmail, priceId) 
-    console.log("Check user vote", voted)
-    return voted;
-
+  /* let voted: boolean = await VotesManager.checkUserVote(userEmail, priceId)
+  console.log("Check user vote", voted) */
+  return await VotesManager.checkUserVote(userEmail, priceId);
 }
 async function addToList(price: Price): Promise<void> {
   let productRecord: ListRecord | null = null;
   console.log("click");
 
-  if (auth.currentUser.email === null) {
+  if (!auth.currentUser) {
     redirect();
   }
 
@@ -199,7 +191,7 @@ async function addToList(price: Price): Promise<void> {
       quantity: 1,
     };
     console.log(productRecord);
-    await UserManager.addProduct(productRecord, auth.currentUser.email);
+    await UserManager.addProduct(productRecord, auth.currentUser!.email!);
     redirectToList();
   }
 }
@@ -279,6 +271,7 @@ button {
 span {
   color: #1dc202;
 }
+
 .priceVotes {
   font-size: 11px;
   text-align: inherit;
@@ -308,15 +301,19 @@ span {
     flex-direction: column;
     align-content: center;
   }
+
   .row {
     margin: 25px 0;
   }
+
   .favoritos {
     width: 5%;
   }
+
   .marca {
     width: 90%;
   }
+
   .prices-container {
     border-style: solid;
     border-color: #46178f;
@@ -324,6 +321,7 @@ span {
     padding: 20px;
     border-radius: 5px;
   }
+
   .price {
     text-align: right;
     font-weight: bold;
@@ -333,10 +331,12 @@ span {
   button {
     text-align: center;
   }
+
   .row {
     width: 100%;
     justify-content: space-between;
   }
+
   span {
     color: #1dc202;
   }

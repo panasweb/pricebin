@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, defineComponent, ref } from 'vue'
+import { onBeforeMount, defineComponent, ref, computed } from 'vue'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
 import UserManager from '@/models/UserManager'
@@ -42,9 +42,17 @@ import { useRouter } from 'vue-router'
 
 export default defineComponent({
     setup() {
-        const total = ref<number>(0)
+
         const products = ref<ListRecord[]>([])
         const router = useRouter();
+        
+        const total = computed(() => {
+            let sum = 0.0
+            products.value.forEach(element => {
+                sum += ((element.amount * element.quantity))
+            });
+            return sum;
+        })
 
         async function fetchProducts(email: string) {
             let user = await UserManager.getByEmail(email)
@@ -93,9 +101,9 @@ export default defineComponent({
                     currentEmail.value = user.email;
                     if (currentEmail.value) {
                         await fetchProducts(currentEmail.value);
-                        products.value.forEach(pr => {
+                        /* products.value.forEach(pr => {
                             total.value += (pr.amount * pr.quantity)
-                        });
+                        }); */
                     }
                 }
             })

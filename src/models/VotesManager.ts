@@ -14,13 +14,16 @@ interface PriceCount {
 const VotesManager = {
 
     addVote: async function(UserKey: string, PriceKey: string) : Promise<string|null>{
-        // check first if vot exists
+        // check first if vote exists
         try{
             const hasVoted = await this.checkUserVote(UserKey, PriceKey);
-            if (hasVoted) return null;
+            if (hasVoted) {
+                console.log("already voted", UserKey, PriceKey);
+                return null;
+            }
 
             const {data} = await axios.post(
-                url + 'price/vote',
+                url,
                 {UserKey, PriceKey}
             );
             return data
