@@ -7,12 +7,13 @@
           <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
         </router-link> 
           <div class="nav-elements">
-            <router-link to="/products" class="nav-link">Ver Productos</router-link> 
-            <router-link to="/login" v-show="!loggedIn" class="nav-link">Login</router-link> 
-            <router-link to="/register"  v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
-            <router-link to="/myproducts"  v-show="loggedIn" class="nav-link cta">Mi Lista</router-link>
-            <router-link to="/prices/add" class="nav-link cta">Registrar Producto</router-link>
             <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
+            <router-link to="/myproducts"  v-show="loggedIn" class="nav-link">Mi Lista</router-link>
+            <router-link to="/products" class="nav-link">Ver Productos</router-link> 
+            <router-link to="/prices/add" v-show="loggedIn" class="nav-link cta">Registrar Un Producto</router-link>  
+            <router-link to="/login" v-show="!loggedIn" class="nav-link">Ingresa a tu cuenta</router-link> 
+            <router-link to="/register"  v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
+               
           </div>
       </div>
     </nav>
