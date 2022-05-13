@@ -13,8 +13,12 @@ interface PriceCount {
 
 const VotesManager = {
 
-    addVote: async function(UserKey: string, PriceKey: string) : Promise<string>{
+    addVote: async function(UserKey: string, PriceKey: string) : Promise<string|null>{
+        // check first if vot exists
         try{
+            const hasVoted = await this.checkUserVote(UserKey, PriceKey);
+            if (hasVoted) return null;
+
             const {data} = await axios.post(
                 url + 'price/vote',
                 {UserKey, PriceKey}
@@ -27,16 +31,17 @@ const VotesManager = {
         }
     },
 
-    checkUserVote: async function(UserKey: string, PriceKey: string) : Promise<string>{
+    checkUserVote: async function(UserKey: string, PriceKey: string) : Promise<boolean>{
+        // UserKey is an email this time
         try{
             const {data} = await axios.get(
                 url + 'user/' + UserKey + '/' + PriceKey
             );
-            return data
+            return data.doc !== null;
         }
         catch(e){
             console.error("Error getting user vote", e);
-            return "Error"
+            return false;
         }
     },
     
