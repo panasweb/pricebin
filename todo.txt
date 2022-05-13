@@ -1,6 +1,12 @@
-0. Add buttons for clearlist and save list in my-products
-1. Update Product Square Card: remove add to list + button, 
-2. Implement "add+" buttons in every price of product view
-3. TEST save currentlist
+DONE:
+0. DONE Add buttons for clearlist and save list in my-products
+1. DONE Update Product Square Card: remove add to list + button,
+
+THIS BRANCH:
+2. Implement Google Auth
+
+NEXT:
+3. Implement "add+" buttons in every price of product view
+4. TEST save currentlist
 
 - IDEA: authenticator handler as an object to call in authorization-required methods
