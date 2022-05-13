@@ -4,6 +4,10 @@
 yarn serve
 ```
 
+**Importante:**
+En el proyecto de la [REST API](https://github.com/panasweb/pricebin) debe de estar corriendo en la máquina local (puerto 3010).
+Se corre con `npm run devstart`.
+
 ## Si no tienes yarn instalado:
 ```
 npm install --global yarn
