@@ -41,11 +41,12 @@
 <script setup lang="ts">
 import { defineComponent, onBeforeMount, ref } from "vue"
 import {auth} from '../services/auth'
-import { onAuthStateChanged } from "@firebase/auth"
+import { deleteUser, getAuth, onAuthStateChanged } from "@firebase/auth"
 import { useRouter } from 'vue-router'
 import { validateNewPassword } from "@/utils/validation"
 import { newUser } from '../services/auth'
 import { NAlert, NSpin } from "naive-ui";
+import UserManager from "@/models/UserManager"
 
 
 
@@ -80,8 +81,9 @@ const showAlert = ref<boolean>(false);
 const showSuccess = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 
-
 async function onSubmit() {
+    
+    const auth = getAuth();
     if (isLoading.value) return;
     console.log("Sign up", email.value)
     showAlert.value = false;
@@ -101,6 +103,10 @@ async function onSubmit() {
         isLoading.value = true;
         console.log("Submitted");
         const res = await newUser(email.value, password.value);
+        let userToCreate = {
+            email: email.value,
+        }
+        
         isLoading.value = false;
         
         if (res.error) {
@@ -112,6 +118,22 @@ async function onSubmit() {
                 alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
             }
         } else {
+            console.log(res)
+            try{
+                await UserManager.create(userToCreate)
+            }catch(error){
+                const user = auth.currentUser;
+                if(user){
+                    deleteUser(user).then(() => {
+                        console.log("Usuario borrado")
+                    }).catch((error) => {
+                        console.log("No se pudo borrar")
+                    });
+                }
+                
+                alertMessage.value = "Algo salió mal, por favor intenta de nuevo"
+            }
+            
             // Redirigir a Home
             showSuccess.value = true;
             setTimeout(() => {
