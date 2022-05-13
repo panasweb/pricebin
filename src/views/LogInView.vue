@@ -40,7 +40,6 @@ onBeforeMount(() => {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log("already signed in");
             redirect();
         }
     })
