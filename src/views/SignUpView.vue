@@ -41,11 +41,12 @@
 <script setup lang="ts">
 import { defineComponent, onBeforeMount, ref } from "vue"
 import {auth} from '../services/auth'
-import { onAuthStateChanged } from "@firebase/auth"
+import { deleteUser, getAuth, onAuthStateChanged } from "@firebase/auth"
 import { useRouter } from 'vue-router'
 import { validateNewPassword } from "@/utils/validation"
 import { newUser } from '../services/auth'
 import { NAlert, NSpin } from "naive-ui";
+import UserManager from "@/models/UserManager"
 
 
 
@@ -62,7 +63,6 @@ onBeforeMount(() => {
     // by storing current user in app global store
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log("already signed in");
             redirect();
         }
     })
@@ -80,8 +80,9 @@ const showAlert = ref<boolean>(false);
 const showSuccess = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 
-
 async function onSubmit() {
+    
+    const auth = getAuth();
     if (isLoading.value) return;
     console.log("Sign up", email.value)
     showAlert.value = false;
@@ -101,6 +102,10 @@ async function onSubmit() {
         isLoading.value = true;
         console.log("Submitted");
         const res = await newUser(email.value, password.value);
+        let userToCreate = {
+            email: email.value,
+        }
+        
         isLoading.value = false;
         
         if (res.error) {
@@ -112,6 +117,25 @@ async function onSubmit() {
                 alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
             }
         } else {
+            console.log("New firebase account. Creating Mongo User...");
+            
+            const [created, newUser] = await UserManager.create(userToCreate)
+
+            // Borra usuario de firebase creado si Mongo falla
+            if (!created){
+                const user = auth.currentUser;
+                if(user){
+                    deleteUser(user).then(() => {
+                        console.log("Usuario", user.email, "borrado por falla de Mongo")
+                    }).catch((error) => {
+                        console.error("Error al borrar usuario de firebase", user.email)
+                    });
+                }
+                
+                alertMessage.value = "Algo salió mal, por favor intenta de nuevo"
+                return;
+            }
+            
             // Redirigir a Home
             showSuccess.value = true;
             setTimeout(() => {

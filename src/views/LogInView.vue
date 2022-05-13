@@ -9,13 +9,15 @@
             <label for="password">Contraseña:</label>
             <input type="password" name="password" required v-model="password" />
             <div class="submit">
-
-
                 <button class="btn btn-primary w-100" type="submit">
                     <n-spin :show="isLoading" size="small" stroke="#fff">
                         <p>Iniciar Sesión</p>
                     </n-spin>
                 </button>
+                <div style="margin-top: 20px;">
+                    <GoogleSignInButton @click="googleSignIn" type="button"/>
+                </div>
+
                 <n-alert v-show="showAlert" title="Error Text" type="error">
                     {{ alertMessage }}
                 </n-alert>
@@ -27,17 +29,17 @@
 
 
 <script setup lang="ts">
-import { auth, logIn } from "@/services/auth";
+import { auth, logIn, logInGooglePopUp } from "@/services/auth";
 import { onAuthStateChanged } from "@firebase/auth"
 import { ref, onBeforeMount } from "vue"
 import { useRouter } from "vue-router"
 import { NAlert, NSpin } from "naive-ui";
+import GoogleSignInButton from '@/components/GoogleSignInButton.vue'
 
 onBeforeMount(() => {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log("already signed in");
             redirect();
         }
     })
@@ -64,6 +66,18 @@ async function onSubmit() {
     isLoading.value = false;
     if (loginResponse.success) {
         redirect();
+    } else {
+        showAlert.value = true;
+        alertMessage.value = "Usuario / Contraseña incorrectos"
+        console.error("Error logging in", loginResponse.error);
+    }
+}
+
+async function googleSignIn() {
+    console.log("Sign in Google");
+    const loginResponse = await logInGooglePopUp();
+    if (loginResponse.success) {
+        //redirect();
     } else {
         showAlert.value = true;
         alertMessage.value = "Usuario / Contraseña incorrectos"

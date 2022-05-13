@@ -117,7 +117,6 @@ export default defineComponent({
             
         })
         onMounted(() => {
-            console.log("New price mounted!");
             fetchProducts();
             fetchStores();
             fetchBrands();

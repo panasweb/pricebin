@@ -12,7 +12,7 @@ const UserManager = {
             console.log(data);
             return [true, data.newDoc as User];
         } catch (e) {
-            console.log("API error creating user");
+            console.log("API error creating user" + e);
             return [false, null];
         }
     },
