@@ -1,6 +1,6 @@
-
 <template>
     <div>
+        
         <div class="container">
             <div class="row">
                 <img :src="productImg" class="productI">
@@ -22,7 +22,9 @@
                     <div class="col price">
                         ${{p.amount}}
                         <div class="priceVotes">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58064V11.7419C6.58064 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z" id="unvoted"/></svg>
+                            <span @click="vote(p._id)">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" ><path d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z" fill="black" id="unvoted"/></svg>
+                            </span>
                             x{{priceVotes[p._id!]}} 
                         </div>
                     </div>
@@ -111,6 +113,28 @@ onBeforeMount(async () => {
     console.log("product", objectData)
 })
        
+
+function vote(priceId: string): void{
+    // Change svg id to voted 
+
+    // Find a way to set the svg id to vote or unvoted if the user has voted that product
+
+    // Fix bug, first time you can vote two times
+    if (document.getElementById("unvoted")){
+        console.log("votando")
+        document.getElementById("unvoted").id = "voted";
+        VotesManager.addVote(user.value, priceId)
+    }else if(document.getElementById('voted')){
+        document.getElementById('voted').id = 'unvoted';
+        console.log("eliminar voto ")
+        VotesManager.deleteVote(user.value, priceId)
+    }
+    
+
+    // Check if reload the page is the best way to update the counter of votes. 
+    // location.reload()
+}
+
 async function addToList(price : Price): Promise <void>{
 
     let productRecord : ListRecord | null = null
@@ -220,15 +244,6 @@ span {
     text-align: inherit;
     color: #444;
 }
-
-#unvoted{
-    fill: black;
-}
-
-#voted{
-    fill: #F76D66;
-}
-
 
 @media only screen and (max-width: 700px) {
     .container {
