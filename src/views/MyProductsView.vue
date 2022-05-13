@@ -76,6 +76,7 @@ export default defineComponent({
                 // do clear
                 console.log("Clearing list...");
                 await UserManager.clearList(auth.currentUser.email!);
+                await fetchProducts(auth.currentUser.email!);
             } else {
                 return;
             }
