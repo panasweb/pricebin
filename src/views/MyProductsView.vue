@@ -55,7 +55,7 @@ export default defineComponent({
         }
 
         function redirect() {
-            router.push({ name: '/login', replace: true });
+            router.push({ name: 'login', replace: true });
         }
 
         async function confirmClear() {
