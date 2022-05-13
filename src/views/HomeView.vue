@@ -2,7 +2,7 @@
 <div class="container">
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.svg" class="logo">
-    <HelloWorld />
+    <WelcomePage />
   </div>
 </div>
   
@@ -10,12 +10,12 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import WelcomePage from '@/components/WelcomePage.vue'; // @ is an alias to /src
 
 export default defineComponent({
   name: 'HomeView',
   components: {
-    HelloWorld,
+    WelcomePage,
   },
 });
 </script>

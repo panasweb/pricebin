@@ -63,7 +63,6 @@ onBeforeMount(() => {
     // by storing current user in app global store
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log("already signed in");
             redirect();
         }
     })
@@ -118,20 +117,23 @@ async function onSubmit() {
                 alertMessage.value = "Algo salió mal, por favor intenta de nuevo.";
             }
         } else {
-            console.log(res)
-            try{
-                await UserManager.create(userToCreate)
-            }catch(error){
+            console.log("New firebase account. Creating Mongo User...");
+            
+            const [created, newUser] = await UserManager.create(userToCreate)
+
+            // Borra usuario de firebase creado si Mongo falla
+            if (!created){
                 const user = auth.currentUser;
                 if(user){
                     deleteUser(user).then(() => {
-                        console.log("Usuario borrado")
+                        console.log("Usuario", user.email, "borrado por falla de Mongo")
                     }).catch((error) => {
-                        console.log("No se pudo borrar")
+                        console.error("Error al borrar usuario de firebase", user.email)
                     });
                 }
                 
                 alertMessage.value = "Algo salió mal, por favor intenta de nuevo"
+                return;
             }
             
             // Redirigir a Home

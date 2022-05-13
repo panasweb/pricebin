@@ -12,7 +12,7 @@ import { defineComponent, onMounted, ref } from 'vue';
 import { auth } from '../services/auth'
 
 export default defineComponent({
-  name: 'HelloWorld',
+  name: 'WelcomePage',
 
   setup() {
     const msg = ref<string>("¡Bienvenidx a PriceBin!");
