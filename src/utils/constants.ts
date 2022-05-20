@@ -10,3 +10,5 @@ export const DEFAULT_STORE : IStore = {
 }
 
 export const PRODUCT_TYPES = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
+
+export const ADMIN_RANK = 10;

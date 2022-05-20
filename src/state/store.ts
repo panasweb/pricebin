@@ -1,6 +1,5 @@
 import { User } from '../types/interfaces/User'
 import {reactive} from 'vue'
-import UserManager from '@/models/UserManager';
 import IStore from '../types/IStore';
 
 

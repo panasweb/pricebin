@@ -3,4 +3,6 @@ import App from './App.vue'
 import router from './router'
 import store from '@/state/store'
 
-createApp(App).use(router).provide('store', store).mount('#app')
+console.log("Store", store);
+
+createApp(App).provide('store', store).use(router).mount('#app')

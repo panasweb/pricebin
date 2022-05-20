@@ -8,5 +8,5 @@ export default interface IStore {
     currencyRate:number,
     currentUser: User | null,
     setCurrency?: currencySetter,
-    setcurrentUser?: currentUserSetter
+    setCurrentUser?: currentUserSetter
 }

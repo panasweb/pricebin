@@ -44,8 +44,6 @@ export default defineComponent({
     setup(props) {
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
         const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
-        const store = inject('store', DEFAULT_STORE);
-        console.dir("Store:", store);
         return { storeLogo, productImg, formatAmt }
     }
 })
