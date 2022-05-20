@@ -52,9 +52,15 @@
           prefill: productFormData,
         },
       }">
-        <button class="btn btn-primary w-100">Registrar un precio</button>
+        <button class="btn btn-primary w-100">
+          <n-icon size="25" :component="PriceChangeFilled"></n-icon>
+             Registrar un precio
+        </button>
       </router-link>
-      <button class="btn btn-secondary w-100 mt-2" @click="handleDelete">Borrar producto</button>
+      <button class="btn btn-secondary w-100 mt-2" @click="handleDelete">
+        <n-icon size="25" :component="DeleteForeverRound"></n-icon>
+        Borrar producto
+      </button>
     </div>
   </div>
 </template>
@@ -73,7 +79,8 @@ import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
-
+import { NButton, NIcon } from "naive-ui";
+import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute();
@@ -85,10 +92,10 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 let userVoted = false;
 
-const store : IStore | undefined = inject('store');
+const store: IStore | undefined = inject('store');
 
 function redirectProducts() {
-  router.push({ name: "products"});
+  router.push({ name: "products" });
 }
 function redirectNotFound() {
   router.push({ name: "404", replace: true });
@@ -157,13 +164,17 @@ async function handleDelete(e: MouseEvent) {
 
   const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
   if (!adminUser) {
-    console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO"); 
+    console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
     return;
   }
   console.log("Admin user", adminUser);
 
   if (adminUser.rank < ADMIN_RANK) {
     console.log("Insuficient permissions");
+    return;
+  }
+
+  if (confirm(`¿Borrar Producto ${currentP.value?.name}?`) != true) {
     return;
   }
 

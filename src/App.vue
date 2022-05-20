@@ -27,6 +27,7 @@
 import { User } from 'firebase/auth';
 import { User as MongoUser } from '@/types/interfaces/User'
 import { inject, onBeforeMount, onMounted, ref } from 'vue'
+import {useRouter} from 'vue-router';
 import { auth, logOut } from '@/services/auth';
 import IStore from './types/IStore';
 import ProductManager from './models/ProductManager';
@@ -35,6 +36,7 @@ import UserManager from './models/UserManager';
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 const store: IStore | undefined = inject('store');
+const router = useRouter();
 
 console.log("Store in App.vue")
 console.dir(store);
@@ -68,6 +70,7 @@ onMounted(() => {
 async function doLogout() {
   const res = await logOut();
   console.log(res);
+  router.push({ name: "login" });
 }
 
 </script>
