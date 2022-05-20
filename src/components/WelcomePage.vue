@@ -18,7 +18,6 @@ export default defineComponent({
     const msg = ref<string>("¡Bienvenidx a PriceBin!");
 
     onMounted(() => {
-      console.log("Mounted!");
       if (auth.currentUser?.displayName) {
         msg.value = `¡Bienvenidx, ${auth.currentUser.displayName}!`
       }

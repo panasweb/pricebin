@@ -21,7 +21,8 @@ export interface User {
     UserLog: UserLog,
     rank: number,
     points:number, 
-    currentList: CurrentList
+    currentList: CurrentList,
+    _id?: string
 }
 
 export interface UserToCreate {

@@ -52,16 +52,23 @@
           prefill: productFormData,
         },
       }">
-        <button class="btn btn-primary w-100">Registrar un precio</button>
+        <button class="btn btn-primary w-100">
+          <n-icon size="25" :component="PriceChangeFilled"></n-icon>
+             Registrar un precio
+        </button>
       </router-link>
+      <button class="btn btn-secondary w-100 mt-2" @click="handleDelete">
+        <n-icon size="25" :component="DeleteForeverRound"></n-icon>
+        Borrar producto
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, inject } from "vue";
 import { Product } from "../types/interfaces/Product";
-import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG } from "../utils/constants";
+import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
 import { auth } from "../services/auth";
 
@@ -71,7 +78,9 @@ import Price from "@/types/interfaces/Price";
 import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
-
+import IStore from "@/types/IStore";
+import { NButton, NIcon } from "naive-ui";
+import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute();
@@ -83,7 +92,12 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 let userVoted = false;
 
-function redirect() {
+const store: IStore | undefined = inject('store');
+
+function redirectProducts() {
+  router.push({ name: "products" });
+}
+function redirectNotFound() {
   router.push({ name: "404", replace: true });
 }
 function redirectToLogin() {
@@ -100,7 +114,7 @@ onBeforeMount(async () => {
   console.log("product", currentP.value);
 
   if (!currentP.value) {
-    redirect();
+    redirectNotFound();
     return;
   }
 
@@ -118,8 +132,7 @@ onBeforeMount(async () => {
         hasvoted.value[pid] = result
       });
     }
-    console.log("User has voted");
-    console.log(hasvoted)
+
   })
 
 
@@ -137,14 +150,44 @@ onBeforeMount(async () => {
     productId: route.params.id as string,
   };
   productFormData.value = JSON.stringify(objectData);
-  console.log("product", objectData.name);
-  console.log("prices", currentP.value.prices);
+
 });
 
+async function handleDelete(e: MouseEvent) {
+  console.log("Store currentUser test", store!.currentUser);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
+
+  const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+  if (!adminUser) {
+    console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+    return;
+  }
+
+  if (adminUser.rank < ADMIN_RANK) {
+    console.log("Insuficient permissions");
+    return;
+  }
+
+  if (confirm(`¿Borrar Producto ${currentP.value?.name}?`) != true) {
+    return;
+  }
+
+  try {
+    await ProductManager.adminDeleteProduct(adminUser._id!, route.params.id as string);
+
+    redirectProducts();
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+}
 
 
 async function vote(priceId: string): Promise<void> {
-  console.log("currentUser", auth.currentUser);
+  console.log("auth.currentUser", auth.currentUser);
 
   // Change svg id to voted
   priceVotes.value[priceId] += 1;
@@ -179,7 +222,7 @@ async function addToList(price: Price): Promise<void> {
   console.log("click");
 
   if (!auth.currentUser) {
-    redirect();
+    redirectToLogin();
   }
 
   if (currentP.value) {

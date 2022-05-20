@@ -81,6 +81,64 @@ const ProductManager = {
     findProductByNameAndBrand() {
         // TODO
         return null;
+    },
+    adminDeleteProduct: async function(UserKey:string, productId:string) : Promise<[boolean, string | null]> {
+        if (!UserKey) {
+            console.log("No UserKey provided for admin delete")
+            return [false, null]
+        }
+
+        if (!productId) {
+            console.log("No id provided for product to delete");
+            return [false, null]
+        }
+
+        const endpoint = url + "delete/" + productId
+        try {
+            const {data} = await axios.post(endpoint, {UserKey});
+
+            return [true, data as string];
+
+        } catch (e) {
+            console.error(e);
+            return [false, "Error deleting product"];
+        }
+    },
+    adminDeletePrice: async function(UserKey:string, productId:string, priceId:string) : Promise<[boolean, Product | null]> {
+        /* 
+        FindOneAndUpdate by product id, then pull from array 
+        the subdocument matching priceId.
+        */
+        if (!UserKey) {
+            console.log("No UserKey provided for admin delete")
+            return [false, null]
+        }
+
+        if (!productId) {
+            console.log('No id provided for product');
+            return [false, null];
+        }
+        if (!priceId) {
+            console.log('No id provided for price');
+            return [false, null];
+        }
+
+        const endpoint = url + 'delete-price'
+
+        try {
+            const reqBody = {
+                UserKey,
+                productId, 
+                priceId
+            }
+            const {data} = await axios.post(endpoint, reqBody);
+            console.log(data.message);
+            return [true, data.newDoc as Product];
+        } catch (e) {
+            console.error("API error", e);
+            return [false, null];
+        }
+
     }
 }
 

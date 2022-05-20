@@ -30,10 +30,10 @@
 </template>
 
 <script lang ="ts">
+import {inject} from 'vue'
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import ListRecord from '../types/ListRecord'
-import {DEFAULT_LOGO_SVG} from '../utils/constants' 
-import { DEFAULT_PRODUCT_IMG } from '@/utils/constants'
+import { DEFAULT_PRODUCT_IMG, DEFAULT_LOGO_SVG, DEFAULT_STORE } from '@/utils/constants'
 import { formatAmt } from "@/utils/misc";
 
 export default defineComponent({
@@ -44,7 +44,6 @@ export default defineComponent({
     setup(props) {
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
         const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
-
         return { storeLogo, productImg, formatAmt }
     }
 })
