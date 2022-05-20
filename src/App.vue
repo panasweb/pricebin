@@ -23,35 +23,33 @@
   
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { User } from 'firebase/auth';
-import { defineComponent, onBeforeMount, ref } from 'vue'
+import { provide, onBeforeMount, ref } from 'vue'
 import { auth, logOut } from '@/services/auth';
 
-export default defineComponent({
-  setup () {
-      const loggedIn = ref<boolean>(false);
-      const currentEmail = ref<string | null>(null);
-    onBeforeMount(() => {
-        // Setup a listener that persists throughout component lifecycle
-        auth.onAuthStateChanged((user:User|null) => {
-            if (!user) {
-                console.log("User not logged in");
-                loggedIn.value = false;
-            } else {
-                loggedIn.value = true;
-                console.log("Logged in as", user.email);
-                currentEmail.value = user.email;
-            }
-        })
+
+const loggedIn = ref<boolean>(false);
+const currentEmail = ref<string | null>(null);
+
+onBeforeMount(() => {
+    // Setup a listener that persists throughout component lifecycle
+    auth.onAuthStateChanged((user:User|null) => {
+        if (!user) {
+            console.log("User not logged in");
+            loggedIn.value = false;
+        } else {
+            loggedIn.value = true;
+            console.log("Logged in as", user.email);
+            currentEmail.value = user.email;
+        }
     })
-    async function doLogout() {
-      const res = await logOut();
-      console.log(res);
-    }
-    return { loggedIn, currentEmail, doLogout }
-  }
 })
+async function doLogout() {
+  const res = await logOut();
+  console.log(res);
+}
+
 </script>
 <style>
 @import './styles/App.css';

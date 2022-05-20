@@ -1,12 +1,13 @@
-DONE:
-0. DONE Add buttons for clearlist and save list in my-products
-1. DONE Update Product Square Card: remove add to list + button,
+FRONT END TODOS:
 
-THIS BRANCH:
-2. Implement Google Auth
+1. Store for Currency and currentUser (is Admin?)
+2. Buttons for delete Product and delete Price for Admin users
+3. Set Currency and add currency converter API calls
+4. New Views:
+    - Configuration Menu
+    - User Stats
+    - Past Lists
+    - Single Past List
+5. Improve styles
+6. Send Mail (2FA) for non-google sign-ups
 
-NEXT:
-3. Implement "add+" buttons in every price of product view
-4. TEST save currentlist
-
-- IDEA: authenticator handler as an object to call in authorization-required methods
