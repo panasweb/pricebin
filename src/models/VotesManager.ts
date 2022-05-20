@@ -33,25 +33,25 @@ const VotesManager = {
             return "Error"
         }
     },
-
     checkUserVote: async function(UserKey: string, PriceKey: string) : Promise<boolean>{
-        // UserKey is an email this time
+        // Calls findUserVote
+        const endpoint = url + 'user/' + UserKey + '/' + PriceKey
+        console.log("Get request to ", endpoint);
         try{
-            const {data} = await axios.get(
-                url + 'user/' + UserKey + '/' + PriceKey
-            );
+            const {data} = await axios.get(endpoint);
+
+            console.log("Check User Vote result", data.doc);
             return data.doc !== null;
         }
         catch(e){
-            console.error("Error getting user vote", e);
+            console.error("Error checking user vote", e);
             return false;
         }
     },
-    
     deleteVote: async function(UserKey: string, PriceKey: string) : Promise<string>{
         try{
             const {data} = await axios.post(
-                url + 'delete/vote',
+                url + 'delete',
                 {UserKey, PriceKey}
             );
             return data

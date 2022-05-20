@@ -132,8 +132,7 @@ onBeforeMount(async () => {
         hasvoted.value[pid] = result
       });
     }
-    console.log("User has voted");
-    console.log(hasvoted)
+
   })
 
 
@@ -151,8 +150,7 @@ onBeforeMount(async () => {
     productId: route.params.id as string,
   };
   productFormData.value = JSON.stringify(objectData);
-  console.log("product", objectData.name);
-  console.log("prices", currentP.value.prices);
+
 });
 
 async function handleDelete(e: MouseEvent) {
@@ -167,7 +165,6 @@ async function handleDelete(e: MouseEvent) {
     console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
     return;
   }
-  console.log("Admin user", adminUser);
 
   if (adminUser.rank < ADMIN_RANK) {
     console.log("Insuficient permissions");
@@ -190,7 +187,7 @@ async function handleDelete(e: MouseEvent) {
 
 
 async function vote(priceId: string): Promise<void> {
-  console.log("currentUser", auth.currentUser);
+  console.log("auth.currentUser", auth.currentUser);
 
   // Change svg id to voted
   priceVotes.value[priceId] += 1;
