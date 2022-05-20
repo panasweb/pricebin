@@ -57,7 +57,7 @@
              Registrar un precio
         </button>
       </router-link>
-      <button class="btn btn-secondary w-100 mt-2" @click="handleDelete">
+      <button v-if="isAdmin" class="btn btn-secondary w-100 mt-2" @click="handleDelete">
         <n-icon size="25" :component="DeleteForeverRound"></n-icon>
         Borrar producto
       </button>
@@ -90,7 +90,7 @@ const priceVotes = ref<Record<string, number>>({});
 const hasvoted = ref<Record<string, boolean>>({});
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
-let userVoted = false;
+const isAdmin = ref<boolean>(false);
 
 const store: IStore | undefined = inject('store');
 
@@ -124,14 +124,27 @@ onBeforeMount(async () => {
   );
 
   // Get booleans has User Voted?
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async (user) => {
     let result: boolean;
     if (user) {
+      
+      // Update vote buttons
       priceIds.forEach(async (pid) => {
         result = await checkUserVote(user.email!, pid);
         hasvoted.value[pid] = result
       });
-    }
+
+      // Check Admin Privileges
+      const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+      if (!adminUser) {
+        console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+        return;
+      }
+
+      isAdmin.value = adminUser.rank === ADMIN_RANK
+      console.log("isAdmin?", isAdmin.value);
+
+    } 
 
   })
 
@@ -160,7 +173,7 @@ async function handleDelete(e: MouseEvent) {
     return;
   }
 
-  const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+  /* const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
   if (!adminUser) {
     console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
     return;
@@ -169,6 +182,15 @@ async function handleDelete(e: MouseEvent) {
   if (adminUser.rank < ADMIN_RANK) {
     console.log("Insuficient permissions");
     return;
+  } */
+
+  if (!isAdmin.value) {
+    console.log("Insufficient Permissions");
+    return;
+  }
+
+  if (!store || !store.currentUser) {
+    console.log("No currentUser in store!");
   }
 
   if (confirm(`¿Borrar Producto ${currentP.value?.name}?`) != true) {
@@ -176,7 +198,7 @@ async function handleDelete(e: MouseEvent) {
   }
 
   try {
-    await ProductManager.adminDeleteProduct(adminUser._id!, route.params.id as string);
+    await ProductManager.adminDeleteProduct(store!.currentUser!._id!, route.params.id as string);
 
     redirectProducts();
   } catch (e) {
@@ -213,10 +235,9 @@ async function unvote(priceId: string): Promise<void> {
 }
 
 async function checkUserVote(userEmail: string, priceId: string): Promise<boolean> {
-  /* let voted: boolean = await VotesManager.checkUserVote(userEmail, priceId)
-  console.log("Check user vote", voted) */
   return await VotesManager.checkUserVote(userEmail, priceId);
 }
+
 async function addToList(price: Price): Promise<void> {
   let productRecord: ListRecord | null = null;
   console.log("click");
