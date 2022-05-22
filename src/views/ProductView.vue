@@ -88,7 +88,7 @@ import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
 import { NIcon } from "naive-ui";
-import {serializePrices, byDateThenVotesThenAmount} from '../utils/misc'
+import {serializePrices, byVotesThenDateThenAmount} from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -118,7 +118,7 @@ function redirectToList() {
 }
 
 function setPrices(): void {
-  sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byDateThenVotesThenAmount);
+  sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byVotesThenDateThenAmount);
   console.log("Set sorted prices");
   console.log(sortedPrices.value);
 }
