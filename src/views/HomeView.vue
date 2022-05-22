@@ -22,7 +22,6 @@ export default defineComponent({
 
 <style scoped>
 .logo{
-  width: 80%;
   margin-top: 5%;
   align-self: center;
 }

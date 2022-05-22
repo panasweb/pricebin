@@ -38,8 +38,6 @@ const VotesManager = {
         const endpoint = url + 'user/' + UserKey + '/' + PriceKey
         try{
             const {data} = await axios.get(endpoint);
-
-            console.log("Check User Vote result", data.doc !== null);
             return data.doc !== null;
         }
         catch(e){

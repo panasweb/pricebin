@@ -15,7 +15,7 @@
         </h3>
       </div>
       <div class="prices-container">
-        <div v-for="p in currentP?.prices" :key="p.store" class="row" style="font-weight: bold">
+        <div v-for="p in sortedPrices" :key="p.store" class="row" style="font-weight: bold">
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
@@ -23,7 +23,7 @@
           <div class="col price">
             ${{ p.amount }}
             <div class="priceInfo">
-              <div class="price-date">{{ (p.date as string).slice(0,10) }}</div>
+              <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', { day: 'numeric', year: 'numeric', month: 'short' }) }}</div>
               <div v-if="!hasvoted[p._id!]" class="priceVotes">
                 <span @click="vote(p._id!)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +87,8 @@ import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
-import { NButton, NIcon } from "naive-ui";
+import { NIcon } from "naive-ui";
+import {serializePrices, byDateThenVotesThenAmount} from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -99,6 +100,7 @@ const hasvoted = ref<Record<string, boolean>>({});
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
+const sortedPrices = ref<Price[]>([]);
 
 const store: IStore | undefined = inject('store');
 
@@ -115,13 +117,42 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
-async function fetchProduct(): Promise<void> {
+function setPrices(): void {
+  sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byDateThenVotesThenAmount);
+  console.log("Set sorted prices");
+  console.log(sortedPrices.value);
+}
+
+async function fetchProduct(): Promise<string[]> {
+  /* Update product, prices list and price votes count */
   currentP.value = await ProductManager.getProduct(route.params.id as string);
+
+  const priceIds = Array.from(
+    currentP.value!.prices!,
+    (price: Price) => price._id!
+  );
+
+  priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
+
+  setPrices(); // update sortedPrices.value
+
+  return priceIds;
+}
+
+async function updateHasVoted(priceIds:string[]): Promise<void> {
+  let result: boolean;
+  if (!auth.currentUser) {
+    return;
+  }
+  priceIds.forEach(async (pid) => {
+        result = await checkUserVote(auth.currentUser!.email!, pid);
+        hasvoted.value[pid] = result
+      });
 }
 
 onBeforeMount(async () => {
 
-  await fetchProduct();
+  const priceIds = await fetchProduct();
 
   console.dir(currentP.value);
 
@@ -130,39 +161,22 @@ onBeforeMount(async () => {
     return;
   }
 
-  const priceIds = Array.from(
-    currentP.value!.prices!,
-    (price: Price) => price._id!
-  );
-
   // Get booleans has User Voted?
   onAuthStateChanged(auth, async (user) => {
-    let result: boolean;
     if (user) {
+      // Update vote buttons color
+      await updateHasVoted(priceIds);
 
-      // Update vote buttons
-      priceIds.forEach(async (pid) => {
-        result = await checkUserVote(user.email!, pid);
-        hasvoted.value[pid] = result
-      });
-
-      // Check Admin Privileges
+      // Set Admin Privileges
       const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
       if (!adminUser) {
         console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
         return;
       }
-
       isAdmin.value = adminUser.rank === ADMIN_RANK
       console.log("isAdmin?", isAdmin.value);
-
     }
-
   })
-
-
-  const counts = await VotesManager.getVoteCounts(priceIds as string[]);
-  priceVotes.value = counts;
 
   if (currentP.value?.img) {
     productImg.value = currentP.value.img;
@@ -398,7 +412,6 @@ span {
   color: #888;
   margin: 0 !important;
   text-align: inherit;
-
 }
 
 .priceInfo {

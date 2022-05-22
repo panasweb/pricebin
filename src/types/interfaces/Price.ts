@@ -5,6 +5,7 @@ interface Price {
     store: string,  // store's name
     StoreKey: string,
     _id?:string
+    votes?:number, // after serialization: `serializePrices` in misc.ts
 }
 
 export default Price
