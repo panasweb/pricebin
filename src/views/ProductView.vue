@@ -15,36 +15,44 @@
         </h3>
       </div>
       <div class="prices-container">
-        <div v-for="p in currentP?.prices" :key="p.store" class="row" style="font-weight: bold">
+        <div v-for="p in sortedPrices" :key="p.store" class="row" style="font-weight: bold">
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
           </div>
           <div class="col price">
             ${{ p.amount }}
-            <div v-if="!hasvoted[p._id!]" class="priceVotes">
-              <span @click="vote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="unvoted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
+            <div class="priceInfo">
+              <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', { day: 'numeric', year: 'numeric', month: 'short' }) }}</div>
+              <div v-if="!hasvoted[p._id!]" class="priceVotes">
+                <span @click="vote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="unvoted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
+              <div v-else class="priceVotes">
+                <span @click="unvote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="voted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
             </div>
-            <div v-else class="priceVotes">
-              <span @click="unvote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="voted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
-            </div>
+
           </div>
           <button class="add col" @click="addToList(p)">+</button>
+          <div v-if="isAdmin" class="del-price-btn">
+            <button @click="deletePrice(p)">Borrar precio</button>
+          </div>
         </div>
+
       </div>
       <router-link :to="{
         name: 'add price',
@@ -54,7 +62,7 @@
       }">
         <button class="btn btn-primary w-100">
           <n-icon size="25" :component="PriceChangeFilled"></n-icon>
-             Registrar un precio
+          Registrar un precio
         </button>
       </router-link>
       <button v-if="isAdmin" class="btn btn-secondary w-100 mt-2" @click="handleDelete">
@@ -71,7 +79,7 @@ import { Product } from "../types/interfaces/Product";
 import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
 import { auth } from "../services/auth";
-
+import ProductPrice from '../components/ProductPrice.vue';
 import ProductManager from "@/models/ProductManager";
 import VotesManager from "@/models/VotesManager";
 import Price from "@/types/interfaces/Price";
@@ -79,7 +87,8 @@ import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
-import { NButton, NIcon } from "naive-ui";
+import { NIcon } from "naive-ui";
+import {serializePrices, byVotesThenDateThenAmount} from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -91,6 +100,7 @@ const hasvoted = ref<Record<string, boolean>>({});
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
+const sortedPrices = ref<Price[]>([]);
 
 const store: IStore | undefined = inject('store');
 
@@ -107,50 +117,66 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
-onBeforeMount(async () => {
+function setPrices(): void {
+  sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byVotesThenDateThenAmount);
+  console.log("Set sorted prices");
+  console.log(sortedPrices.value);
+}
 
+async function fetchProduct(): Promise<string[]> {
+  /* Update product, prices list and price votes count */
   currentP.value = await ProductManager.getProduct(route.params.id as string);
-
-  console.log("product", currentP.value);
-
-  if (!currentP.value) {
-    redirectNotFound();
-    return;
-  }
 
   const priceIds = Array.from(
     currentP.value!.prices!,
     (price: Price) => price._id!
   );
 
-  // Get booleans has User Voted?
-  onAuthStateChanged(auth, async (user) => {
-    let result: boolean;
-    if (user) {
-      
-      // Update vote buttons
-      priceIds.forEach(async (pid) => {
-        result = await checkUserVote(user.email!, pid);
+  priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
+
+  setPrices(); // update sortedPrices.value
+
+  return priceIds;
+}
+
+async function updateHasVoted(priceIds:string[]): Promise<void> {
+  let result: boolean;
+  if (!auth.currentUser) {
+    return;
+  }
+  priceIds.forEach(async (pid) => {
+        result = await checkUserVote(auth.currentUser!.email!, pid);
         hasvoted.value[pid] = result
       });
+}
 
-      // Check Admin Privileges
+onBeforeMount(async () => {
+
+  const priceIds = await fetchProduct();
+
+  console.dir(currentP.value);
+
+  if (!currentP.value) {
+    redirectNotFound();
+    return;
+  }
+
+  // Get booleans has User Voted?
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Update vote buttons color
+      await updateHasVoted(priceIds);
+
+      // Set Admin Privileges
       const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
       if (!adminUser) {
         console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
         return;
       }
-
       isAdmin.value = adminUser.rank === ADMIN_RANK
       console.log("isAdmin?", isAdmin.value);
-
-    } 
-
+    }
   })
-
-
-  const counts = await VotesManager.getVoteCounts(priceIds as string[]);
-  priceVotes.value = counts;
 
   if (currentP.value?.img) {
     productImg.value = currentP.value.img;
@@ -166,23 +192,47 @@ onBeforeMount(async () => {
 
 });
 
-async function handleDelete(e: MouseEvent) {
-  console.log("Store currentUser test", store!.currentUser);
+async function deletePrice(price: Price): Promise<void> {
+
+  const priceId = price._id!
+  console.log("Price Id", priceId);
+
   if (!auth.currentUser) {
     redirectToLogin();
     return;
   }
 
-  /* const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
-  if (!adminUser) {
-    console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+  if (!isAdmin.value) {
+    console.log("Insufficient Permissions");
     return;
   }
 
-  if (adminUser.rank < ADMIN_RANK) {
-    console.log("Insuficient permissions");
+  if (!store || !store.currentUser) {
+    console.log("No currentUser in store!");
+  }
+
+  if (confirm(`¿Borrar este precio $${price.amount}?`) != true) {
     return;
-  } */
+  }
+
+  try {
+    const UserKey = store!.currentUser!._id!;
+    const productId = route.params.id as string;
+
+    await ProductManager.adminDeletePrice(UserKey, productId, priceId);
+    await fetchProduct();
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function handleDelete(e: MouseEvent): Promise<void> {
+  console.log("Store currentUser test", store!.currentUser);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
 
   if (!isAdmin.value) {
     console.log("Insufficient Permissions");
@@ -305,6 +355,7 @@ async function addToList(price: Price): Promise<void> {
   margin: 25px 0;
   padding: 20px;
   border-radius: 5px;
+  position: relative;
 }
 
 .price {
@@ -356,6 +407,17 @@ span {
   fill: #f76d66;
 }
 
+.price-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0 !important;
+  text-align: inherit;
+}
+
+.priceInfo {
+  text-align: inherit;
+}
+
 @media only screen and (max-width: 700px) {
   .container {
     width: 100%;
@@ -364,10 +426,6 @@ span {
     display: flex;
     flex-direction: column;
     align-content: center;
-  }
-
-  .row {
-    margin: 25px 0;
   }
 
   .favoritos {
@@ -397,6 +455,7 @@ span {
   }
 
   .row {
+    margin: 25px 0;
     width: 100%;
     justify-content: space-between;
   }

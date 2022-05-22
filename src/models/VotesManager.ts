@@ -36,11 +36,8 @@ const VotesManager = {
     checkUserVote: async function(UserKey: string, PriceKey: string) : Promise<boolean>{
         // Calls findUserVote
         const endpoint = url + 'user/' + UserKey + '/' + PriceKey
-        console.log("Get request to ", endpoint);
         try{
             const {data} = await axios.get(endpoint);
-
-            console.log("Check User Vote result", data.doc !== null);
             return data.doc !== null;
         }
         catch(e){

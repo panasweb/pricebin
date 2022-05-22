@@ -12,3 +12,5 @@ export const DEFAULT_STORE : IStore = {
 export const PRODUCT_TYPES = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
 
 export const ADMIN_RANK = 10;
+
+export const DEFAULT_AVI = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ii/crystal/132.png";
