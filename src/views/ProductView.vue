@@ -44,7 +44,11 @@
             </div>
           </div>
           <button class="add col" @click="addToList(p)">+</button>
+          <div v-if="isAdmin" class="del-price-btn">
+            <button @click="deletePrice(p)">Borrar precio</button>
+          </div>
         </div>
+
       </div>
       <router-link :to="{
         name: 'add price',
@@ -54,7 +58,7 @@
       }">
         <button class="btn btn-primary w-100">
           <n-icon size="25" :component="PriceChangeFilled"></n-icon>
-             Registrar un precio
+          Registrar un precio
         </button>
       </router-link>
       <button v-if="isAdmin" class="btn btn-secondary w-100 mt-2" @click="handleDelete">
@@ -107,11 +111,15 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
+async function fetchProduct(): Promise<void> {
+  currentP.value = await ProductManager.getProduct(route.params.id as string);
+}
+
 onBeforeMount(async () => {
 
-  currentP.value = await ProductManager.getProduct(route.params.id as string);
+  await fetchProduct();
 
-  console.log("product", currentP.value);
+  console.dir(currentP.value);
 
   if (!currentP.value) {
     redirectNotFound();
@@ -127,7 +135,7 @@ onBeforeMount(async () => {
   onAuthStateChanged(auth, async (user) => {
     let result: boolean;
     if (user) {
-      
+
       // Update vote buttons
       priceIds.forEach(async (pid) => {
         result = await checkUserVote(user.email!, pid);
@@ -144,7 +152,7 @@ onBeforeMount(async () => {
       isAdmin.value = adminUser.rank === ADMIN_RANK
       console.log("isAdmin?", isAdmin.value);
 
-    } 
+    }
 
   })
 
@@ -166,23 +174,47 @@ onBeforeMount(async () => {
 
 });
 
-async function handleDelete(e: MouseEvent) {
-  console.log("Store currentUser test", store!.currentUser);
+async function deletePrice(price: Price): Promise<void> {
+
+  const priceId = price._id!
+  console.log("Price Id", priceId);
+
   if (!auth.currentUser) {
     redirectToLogin();
     return;
   }
 
-  /* const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
-  if (!adminUser) {
-    console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+  if (!isAdmin.value) {
+    console.log("Insufficient Permissions");
     return;
   }
 
-  if (adminUser.rank < ADMIN_RANK) {
-    console.log("Insuficient permissions");
+  if (!store || !store.currentUser) {
+    console.log("No currentUser in store!");
+  }
+
+  if (confirm(`¿Borrar este precio $${price.amount}?`) != true) {
     return;
-  } */
+  }
+
+  try {
+    const UserKey = store!.currentUser!._id!;
+    const productId = route.params.id as string;
+
+    await ProductManager.adminDeletePrice(UserKey, productId, priceId);
+    await fetchProduct();
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function handleDelete(e: MouseEvent): Promise<void> {
+  console.log("Store currentUser test", store!.currentUser);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
 
   if (!isAdmin.value) {
     console.log("Insufficient Permissions");
@@ -305,6 +337,7 @@ async function addToList(price: Price): Promise<void> {
   margin: 25px 0;
   padding: 20px;
   border-radius: 5px;
+  position: relative;
 }
 
 .price {
@@ -356,6 +389,7 @@ span {
   fill: #f76d66;
 }
 
+
 @media only screen and (max-width: 700px) {
   .container {
     width: 100%;
@@ -364,10 +398,6 @@ span {
     display: flex;
     flex-direction: column;
     align-content: center;
-  }
-
-  .row {
-    margin: 25px 0;
   }
 
   .favoritos {
@@ -397,6 +427,7 @@ span {
   }
 
   .row {
+    margin: 25px 0;
     width: 100%;
     justify-content: space-between;
   }
