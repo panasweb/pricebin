@@ -22,26 +22,30 @@
           </div>
           <div class="col price">
             ${{ p.amount }}
-            <div v-if="!hasvoted[p._id!]" class="priceVotes">
-              <span @click="vote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="unvoted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
+            <div class="priceInfo">
+              <div class="price-date">{{ (p.date as string).slice(0,10) }}</div>
+              <div v-if="!hasvoted[p._id!]" class="priceVotes">
+                <span @click="vote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="unvoted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
+              <div v-else class="priceVotes">
+                <span @click="unvote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="voted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
             </div>
-            <div v-else class="priceVotes">
-              <span @click="unvote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="voted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
-            </div>
+
           </div>
           <button class="add col" @click="addToList(p)">+</button>
           <div v-if="isAdmin" class="del-price-btn">
@@ -75,7 +79,7 @@ import { Product } from "../types/interfaces/Product";
 import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
 import { auth } from "../services/auth";
-
+import ProductPrice from '../components/ProductPrice.vue';
 import ProductManager from "@/models/ProductManager";
 import VotesManager from "@/models/VotesManager";
 import Price from "@/types/interfaces/Price";
@@ -389,6 +393,17 @@ span {
   fill: #f76d66;
 }
 
+.price-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0 !important;
+  text-align: inherit;
+
+}
+
+.priceInfo {
+  text-align: inherit;
+}
 
 @media only screen and (max-width: 700px) {
   .container {
