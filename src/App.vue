@@ -7,16 +7,14 @@
           <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
         </router-link>
         <div class="nav-elements">
-          <n-space vertical>
-              <n-select v-model:value="currency" :options="CURRENCY_OPTIONS" color="#f76d66"/>
+          <n-space  vertical>
+              <n-select v-model:value="currency" size="small" :options="CURRENCY_OPTIONS" :theme-overrides="selectThemeOverrides"/>
           </n-space>
-          <n-button @click="setCurrency" color="#f76d66">
-                <template #icon>
-                    <n-icon>
-                        <cash/>
-                    </n-icon>     
-                </template>
-                Set currency
+          <n-button @click="setCurrency" size="small" color="#f76d66">
+                <div>
+                  <n-icon> <cash/> </n-icon>
+                  Set currency
+                </div>
           </n-button>
         </div>
         <div class="nav-elements">
@@ -45,15 +43,30 @@ import { auth, logOut } from '@/services/auth';
 import IStore from './types/IStore';
 import ProductManager from './models/ProductManager';
 import UserManager from './models/UserManager';
-import {NSpace, NSelect, NButton, NIcon} from 'naive-ui';
+import {NSpace, NSelect, NButton, NIcon, SelectProps } from 'naive-ui';
 import { CurrencyExchangeOutlined as cash } from '@vicons/material';
 import {CURRENCY_OPTIONS} from './utils/constants';
+import { whileStatement } from '@babel/types';
+type SelectThemeOverrides = NonNullable<SelectProps['themeOverrides']>
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 const store: IStore | undefined = inject('store');
 const router = useRouter();
 const currency = ref<string>(store!.currency);
+const selectThemeOverrides: SelectThemeOverrides = {
+  peers: {
+    InternalSelection: {
+      textColor: "#FFFFFF",
+      color: '#f76d66',
+      heightMedium: '42px'
+    },
+    InternalSelectMenu: {
+      optionTextColor: "#FFFFFF",
+      color: '#f76d66',
+    },
+  }
+}
 
 console.log("Store in App.vue")
 console.dir(store);
@@ -91,6 +104,7 @@ async function doLogout() {
 }
 
 async function setCurrency(){
+  console.log("Changing currency")
     let newCurrency = await UserManager.getCurrency(currency.value);
     if (store?.setCurrency && store?.setCurrencyRate){
         store.setCurrency(currency.value)
