@@ -6,6 +6,9 @@ FRONT END TODOS:
 
 0. Add No results to productList
 1. Set Currency and add currency converter API calls
+    - Mi Lista
+    - Signos de Currency (diccionario en constants)
+    - Refactorizar sin Set currency?
 
 4. New Views:
     - User Stats + Currency Selection

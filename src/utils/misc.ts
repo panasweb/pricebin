@@ -1,5 +1,7 @@
 import Price from '@/types/interfaces/Price';
 import md5 from 'md5'  // must add @types/md5
+import { CURRENCY_SYMBOLS } from './constants';
+import IStore from "@/types/IStore"
 
 export const getGravatarURL = (email: string) => {
     return `https://gravatar.com/avatar/${md5(email)}?s=128`;
@@ -10,8 +12,9 @@ export const updatedAverage = (average: number, size: number, new_value: number)
     return (size * average + new_value) / (size + 1);
 }
 
-
-
+export const toCurrency = (amount:number, store:IStore|undefined) : string => {
+    return `${CURRENCY_SYMBOLS[store?.currency||"MXN"]} ${store?.getConvertedAmount ? store?.getConvertedAmount(amount).toFixed(2) : amount.toFixed(2)}`
+}
 
 export const productNameToID = (name: string): string => {
     return (name.normalize("NFD").replace(/\p{Diacritic}/gu, "")).toLowerCase().replace(/ +/g, '-').replace(/[()]+/g, '');

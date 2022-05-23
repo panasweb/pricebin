@@ -17,22 +17,11 @@
             <div class="price-container">
                 <ProductCardSquare v-for="p in products" :key="p.name" :product="p" />
             </div>
-            <n-button @click="setCurrency" color="#f76d66">
-                <template #icon>
-                    <n-icon>
-                        <cash/>
-                    </n-icon>     
-                </template>
-                Set currency
-            </n-button>
         </div>
 
         <div>
             <h1>Currency converter</h1>
-             <n-space vertical>
-                <n-select v-model:value="currency" :options="CURRENCY_OPTIONS"/>
-                <h1>{{currency}}</h1>
-            </n-space>
+             <CurrencySelect />
         </div>
     </div>
 </template>
@@ -50,6 +39,8 @@ import RegisterPrice from '@/components/RegisterPrice.vue';
 import {CURRENCY_OPTIONS} from '../utils/constants';
 import {inject} from 'vue';
 import IStore from '@/types/IStore';
+import CurrencySelect from '@/components/CurrencySelect.vue'
+
 const store:IStore | undefined = inject("store")
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
