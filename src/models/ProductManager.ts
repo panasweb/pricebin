@@ -13,7 +13,6 @@ const ProductManager = {
             console.error("Error fetching products", e);
             return []   
         }
-
     },
     create : async function(product: Product) : Promise<[boolean, Product | null]> {
         console.log("Create product", product.name, product.brand);
@@ -78,9 +77,20 @@ const ProductManager = {
         }
 
     },
-    findProductByNameAndBrand() {
-        // TODO
-        return null;
+    searchProducts: async function(query:string) : Promise<Product[]>{
+        // Search by name for now
+        if (!query) {
+            return await this.getAll();
+        }
+
+        const endpoint = url + "by-name";
+        try {
+            const {data} = await axios.post(endpoint, {name: query});
+            return data as Product[];
+        } catch (e) {
+            console.error("API error", e);
+            return [];
+        }
     },
     adminDeleteProduct: async function(UserKey:string, productId:string) : Promise<[boolean, string | null]> {
         if (!UserKey) {
