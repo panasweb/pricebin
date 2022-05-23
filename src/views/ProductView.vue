@@ -11,7 +11,7 @@
         <div class="favoritos"><img src="@/assets/heart.svg" /></div>
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
         <h3>
-          Precio mas bajo: <span> $ {{ currentP?.prices[0].amount }}</span>
+          Precio mas bajo: <span> $ {{ store?.getConvertedAmount ? store?.getConvertedAmount(currentP!.prices[0].amount).toFixed(2) : currentP?.prices[0].amount.toFixed(2) }}</span>
         </h3>
       </div>
       <div class="prices-container">

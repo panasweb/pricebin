@@ -21,8 +21,7 @@
                 <template #icon>
                     <n-icon>
                         <cash/>
-                    </n-icon>
-                    
+                    </n-icon>     
                 </template>
                 Set currency
             </n-button>
@@ -75,7 +74,7 @@ onBeforeMount(() => {
 
 async function setCurrency(){
     let newCurrency = await UserManager.getCurrency(currency.value);
-    if (store?.setCurrency){
+    if (store?.setCurrency && store?.setCurrencyRate){
         store.setCurrency(currency.value)
         store.setCurrencyRate(newCurrency)
         console.log("Currency rate",store.currencyRate)
