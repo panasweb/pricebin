@@ -114,7 +114,7 @@ const UserManager = {
         const fromCurrency = 'MXN'
         try{
             const {data} = await axios.post('http://localhost:3010/convert', {fromCurrency, toCurrency})
-            console.log(data[`${fromCurrency}_${toCurrency}`])
+
             return data[`${fromCurrency}_${toCurrency}`] as number;
         }
         catch(e){
