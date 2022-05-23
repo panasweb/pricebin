@@ -21,7 +21,7 @@
             <p>{{ p.store }}</p>
           </div>
           <div class="col price">
-            ${{ p.amount }}
+            ${{ store?.getConvertedAmount ? store?.getConvertedAmount(p.amount).toFixed(2) : p.amount }}
             <div class="priceInfo">
               <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', { day: 'numeric', year: 'numeric', month: 'short' }) }}</div>
               <div v-if="!hasvoted[p._id!]" class="priceVotes">

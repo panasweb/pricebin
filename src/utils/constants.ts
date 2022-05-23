@@ -9,6 +9,17 @@ export const DEFAULT_STORE : IStore = {
     currentUser: null
 }
 
+export const CURRENCY_OPTIONS = [
+    {label: 'USD', value: 'USD'},
+    {label: 'MXN', value: 'MXN'},
+    {label: 'EUR', value: 'EUR'},
+    {label: 'GBP', value: 'GBP'},
+    {label: 'BTC', value: 'BTC'},
+    {label: 'CAD', value: 'CAD'},
+    {label: 'COP', value: 'COP'},
+    {label: 'RUB', value: 'RUB'},
+    {label: 'JPY', value: 'JPY'}, 
+    {label: 'CNY', value: 'CNY'}] 
 export const PRODUCT_TYPES = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
 
 export const ADMIN_RANK = 10;
