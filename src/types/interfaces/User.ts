@@ -22,7 +22,8 @@ export interface User {
     rank: number,
     points:number, 
     currentList: CurrentList,
-    _id?: string
+    _id?: string,
+    avatar: string
 }
 
 export interface UserToCreate {
