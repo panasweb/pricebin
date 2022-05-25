@@ -7,6 +7,15 @@
           <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
         </router-link>
         <div class="nav-elements">
+          <!-- <n-space  vertical>
+              <n-select v-model:value="currency" size="small" :options="CURRENCY_OPTIONS" :theme-overrides="selectThemeOverrides"/>
+          </n-space>
+          <n-button @click="setCurrency" size="small" color="#f76d66">
+                <div>
+                  <n-icon> <cash/> </n-icon>
+                  Set currency
+                </div>
+          </n-button> -->
           <!-- <n-space vertical>
               <n-select v-model:value="currency" :options="CURRENCY_OPTIONS" color="#f76d66"/>
           </n-space>
@@ -45,10 +54,9 @@ import {useRouter} from 'vue-router';
 import { auth, logOut } from '@/services/auth';
 import IStore from './types/IStore';
 import UserManager from './models/UserManager';
-import {NSpace, NSelect, NButton, NIcon} from 'naive-ui';
-import { CurrencyExchangeOutlined as cash } from '@vicons/material';
-import {CURRENCY_OPTIONS} from './utils/constants';
-import CurrencySelect from './components/CurrencySelect.vue'
+import CurrencySelect from './components/CurrencySelect.vue';
+
+
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
@@ -92,6 +100,8 @@ async function doLogout() {
 }
 
 async function setCurrency(){
+  console.log("Changing currency")
+    // let newCurrency = await UserManager.getCurrency(currency.value);
     // If currency is the same, ignore
     const currentCurrency = store?.currency || "MXN"
     if (currency.value === currentCurrency) {
