@@ -13,6 +13,9 @@
           <router-link to="/prices/add" v-show="loggedIn" class="nav-link cta">Registrar Un Producto</router-link>
           <router-link to="/login" v-show="!loggedIn" class="nav-link">Ingresa a tu cuenta</router-link>
           <router-link to="/register" v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
+          <router-link to="/profile" v-show="loggedIn" class="nav-link img-container">
+              <img :src="avatar" alt="" class="profile-pic">
+          </router-link>
 
         </div>
       </div>
@@ -32,9 +35,11 @@ import { auth, logOut } from '@/services/auth';
 import IStore from './types/IStore';
 import ProductManager from './models/ProductManager';
 import UserManager from './models/UserManager';
+import { DEFAULT_AVI } from '@/utils/constants';
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
+const avatar = ref<string>(DEFAULT_AVI);
 const store: IStore | undefined = inject('store');
 const router = useRouter();
 
@@ -59,6 +64,9 @@ onBeforeMount(() => {
       if (store?.setCurrentUser) {
         store.setCurrentUser(currentUser);
       }
+      if(currentUser?.avatar) {
+        avatar.value = currentUser.avatar;
+      }
     }
   })
 })
@@ -76,4 +84,15 @@ async function doLogout() {
 </script>
 <style>
 @import './styles/App.css';
+
+.img-container{
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+}
+
+.img-container img{
+    width: 80%;
+}
 </style>
