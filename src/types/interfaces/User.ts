@@ -8,7 +8,7 @@ interface UserLog {
     weeklyAverage:number,
     listAverage:number,
     start: Date,
-    globalTotal: number,
+    globalTotal: number
 }
 
 export interface CurrentList {
@@ -22,7 +22,8 @@ export interface User {
     rank: number,
     points:number, 
     currentList: CurrentList,
-    _id?: string
+    _id?: string,
+    verified?: boolean,
 }
 
 export interface UserToCreate {
