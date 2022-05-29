@@ -27,8 +27,13 @@ async function onNegativeClick(): Promise<void> {
   if (store && store!.currentUser) {
     const UserKey = store.currentUser._id!;
     console.log("Resend mail to", UserKey);
+    try {
     const response = await axios.post(PRICEBIN_API + '/users/mail/resend', { UserKey })
     console.log("resend response", response);
+    } catch(e) {
+      console.error(e);
+      message.error("Error enviando correo: demasiados reenvíos");
+    }
   }
 }
 </script>
