@@ -119,7 +119,7 @@ onBeforeMount(async () => {
       });
     }
     console.log("User has voted");
-    console.log(hasvoted)
+    console.log(hasvoted.value)
   })
 
 

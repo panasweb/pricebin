@@ -1,6 +1,11 @@
 <template>
     <div class="container">
         <h1>Mis productos</h1>
+        <router-link :to="{
+            name: 'get Lists'
+        }">
+            <button class="btn btn-primary">Ver listas pasadas</button>
+        </router-link>
         <div class="row">
             <div class="col-2">
                 <h2>Hoy</h2>
@@ -26,6 +31,7 @@
             </router-link>
             <div>
                 <button class="btn btn-primary" @click="confirmClear">Limpiar Lista</button>
+                <button class="btn btn-primary" @click="saveList">Guardar Lista</button>
             </div>
         </div>
     </div>
@@ -82,6 +88,18 @@ export default defineComponent({
             }
         }
 
+        async function saveList() {
+            if( !auth.currentUser) {
+                redirect();
+                return;
+            }
+            console.log("Salvando Lista");
+            //console.log(parseInt(total))
+            await UserManager.saveList(auth.currentUser.email!, total.value, products.value);
+            await confirmClear()
+            //confirmClear()
+            await fetchProducts(auth.currentUser.email!);
+        }
 
         async function deleteRow(index: number) {
             let newList = products.value.filter((p, i) => i != index); // remove 1 element from index
@@ -115,7 +133,8 @@ export default defineComponent({
             total,
             products,
             deleteRow,
-            confirmClear
+            confirmClear,
+            saveList
         }
     },
     components: {

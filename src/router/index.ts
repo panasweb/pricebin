@@ -59,6 +59,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'my products',
     component: () => import('../views/MyProductsView.vue')
   },
+  {
+    path: '/myproducts/history',
+    name: 'get Lists',
+    component: () => import('../views/MyPastLists.vue')
+  },
   // catch-all
   {
     path:'/:catchAll(.*)',
