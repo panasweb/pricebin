@@ -3,7 +3,7 @@
     <div class="container">
         <form @submit.prevent="onSubmit">
             <div class="headline">
-                <h2>{{customTitle}}</h2>
+                <h2>{{ customTitle }}</h2>
             </div>
 
             <label for="productType">Tipo:</label>
@@ -47,12 +47,13 @@
                 <button class="btn btn-primary w-100" type="submit">Registrar Precio</button>
             </div>
         </form>
+        <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal"/>
     </div>
 </template>
 
 <script lang="ts">
 import FormAlert from './FormAlert.vue'
-import { defineComponent, onMounted, onBeforeMount, ref, PropType } from 'vue'
+import { defineComponent, onMounted, onBeforeMount, ref, PropType, inject } from 'vue'
 import { Product } from '@/types/interfaces/Product'
 import { PRODUCT_TYPES } from '@/utils/constants'
 import StoreManager from '@/models/StoreManager'
@@ -64,12 +65,15 @@ import Brand from '@/types/Brand'
 import ProductType from '@/types/ProductType'
 import ProductManager from '@/models/ProductManager'
 import { useRouter, useRoute } from 'vue-router'
+import { auth } from '../services/auth'
+import IStore from '@/types/IStore'
+import UnverifiedUserModal from '@/components/UnverifiedUserModal.vue'
 
-import { auth } from '../services/auth';
 
 export default defineComponent({
     components: {
         FormAlert,
+        UnverifiedUserModal
     },
     props: {
         title: { type: String as PropType<string>, required: false }
@@ -81,7 +85,11 @@ export default defineComponent({
         const storeList = ref<Store[]>([]);
         const brandList = ref<Brand[]>([]);
         const hasProduct = ref<boolean>(false);
-        const customTitle = ref<string>( props.title || 'Registrar Nuevo Producto');  // either comes from Add to List or register Product
+        const customTitle = ref<string>(props.title || 'Registrar Nuevo Producto');  // either comes from Add to List or register Product
+        const showModal = ref(false);
+
+        // Store data
+        const store: IStore | undefined = inject('store');
 
         // Prefill from route params
         const route = useRoute();
@@ -137,7 +145,9 @@ export default defineComponent({
             router.push('/product/' + p._id);
         }
 
-
+        function isVerified(): boolean {
+            return store?.currentUser?.verified || false;
+        }
         async function fetchProducts(): Promise<void> {
             let response = await ProductManager.getAll();
             console.log(response);
@@ -152,8 +162,23 @@ export default defineComponent({
             brandList.value = exampleBrands
         }
 
+        // Modal-related
+        function onCloseModal(): void {
+            showModal.value = false
+        }
+        function doShowModal() {
+            showModal.value = true;
+        }
+
+        // On Form submit
         async function onSubmit(): Promise<void> {
             alertMsg.value = '';
+
+            // Verified check
+            if (!isVerified()) {
+                doShowModal();
+                return;
+            }
 
             console.log("New product")
 
@@ -245,7 +270,7 @@ export default defineComponent({
         return {
             amount, productInput, productTypeInput, brandInput, storeInput, customTitle,
             productList, storeList, brandList, PRODUCT_TYPES, alertMsg, hasProduct,
-            onSubmit
+            onSubmit, showModal, onCloseModal,
         }
     }
 })

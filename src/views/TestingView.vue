@@ -2,10 +2,13 @@
     <div>
         <p v-if="loggedIn">Logged in as {{ currentEmail }}</p>
         <p v-else>No current user</p>
+        <div v-show="loggedIn">
+            <p>Is verified? {{isVerified()}}</p>
+        </div>
         <div class="">
             <button>
                 <span v-show="loggedIn" @click="doLogout">Log out</span>
-                <span v-show="!loggedIn" @click="doLogin">Log in</span>
+                <span v-show="!loggedIn" @click="doLogin">Log in as ericjardon@hotmail.com</span>
             </button>
         </div>
         <h1>Products CRUD</h1>
@@ -13,21 +16,14 @@
             <RegisterPrice />
         </div>
         <div>
-            Hello products
-            <div class="price-container">
-                <ProductCardSquare v-for="p in products" :key="p.name" :product="p" />
-            </div>
-        </div>
-
-        <div>
             <h1>Currency converter</h1>
-             <CurrencySelect />
+            <CurrencySelect />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import {NSpace, NSelect, NButton, NIcon} from 'naive-ui';
+import { NSpace, NSelect, NButton, NIcon } from 'naive-ui';
 import { CurrencyExchangeOutlined as cash } from '@vicons/material';
 import { onBeforeMount, onMounted, ref } from 'vue';
 import ProductManager from '@/models/ProductManager';
@@ -36,12 +32,12 @@ import { auth, logIn, logOut } from '../services/auth';
 import { Product } from '@/types/interfaces/Product';
 import ProductCardSquare from '@/components/ProductCardSquare.vue';
 import RegisterPrice from '@/components/RegisterPrice.vue';
-import {CURRENCY_OPTIONS} from '../utils/constants';
-import {inject} from 'vue';
+import { CURRENCY_OPTIONS } from '../utils/constants';
+import { inject } from 'vue';
 import IStore from '@/types/IStore';
 import CurrencySelect from '@/components/CurrencySelect.vue'
 
-const store:IStore | undefined = inject("store")
+const store: IStore | undefined = inject("store")
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 const products = ref<Product[]>([]);
@@ -49,6 +45,13 @@ const currency = ref<string>(store!.currency);
 async function fetchProducts() {
     let products_ = await ProductManager.getAll();
     products.value = products_;
+}
+function isVerified() : boolean {
+  return store?.currentUser?.verified || false;
+}
+const showModal = ref<boolean>(true);
+const toggleModal = () => {
+  showModal.value = !showModal.value
 }
 
 onBeforeMount(() => {
@@ -63,12 +66,12 @@ onBeforeMount(() => {
     })
 })
 
-async function setCurrency(){
+async function setCurrency() {
     let newCurrency = await UserManager.getCurrency(currency.value);
-    if (store?.setCurrency && store?.setCurrencyRate){
+    if (store?.setCurrency && store?.setCurrencyRate) {
         store.setCurrency(currency.value)
         store.setCurrencyRate(newCurrency)
-        console.log("Currency rate",store.currencyRate)
+        console.log("Currency rate", store.currencyRate)
     }
 }
 
