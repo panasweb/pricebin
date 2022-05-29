@@ -7,6 +7,29 @@
           <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
         </router-link>
         <div class="nav-elements">
+          <!-- <n-space  vertical>
+              <n-select v-model:value="currency" size="small" :options="CURRENCY_OPTIONS" :theme-overrides="selectThemeOverrides"/>
+          </n-space>
+          <n-button @click="setCurrency" size="small" color="#f76d66">
+                <div>
+                  <n-icon> <cash/> </n-icon>
+                  Set currency
+                </div>
+          </n-button> -->
+          <!-- <n-space vertical>
+              <n-select v-model:value="currency" :options="CURRENCY_OPTIONS" color="#f76d66"/>
+          </n-space>
+          <n-button @click="setCurrency" color="#f76d66">
+                <template #icon>
+                    <n-icon>
+                        <cash/>
+                    </n-icon>     
+                </template>
+                Set currency
+          </n-button> -->
+          <CurrencySelect/>
+        </div>
+        <div class="nav-elements">
           <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
           <router-link to="/myproducts" v-show="loggedIn" class="nav-link">Mi Lista</router-link>
           <router-link to="/products" class="nav-link">Ver Productos</router-link>
@@ -30,13 +53,16 @@ import { inject, onBeforeMount, onMounted, ref } from 'vue'
 import {useRouter} from 'vue-router';
 import { auth, logOut } from '@/services/auth';
 import IStore from './types/IStore';
-import ProductManager from './models/ProductManager';
 import UserManager from './models/UserManager';
+import CurrencySelect from './components/CurrencySelect.vue';
+
+
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 const store: IStore | undefined = inject('store');
 const router = useRouter();
+const currency = ref<string>(store!.currency);
 
 console.log("Store in App.vue")
 console.dir(store);
@@ -71,6 +97,24 @@ async function doLogout() {
   const res = await logOut();
   console.log(res);
   router.push({ name: "login" });
+}
+
+async function setCurrency(){
+  console.log("Changing currency")
+    // let newCurrency = await UserManager.getCurrency(currency.value);
+    // If currency is the same, ignore
+    const currentCurrency = store?.currency || "MXN"
+    if (currency.value === currentCurrency) {
+      console.log("Same currency, no change");
+      return;
+    }
+
+    const newCurrency = await UserManager.getCurrency(currency.value);
+    if (store?.setCurrency && store?.setCurrencyRate){
+        store.setCurrency(currency.value)
+        store.setCurrencyRate(newCurrency)
+        console.log("Currency rate",store.currencyRate)
+    }
 }
 
 </script>

@@ -13,7 +13,13 @@
                 </template>
             </n-input>
         </div>
-        <div class="price-container">
+        <div v-if="showNoServer" class="price-container">
+            Servidor dormido :P
+        </div>
+        <div v-else-if="showNoResults" class="price-container">
+            No se encontraron resultados :P
+        </div>
+        <div v-else class="price-container">
             <ProductCardSquare v-for="p in products" :key="p.name" :product="p" />
         </div>
     </div>
@@ -30,11 +36,21 @@ import {NInput, NIcon} from "naive-ui"
 const searchValue = ref<string>("");
 const isLoading = ref<boolean>(false);
 const products = ref<Product[]>([]);
+const showNoResults = ref<boolean>(false);
+const showNoServer = ref<boolean>(false);
 
 async function fetchProducts() {
     isLoading.value = true;
-    products.value = await ProductManager.getAll();
-    isLoading.value = false;
+    try {
+        products.value = await ProductManager.getAll();
+        showNoResults.value = products.value.length === 0;
+    }
+    catch (e) {
+        console.error("Error fetching products", e);
+        showNoServer.value = true;
+    } finally {
+        isLoading.value = false;
+    }
 }
 
 async function handleSearch(e: Event) {

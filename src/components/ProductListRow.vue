@@ -13,7 +13,7 @@
         <div class="col-2">
             <p>
                 <!-- Render the price times the number of units -->
-                ${{ formatAmt(product.amount) }}
+                {{ toCurrency(product.amount, store) }}
             </p>
         </div>
         <div class="col-2">
@@ -34,7 +34,8 @@ import {inject} from 'vue'
 import { defineComponent, onMounted, PropType, ref } from "@vue/runtime-core";
 import ListRecord from '../types/ListRecord'
 import { DEFAULT_PRODUCT_IMG, DEFAULT_LOGO_SVG, DEFAULT_STORE } from '@/utils/constants'
-import { formatAmt } from "@/utils/misc";
+import { formatAmt, toCurrency } from "@/utils/misc";
+import IStore from '@/types/IStore';
 
 export default defineComponent({
     props: {
@@ -42,9 +43,10 @@ export default defineComponent({
         onClick: {type: Object as PropType<any>, required: true}
     },
     setup(props) {
+        const store : IStore | undefined = inject('store'); 
         const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
         const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
-        return { storeLogo, productImg, formatAmt }
+        return { store, storeLogo, productImg, formatAmt, toCurrency }
     }
 })
 </script>

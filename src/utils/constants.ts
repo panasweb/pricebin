@@ -1,3 +1,4 @@
+import { SelectMixedOption } from 'naive-ui/lib/select/src/interface';
 import IStore from '../types/IStore';
 export const WEEK_MILISECONDS : number = 1000 * 60 * 60 * 24 * 7;
 
@@ -9,7 +10,37 @@ export const DEFAULT_STORE : IStore = {
     currentUser: null
 }
 
-export const PRODUCT_TYPES = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
+interface CurrencyOption {
+    label: string,
+    value:string
+}
+
+export const CURRENCY_OPTIONS : SelectMixedOption[] = [
+    {label: 'USD', value: 'USD'},
+    {label: 'MXN', value: 'MXN'},
+    {label: 'EUR', value: 'EUR'},
+    {label: 'CAD', value: 'CAD'},
+    {label: 'GBP', value: 'GBP'},
+    {label: 'BRL', value: 'BRL'},
+    {label: 'RUB', value: 'RUB'},
+    {label: 'JPY', value: 'JPY'}, 
+    {label: 'CNY', value: 'CNY'},
+    {label: 'BTC', value: 'BTC'},
+] 
+export const PRODUCT_TYPES : string[] = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
+
+export const CURRENCY_SYMBOLS : Record<string,string> = {
+    'USD': "$",
+    'MXN': '$',
+    'EUR': "€",
+    'CAD': "$",
+    'GBP':"£",
+    'BRL':"R$",
+    'RUB':"₽",
+    'JPY':"¥",
+    'CNY':"¥",
+    'BTC':"BTC"
+}
 
 export const ADMIN_RANK = 10;
 

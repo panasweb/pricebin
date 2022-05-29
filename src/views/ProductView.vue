@@ -10,8 +10,11 @@
         </div>
         <div class="favoritos"><img src="@/assets/heart.svg" /></div>
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
-        <h3>
-          Precio mas bajo: <span> $ {{ currentP?.prices[0].amount }}</span>
+        <h3 v-if="currentP">
+          Precio mas bajo: <span>
+            {{ toCurrency(currentP!.prices[0].amount, store) }}
+          </span>
+
         </h3>
       </div>
       <div class="prices-container">
@@ -21,9 +24,15 @@
             <p>{{ p.store }}</p>
           </div>
           <div class="col price">
-            ${{ p.amount }}
+            <!-- {{CURRENCY_SYMBOLS[store?.currency||"MXN"]}} 
+            {{ store?.getConvertedAmount ? store?.getConvertedAmount(p.amount).toFixed(2) : p.amount }} -->
+            {{ toCurrency(p.amount, store) }}
             <div class="priceInfo">
-              <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', { day: 'numeric', year: 'numeric', month: 'short' }) }}</div>
+              <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', {
+                  day: 'numeric', year: 'numeric',
+                  month: 'short'
+                })
+              }}</div>
               <div v-if="!hasvoted[p._id!]" class="priceVotes">
                 <span @click="vote(p._id!)">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,10 +85,9 @@
 <script setup lang="ts">
 import { onBeforeMount, ref, inject } from "vue";
 import { Product } from "../types/interfaces/Product";
-import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK } from "../utils/constants";
+import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK, CURRENCY_SYMBOLS } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
 import { auth } from "../services/auth";
-import ProductPrice from '../components/ProductPrice.vue';
 import ProductManager from "@/models/ProductManager";
 import VotesManager from "@/models/VotesManager";
 import Price from "@/types/interfaces/Price";
@@ -88,7 +96,7 @@ import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
 import { NIcon } from "naive-ui";
-import {serializePrices, byVotesThenDateThenAmount} from '../utils/misc'
+import { serializePrices, byVotesThenDateThenAmount, toCurrency } from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -139,15 +147,15 @@ async function fetchProduct(): Promise<string[]> {
   return priceIds;
 }
 
-async function updateHasVoted(priceIds:string[]): Promise<void> {
+async function updateHasVoted(priceIds: string[]): Promise<void> {
   let result: boolean;
   if (!auth.currentUser) {
     return;
   }
   priceIds.forEach(async (pid) => {
-        result = await checkUserVote(auth.currentUser!.email!, pid);
-        hasvoted.value[pid] = result
-      });
+    result = await checkUserVote(auth.currentUser!.email!, pid);
+    hasvoted.value[pid] = result
+  });
 }
 
 onBeforeMount(async () => {

@@ -11,7 +11,7 @@
             </div>
             <div class="col-2">
                 <!-- Renderear la sumatoria total de los productos -->
-                <h2>${{ total }}</h2>
+                <h2>{{toCurrency(total, store)}}</h2>
             </div>
         </div>
         <div v-for="(p, i) in products" :key="i" class="row">
@@ -32,17 +32,21 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, defineComponent, ref, computed } from 'vue'
+import { onBeforeMount, defineComponent, ref, computed, inject } from 'vue'
 import ProductListRow from '../components/ProductListRow.vue'
 import ListRecord from '../types/ListRecord'
 import UserManager from '@/models/UserManager'
-const currentEmail = ref<string | null>(null);
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router'
+import {toCurrency} from "@/utils/misc"
+import IStore from '@/types/IStore';
+
 
 export default defineComponent({
     setup() {
+        const store : IStore | undefined = inject('store');
 
+    const currentEmail = ref<string | null>(null);
         const products = ref<ListRecord[]>([])
         const router = useRouter();
         
@@ -112,10 +116,12 @@ export default defineComponent({
         })
 
         return {
+            store,
             total,
             products,
             deleteRow,
-            confirmClear
+            confirmClear,
+            toCurrency,
         }
     },
     components: {
