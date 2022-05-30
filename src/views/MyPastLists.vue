@@ -70,7 +70,7 @@ export default defineComponent({
                     redirect();
                 } else {
                     let tempUser : User | null = await UserManager.getByEmail(user.email!)
-                    if(tempUser){
+                    if(tempUser && tempUser._id) {
                         currentId.value = tempUser._id
                         if (currentId.value) {
                             await fetchProducts(currentId.value);

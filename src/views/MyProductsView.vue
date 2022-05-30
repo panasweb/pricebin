@@ -55,7 +55,7 @@ export default defineComponent({
 
     const currentEmail = ref<string | null>(null);
         const products = ref<ListRecord[]>([])
-        const id = ref<string | null>(null)
+        const id = ref<string | null| undefined>(null)
         const router = useRouter();
         
         const total = computed(() => {
@@ -145,7 +145,7 @@ export default defineComponent({
             products,
             deleteRow,
             confirmClear,
-            saveList
+            saveList,
             toCurrency,
         }
     },
