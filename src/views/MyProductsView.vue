@@ -45,11 +45,13 @@ import UserManager from '@/models/UserManager'
 const currentEmail = ref<string | null>(null);
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router'
+import ListManager from '@/models/ListManager';
 
 export default defineComponent({
     setup() {
 
         const products = ref<ListRecord[]>([])
+        const id = ref<string | null>(null)
         const router = useRouter();
         
         const total = computed(() => {
@@ -64,7 +66,9 @@ export default defineComponent({
             let user = await UserManager.getByEmail(email)
             if (user) {
                 products.value = user.currentList.list
+                id.value = user._id
             }
+            
             // else, display error
         }
 
@@ -94,11 +98,13 @@ export default defineComponent({
                 return;
             }
             console.log("Salvando Lista");
-            //console.log(parseInt(total))
-            await UserManager.saveList(auth.currentUser.email!, total.value, products.value);
-            await confirmClear()
-            //confirmClear()
-            await fetchProducts(auth.currentUser.email!);
+            if(id.value){
+                await ListManager.saveList(id.value, products.value);
+                //confirmClear()
+                await UserManager.clearList(auth.currentUser.email!);
+                await fetchProducts(auth.currentUser.email!);
+            }
+            
         }
 
         async function deleteRow(index: number) {
