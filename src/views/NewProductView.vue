@@ -18,26 +18,6 @@ export default defineComponent({
     name: 'NewProductView',
     components: {
         AddToList
-    },
-
-    setup () {
-        const loggedIn = ref<boolean>(false);
-        const currentEmail = ref<string | null>(null);
-
-        onBeforeMount(() => {
-            // Setup a listener that persists throughout component lifecycle
-            auth.onAuthStateChanged(user => {
-                if (!user) {
-                    loggedIn.value = false;
-                } else {
-                    loggedIn.value = true;
-                    currentEmail.value = user.email;
-                }
-            })
-        })
-
-
-        return { loggedIn, currentEmail }
     }
 })
 </script>

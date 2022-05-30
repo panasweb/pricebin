@@ -10,41 +10,58 @@
         </div>
         <div class="favoritos"><img src="@/assets/heart.svg" /></div>
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
-        <h3>
-          Precio mas bajo: <span> $ {{ currentP?.prices[0].amount }}</span>
+        <h3 v-if="currentP">
+          Precio mas bajo: <span>
+            {{ toCurrency(currentP!.prices[0].amount, store) }}
+          </span>
+
         </h3>
       </div>
       <div class="prices-container">
-        <div v-for="p in currentP?.prices" :key="p.store" class="row" style="font-weight: bold">
+        <div v-for="p in sortedPrices" :key="p.store" class="row" style="font-weight: bold">
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
           </div>
           <div class="col price">
-            ${{ p.amount }}
-            <div v-if="!hasvoted[p._id!]" class="priceVotes">
-              <span @click="vote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="unvoted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
+            <!-- {{CURRENCY_SYMBOLS[store?.currency||"MXN"]}} 
+            {{ store?.getConvertedAmount ? store?.getConvertedAmount(p.amount).toFixed(2) : p.amount }} -->
+            {{ toCurrency(p.amount, store) }}
+            <div class="priceInfo">
+              <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', {
+                  day: 'numeric', year: 'numeric',
+                  month: 'short'
+                })
+              }}</div>
+              <div v-if="!hasvoted[p._id!]" class="priceVotes">
+                <span @click="vote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="unvoted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
+              <div v-else class="priceVotes">
+                <span @click="unvote(p._id!)">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
+                      id="voted" />
+                  </svg>
+                </span>
+                x{{ priceVotes[p._id!] }}
+              </div>
             </div>
-            <div v-else class="priceVotes">
-              <span @click="unvote(p._id!)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M0 8C0 3.58065 3.58065 0 8 0C12.4194 0 16 3.58065 16 8C16 12.4194 12.4194 16 8 16C3.58065 16 0 12.4194 0 8ZM9.41935 11.7419V8H11.7065C12.0516 8 12.2258 7.58064 11.9806 7.33871L8.27419 3.65161C8.12258 3.5 7.88065 3.5 7.72903 3.65161L4.01935 7.33871C3.77419 7.58387 3.94839 8 4.29355 8H6.58065V11.7419C6.58065 11.9548 6.75484 12.129 6.96774 12.129H9.03226C9.24516 12.129 9.41935 11.9548 9.41935 11.7419Z"
-                    id="voted" />
-                </svg>
-              </span>
-              x{{ priceVotes[p._id!] }}
-            </div>
+
           </div>
           <button class="add col" @click="addToList(p)">+</button>
+          <div v-if="isAdmin" class="del-price-btn">
+            <button @click="deletePrice(p)">Borrar precio</button>
+          </div>
         </div>
+
       </div>
       <router-link :to="{
         name: 'add price',
@@ -52,26 +69,35 @@
           prefill: productFormData,
         },
       }">
-        <button class="btn btn-primary w-100">Registrar un precio</button>
+        <button class="btn btn-primary w-100">
+          <n-icon size="25" :component="PriceChangeFilled"></n-icon>
+          Registrar un precio
+        </button>
       </router-link>
+      <button v-if="isAdmin" class="btn btn-secondary w-100 mt-2" @click="handleDelete">
+        <n-icon size="25" :component="DeleteForeverRound"></n-icon>
+        Borrar producto
+      </button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, inject } from "vue";
 import { Product } from "../types/interfaces/Product";
-import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG } from "../utils/constants";
+import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK, CURRENCY_SYMBOLS } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
 import { auth } from "../services/auth";
-
 import ProductManager from "@/models/ProductManager";
 import VotesManager from "@/models/VotesManager";
 import Price from "@/types/interfaces/Price";
 import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
-
+import IStore from "@/types/IStore";
+import { NIcon } from "naive-ui";
+import { serializePrices, byVotesThenDateThenAmount, toCurrency } from '../utils/misc'
+import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute();
@@ -81,9 +107,15 @@ const priceVotes = ref<Record<string, number>>({});
 const hasvoted = ref<Record<string, boolean>>({});
 const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
-let userVoted = false;
+const isAdmin = ref<boolean>(false);
+const sortedPrices = ref<Price[]>([]);
 
-function redirect() {
+const store: IStore | undefined = inject('store');
+
+function redirectProducts() {
+  router.push({ name: "products" });
+}
+function redirectNotFound() {
   router.push({ name: "404", replace: true });
 }
 function redirectToLogin() {
@@ -93,38 +125,66 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
-onBeforeMount(async () => {
+function setPrices(): void {
+  sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byVotesThenDateThenAmount);
+  console.log("Set sorted prices");
+  console.log(sortedPrices.value);
+}
 
+async function fetchProduct(): Promise<string[]> {
+  /* Update product, prices list and price votes count */
   currentP.value = await ProductManager.getProduct(route.params.id as string);
-
-  console.log("product", currentP.value);
-
-  if (!currentP.value) {
-    redirect();
-    return;
-  }
 
   const priceIds = Array.from(
     currentP.value!.prices!,
     (price: Price) => price._id!
   );
 
+  priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
+
+  setPrices(); // update sortedPrices.value
+
+  return priceIds;
+}
+
+async function updateHasVoted(priceIds: string[]): Promise<void> {
+  let result: boolean;
+  if (!auth.currentUser) {
+    return;
+  }
+  priceIds.forEach(async (pid) => {
+    result = await checkUserVote(auth.currentUser!.email!, pid);
+    hasvoted.value[pid] = result
+  });
+}
+
+onBeforeMount(async () => {
+
+  const priceIds = await fetchProduct();
+
+  console.dir(currentP.value);
+
+  if (!currentP.value) {
+    redirectNotFound();
+    return;
+  }
+
   // Get booleans has User Voted?
-  onAuthStateChanged(auth, user => {
-    let result: boolean;
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
-      priceIds.forEach(async (pid) => {
-        result = await checkUserVote(user.email!, pid);
-        hasvoted.value[pid] = result
-      });
+      // Update vote buttons color
+      await updateHasVoted(priceIds);
+
+      // Set Admin Privileges
+      const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+      if (!adminUser) {
+        console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+        return;
+      }
+      isAdmin.value = adminUser.rank === ADMIN_RANK
+      console.log("isAdmin?", isAdmin.value);
     }
-    console.log("User has voted");
-    console.log(hasvoted.value)
   })
-
-
-  const counts = await VotesManager.getVoteCounts(priceIds as string[]);
-  priceVotes.value = counts;
 
   if (currentP.value?.img) {
     productImg.value = currentP.value.img;
@@ -137,14 +197,77 @@ onBeforeMount(async () => {
     productId: route.params.id as string,
   };
   productFormData.value = JSON.stringify(objectData);
-  console.log("product", objectData.name);
-  console.log("prices", currentP.value.prices);
+
 });
 
+async function deletePrice(price: Price): Promise<void> {
+
+  const priceId = price._id!
+  console.log("Price Id", priceId);
+
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
+
+  if (!isAdmin.value) {
+    console.log("Insufficient Permissions");
+    return;
+  }
+
+  if (!store || !store.currentUser) {
+    console.log("No currentUser in store!");
+  }
+
+  if (confirm(`¿Borrar este precio $${price.amount}?`) != true) {
+    return;
+  }
+
+  try {
+    const UserKey = store!.currentUser!._id!;
+    const productId = route.params.id as string;
+
+    await ProductManager.adminDeletePrice(UserKey, productId, priceId);
+    await fetchProduct();
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function handleDelete(e: MouseEvent): Promise<void> {
+  console.log("Store currentUser test", store!.currentUser);
+  if (!auth.currentUser) {
+    redirectToLogin();
+    return;
+  }
+
+  if (!isAdmin.value) {
+    console.log("Insufficient Permissions");
+    return;
+  }
+
+  if (!store || !store.currentUser) {
+    console.log("No currentUser in store!");
+  }
+
+  if (confirm(`¿Borrar Producto ${currentP.value?.name}?`) != true) {
+    return;
+  }
+
+  try {
+    await ProductManager.adminDeleteProduct(store!.currentUser!._id!, route.params.id as string);
+
+    redirectProducts();
+  } catch (e) {
+    console.error(e);
+    return;
+  }
+}
 
 
 async function vote(priceId: string): Promise<void> {
-  console.log("currentUser", auth.currentUser);
+  console.log("auth.currentUser", auth.currentUser);
 
   // Change svg id to voted
   priceVotes.value[priceId] += 1;
@@ -170,16 +293,15 @@ async function unvote(priceId: string): Promise<void> {
 }
 
 async function checkUserVote(userEmail: string, priceId: string): Promise<boolean> {
-  /* let voted: boolean = await VotesManager.checkUserVote(userEmail, priceId)
-  console.log("Check user vote", voted) */
   return await VotesManager.checkUserVote(userEmail, priceId);
 }
+
 async function addToList(price: Price): Promise<void> {
   let productRecord: ListRecord | null = null;
   console.log("click");
 
   if (!auth.currentUser) {
-    redirect();
+    redirectToLogin();
   }
 
   if (currentP.value) {
@@ -241,6 +363,7 @@ async function addToList(price: Price): Promise<void> {
   margin: 25px 0;
   padding: 20px;
   border-radius: 5px;
+  position: relative;
 }
 
 .price {
@@ -292,6 +415,17 @@ span {
   fill: #f76d66;
 }
 
+.price-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0 !important;
+  text-align: inherit;
+}
+
+.priceInfo {
+  text-align: inherit;
+}
+
 @media only screen and (max-width: 700px) {
   .container {
     width: 100%;
@@ -300,10 +434,6 @@ span {
     display: flex;
     flex-direction: column;
     align-content: center;
-  }
-
-  .row {
-    margin: 25px 0;
   }
 
   .favoritos {
@@ -333,6 +463,7 @@ span {
   }
 
   .row {
+    margin: 25px 0;
     width: 100%;
     justify-content: space-between;
   }

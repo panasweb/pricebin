@@ -29,7 +29,7 @@
                                     }
                                 }"
                             >
-                                <button type="button" class="btn btn-dark">Registrar</button>
+                                <button type="button" class="btn btn-dark">+ Precio</button>
                             </router-link>
                         </div>
                     </div>

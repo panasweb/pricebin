@@ -17,13 +17,14 @@ export interface CurrentList {
 }
 
 export interface User {
-    _id: any,
     username: string,
     email: string,
     UserLog: UserLog,
     rank: number,
     points:number, 
-    currentList: CurrentList
+    currentList: CurrentList,
+    _id?: string,
+    verified?: boolean,
 }
 
 export interface UserToCreate {

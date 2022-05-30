@@ -1,12 +1,20 @@
-DONE:
-0. DONE Add buttons for clearlist and save list in my-products
-1. DONE Update Product Square Card: remove add to list + button,
+FRONT END TODOS:
+- Store for Currency and currentUser (is Admin?) DONE
+-  Buttons for delete Product 
+- Admin checks to display delete buttons  DONE
+- Buttons for delete Price for Admin users DONE
 
-THIS BRANCH:
-2. Implement Google Auth
+0. Add No results to productList
+1. Set Currency and add currency converter API calls
+    - Mi Lista
+    - Signos de Currency (diccionario en constants)
+    - Refactorizar sin Set currency?
 
-NEXT:
-3. Implement "add+" buttons in every price of product view
-4. TEST save currentlist
+4. New Views:
+    - User Stats + Currency Selection
+    - Past Lists
+    - Single Past List
 
-- IDEA: authenticator handler as an object to call in authorization-required methods
+5. Improve styles / Redesign
+
+6. Send Mail (2FA) for non-google sign-ups [SendGrid]

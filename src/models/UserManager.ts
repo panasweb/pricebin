@@ -119,6 +119,18 @@ const UserManager = {
             console.log("Api error", e)
             return null;
         }
+    },
+    getCurrency: async function (toCurrency:string): Promise<number>{
+        const fromCurrency = 'MXN'
+        try{
+            const {data} = await axios.post('http://localhost:3010/convert', {fromCurrency, toCurrency})
+
+            return data[`${fromCurrency}_${toCurrency}`] as number;
+        }
+        catch(e){
+            console.log("Currency API error: ",e)
+            return 1
+        }
     }
 }
 
