@@ -13,8 +13,8 @@
   </div>
   
   <div v-if="statsRender">
-      <h4>Tienda favorita: {{}}</h4>
-      <h4>Articulo favorito: {{}}</h4>
+      <h4>Tienda favorita: {{favStore}}</h4>
+      <h4>Articulo favorito: {{favProduct}}</h4>
       <a class="btn btn-primary btn-lg" @click="changeRenderStats" >Ocultar mis stats</a>
   </div>
   <a v-if="!statsRender" class="btn btn-primary btn-lg" @click="getCoolStats" >Ver mis stats</a>
@@ -37,6 +37,9 @@ const router = useRouter();
 const avatar = ref<string>(DEFAULT_AVI);
 const headline = ref<string>('Mi perfil');
 const email = ref<string>('');
+const favStore = ref<string>('');
+const favProduct = ref<string>('');
+
 let statsRender = ref<boolean>(false);      
 
 function redirect() {
@@ -47,13 +50,7 @@ function changeRenderStats(): void {
     statsRender.value = !statsRender.value;
 }	
 
-async function getCoolStats(): Promise<void>{
-    changeRenderStats();
-    console.log(currentEmail.value);
-    const stats = await UserManager.getUserStats(currentEmail.value); 
-    console.log("Stats: ", stats);
-    return stats
-}
+
 
 onBeforeMount(() => {
     auth.onAuthStateChanged(async (user) => {
@@ -71,6 +68,16 @@ onBeforeMount(() => {
         }
     })
 })
+
+async function getCoolStats(): Promise<void>{
+    changeRenderStats();
+    console.log(currentEmail.value);
+    const userData = await UserManager.getByEmail(currentEmail.value!);
+    const stats = await UserManager.getUserStats(userData!._id!); 
+    favStore.value = stats["favStore"];
+    favProduct.value = stats["favProduct"];
+    return stats
+}
 
         
 </script>
