@@ -13,6 +13,14 @@
   </div>
   
   <div v-if="statsRender">
+    <h4>Number of creted Lists: {{userLogStats["nLists"]}}</h4>
+    <h4>Number of months: {{userLogStats["nMonths"]}}</h4>
+    <h4>Number of weeks: {{userLogStats["nWeeks"]}}</h4>
+    <h4>List average: {{userLogStats["listAverage"]}}</h4>
+    <h4>Monthly average: {{userLogStats["monthlyAverage"]}}</h4>
+    <h4>Weekly average: {{userLogStats["globalTotal"]}}</h4>
+    <h4>Global total: {{userLogStats["weeklyAverage"]}}</h4>
+    <h4>Account created at: {{userLogStats["start"]}}</h4>
       <h4>Tienda favorita: {{favStore}}</h4>
       <h4>Articulo favorito: {{favProduct}}</h4>
       <a class="btn btn-primary btn-lg" @click="changeRenderStats" >Ocultar mis stats</a>
@@ -39,7 +47,7 @@ const headline = ref<string>('Mi perfil');
 const email = ref<string>('');
 const favStore = ref<string>('');
 const favProduct = ref<string>('');
-
+let userLogStats = ref<any>({});
 let statsRender = ref<boolean>(false);      
 
 function redirect() {
@@ -71,9 +79,9 @@ onBeforeMount(() => {
 
 async function getCoolStats(): Promise<void>{
     changeRenderStats();
-    console.log(currentEmail.value);
     const userData = await UserManager.getByEmail(currentEmail.value!);
-    const stats = await UserManager.getUserStats(userData!._id!); 
+    const stats = await UserManager.getUserStats(userData!._id!);
+    userLogStats.value = userData!.UserLog!
     favStore.value = stats["favStore"];
     favProduct.value = stats["favProduct"];
     return stats
