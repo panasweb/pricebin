@@ -2,34 +2,47 @@
     <div class="container">
         <h1>Mis Listas pasadas</h1>
         <div v-for="(list, j) in lists" :key="j"  class="row">
-            <h3>My lista del {{list.date}}</h3>
-            <h3>Total: {{list.total}}</h3>
-            <div v-for="(p, i) in list.list" :key="i" class="row">
-                <PreviousListRow :product="p"  />
-                    <!-- <button @click="deleteRow(i)">X</button> -->
-            </div>
-            <div class="div-button">
-                <button class="btn btn-primary" @click="turnToCurrent">Usar Lista</button>
-            </div>
+            <NCollapse arrow-placement="right">
+                <div class="list-card">
+                    <p>My lista del {{list.date}}</p>
+                    <p>Total: {{toCurrency(list.total,store)}}</p>
+                    <p>Productos: {{list.list.length}}</p>
+                    <div width="100%">
+                        <NCollapseItem  title="Ver productos">
+                            <p>Productos</p>
+                            <div v-for="(p, i) in list.list" :key="i" class="row">
+                                <PreviousListRow :product="p"  />
+                            </div>
+                        </NCollapseItem>
+                    </div>
+                    
+                </div>
+            </NCollapse>
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import { onBeforeMount, defineComponent, ref, computed } from 'vue'
-import PreviousListRow from '../components/PreviousListRow.vue'
 import ProductList from '@/models/classes/ProductList';
 import UserManager from '@/models/UserManager';
 const currentId= ref<string | null>(null);
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router'
 import ListManager from '@/models/ListManager';
+import PreviousListRow from '../components/PreviousListRow.vue'
+import {  toCurrency } from "@/utils/misc";
 import {User} from '@/types/interfaces/User';
+import IStore from '@/types/IStore';
+import {inject} from 'vue';
+import {NCollapse, NCollapseItem} from 'naive-ui';
+
 export default defineComponent({
     setup() {
 
         const lists = ref<ProductList[]>([])
         const router = useRouter();
+        const store : IStore | undefined = inject('store'); 
         
 
         async function fetchProducts(id: string) {
@@ -85,10 +98,14 @@ export default defineComponent({
         return {
             confirmClear,
             turnToCurrent,
-            lists
+            lists,
+            toCurrency, 
+            store
         }
     },
     components: {
+        NCollapse,
+        NCollapseItem, 
         PreviousListRow
     }
 })
@@ -98,5 +115,17 @@ export default defineComponent({
 .div-button{
     align-self: center;
 }
-
+.list-card{
+    margin: 10px;
+    padding: 10px;
+    box-shadow: 5px 10px 18px #888888;
+    justify-content: space-between;	
+    align-content: center;
+    display: flex;
+    flex-direction: row;
+}
+.collapse{
+    width: 100%;
+    height: 25px;
+}
 </style>
