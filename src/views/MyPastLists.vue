@@ -24,7 +24,8 @@
 </template>
 
 <script lang="ts">
-import { onBeforeMount, defineComponent, ref } from 'vue'
+
+import { onBeforeMount, defineComponent, ref, computed } from 'vue'
 import ProductList from '@/models/classes/ProductList';
 import UserManager from '@/models/UserManager';
 const currentId= ref<string | null>(null);
@@ -57,6 +58,7 @@ export default defineComponent({
         function redirect() {
             router.push({ name: 'login', replace: true });
         }
+
         function dateToString(date: string) {
             console.log(typeof date)
             let newDate = new Date(date)
@@ -66,6 +68,7 @@ export default defineComponent({
             })
 
         }
+
         async function confirmClear() {
             if( !auth.currentUser) {
                 redirect();
@@ -111,6 +114,7 @@ export default defineComponent({
             toCurrency, 
             store, 
             dateToString
+
         }
     },
     components: {
@@ -139,6 +143,7 @@ export default defineComponent({
     width: 100%;
     height: 25px;
 }
+
 .list-card-row{
     display: flex;
     flex-direction: row;
@@ -146,7 +151,9 @@ export default defineComponent({
     width:  100%;
 
 }
+
 .n-collapse-item {
     width: 100%;
 }
+
 </style>

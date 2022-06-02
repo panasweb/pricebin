@@ -1,7 +1,6 @@
 <template>
     <div class="container">
-        <h1>Mis productos</h1> 
-       
+        <h1>Mis productos</h1>
         <router-link :to="{
             name: 'get Lists'
         }">
@@ -9,6 +8,7 @@
         </router-link>
 
         <div class="row" style="margin-bottom:25px ;">
+
             <div class="col-2">
                 <h2>Hoy</h2>
             </div>
