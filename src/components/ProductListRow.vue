@@ -1,29 +1,29 @@
 <template>
-    <div v-if="product" class="row">
-        <div class="col-2">
+    <div v-if="product" class="row container">
+        <div class="col">
             <!-- Render the image of every item -->
             <img :src="productImg" class="row-img"/>
             <p>{{ product.productName }}</p>
         </div>
-        <div class="col-2">
+        <div class="col">
             <!-- Render the image of the store -->
             <p>{{ product.storeName }}</p>
         </div>
         
-        <div class="col-2">
+        <div class="col">
             <p>
                 <!-- Render the price times the number of units -->
                 {{ toCurrency(product.amount, store) }}
             </p>
         </div>
-        <div class="col-2">
+        <div class="col">
             <p>
                 {{ product.quantity }}
             </p>
         </div>
-        <div class="col-2">
-            <button @click="onClick">
-                BORRAR
+        <div class="col">
+            <button @click="onClick" class="btn btn-secondary">
+                Borrar
             </button>
         </div>
     </div>
@@ -54,6 +54,10 @@ export default defineComponent({
 <style scoped>
     .logo{
         height: 50px;
+    }
+    .container{
+        width: 80%;
+        margin: 25px 10% ;
     }
     
 </style>
