@@ -12,19 +12,57 @@
       </div>
   </div>
   
-  <div v-if="statsRender">
-    <h4>Number of creted Lists: {{userLogStats["nLists"]}}</h4>
-    <h4>Number of months: {{userLogStats["nMonths"]}}</h4>
-    <h4>Number of weeks: {{userLogStats["nWeeks"]}}</h4>
-    <h4>List average: {{userLogStats["listAverage"]}}</h4>
-    <h4>Monthly average: {{userLogStats["monthlyAverage"]}}</h4>
-    <h4>Weekly average: {{userLogStats["globalTotal"]}}</h4>
-    <h4>Global total: {{userLogStats["weeklyAverage"]}}</h4>
-    <h4>Account created at: {{userLogStats["start"]}}</h4>
-      <h4>Tienda favorita: {{favStore}}</h4>
-      <h4>Articulo favorito: {{favProduct}}</h4>
-      <a class="btn btn-primary btn-lg" @click="changeRenderStats" >Ocultar mis stats</a>
+  <div v-if="statsRender" class="statContainer">
+    <div v-if="statSelected == 1">
+        <h6 class="statSub">Has creado</h6>
+        <h4 class="stat">{{userLogStats["nLists"]}} Listas</h4>
+    </div>
+    <div v-else-if="statSelected == 2">
+        <h6 class="statSub">Tienes:</h6>
+        <h4 class="stat">{{userLogStats["nMonths"]}}</h4>
+        <h6 v-if="userLogStats['nMonths'] != 1" class="statSub">Meses en Pricebin</h6>
+        <h6 v-else class="statSub">Mes en Pricebin</h6>
+    </div>
+    <div v-else-if="statSelected == 3">        
+        <h6 class="statSub">Tienes:</h6>
+        <h4 class="stat">{{userLogStats["nWeeks"]}}</h4>
+        <h6 v-if="userLogStats['nWeeks'] != 1" class="statSub">Semanas en Pricebin</h6>
+        <h6 v-else class="statSub">Semana en Pricebin</h6>
+    </div>
+    <div v-else-if="statSelected == 4">
+        <h6 class="statSub">Tu gasto promedio por <u>lista</u> es de :</h6>
+        <h4 class="stat">${{userLogStats["listAverage"]}}</h4>
+    </div>
+    <div v-else-if="statSelected == 5">
+        <h6 class="statSub">Tu gasto promedio <u>mensual</u> es de :</h6>
+        <h4 class="stat">${{userLogStats["monthlyAverage"]}}</h4>
+    </div>
+    <div v-else-if="statSelected == 6">
+        <h6 class="statSub">Tu gasto promedio <u>semanal</u> es de :</h6>
+        <h4 class="stat">${{userLogStats["weeklyAverage"]}}</h4>
+    </div>
+    <div v-else-if="statSelected == 7">
+        <h6 class="statSub">Tu gasto <u>total</u> es de :</h6>
+        <h4 class="stat">${{userLogStats["globalTotal"]}}</h4>
+    </div>
+    <div v-else-if="statSelected == 8">
+        <h6 class="statSub">Te uniste a Pricebin el:</h6>
+        <h4 class="stat">{{userLogStats["start"].toLocaleDateString('es-MX', {year: 'numeric', month: 'long', day: 'numeric'})}}</h4>
+    </div>
+    <div v-else-if="statSelected == 9">
+        <h6 class="statSub">Tu tienda favorita es:</h6>
+        <h4 class="stat">{{favStore}}</h4>
+    </div>
+    <div v-else-if="statSelected == 10">
+        <h6 class="statSub">Tu producto favorito es:</h6>
+        <h4 class="stat">{{favProduct}}</h4>
+    </div>
+
+    <a class="btn btn-primary btn-lg" @click="changeStat" >Siguente stat</a>
+    <br><br>
+    <hr>
   </div>
+  
   <a v-if="!statsRender" class="btn btn-primary btn-lg" @click="getCoolStats" >Ver mis stats</a>
   <a class="btn btn-secondary btn-lg">Ver mi historial de listas</a>
     
@@ -49,6 +87,7 @@ const favStore = ref<string>('');
 const favProduct = ref<string>('');
 let userLogStats = ref<any>({});
 let statsRender = ref<boolean>(false);      
+let statSelected = ref<number>(1);
 
 function redirect() {
     router.push({ name: 'login', replace: true });
@@ -81,10 +120,23 @@ async function getCoolStats(): Promise<void>{
     changeRenderStats();
     const userData = await UserManager.getByEmail(currentEmail.value!);
     const stats = await UserManager.getUserStats(userData!._id!);
+
     userLogStats.value = userData!.UserLog!
-    favStore.value = stats["favStore"];
-    favProduct.value = stats["favProduct"];
+    console.log(userLogStats.value.start)
+    userLogStats.value.start = new Date(userLogStats!.value.start);
+    favStore.value = ("favStore" in userLogStats.value) ? userLogStats.value.favStore : "No tienes tienda favorita (aún)";
+    favProduct.value = ("favProduct" in userLogStats.value) ? userLogStats.value.favProduct : "No tienes un producto favorito (aún)";
     return stats
+}
+
+function changeStat(){
+
+    if((Object.keys(userLogStats.value).length + 2 )== statSelected.value){
+        statSelected.value = 1;
+    }
+    else{
+        statSelected.value = statSelected.value + 1;
+    }
 }
 
         
@@ -121,5 +173,18 @@ async function getCoolStats(): Promise<void>{
     display: block;
     margin: 1rem auto;
     width: 50%;
+}
+
+.statContainer{
+    margin: 4rem auto;
+}
+
+.statContainer statSub{
+    font-size: 1.2rem;
+}
+
+.statContainer .stat{
+    font-size: 5rem;
+    font-weight: bold;
 }
 </style>
