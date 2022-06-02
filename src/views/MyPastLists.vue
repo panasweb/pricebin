@@ -4,12 +4,13 @@
         <div v-for="(list, j) in lists" :key="j"  class="row">
             <NCollapse arrow-placement="right">
                 <div class="list-card">
-                    <p>My lista del {{list.date}}</p>
-                    <p>Total: {{toCurrency(list.total,store)}}</p>
-                    <p>Productos: {{list.list.length}}</p>
-                    <div width="100%">
+                    <div class="list-card-row">
+                        <p>Mi lista del {{dateToString(list.date)}}</p>
+                        <p>Total: {{toCurrency(list.total,store)}}</p>
+                        <p>Productos: {{list.list.length}}</p>
+                    </div>
+                    <div class="list-card-row">
                         <NCollapseItem  title="Ver productos">
-                            <p>Productos</p>
                             <div v-for="(p, i) in list.list" :key="i" class="row">
                                 <PreviousListRow :product="p"  />
                             </div>
@@ -23,6 +24,7 @@
 </template>
 
 <script lang="ts">
+
 import { onBeforeMount, defineComponent, ref, computed } from 'vue'
 import ProductList from '@/models/classes/ProductList';
 import UserManager from '@/models/UserManager';
@@ -55,6 +57,16 @@ export default defineComponent({
 
         function redirect() {
             router.push({ name: 'login', replace: true });
+        }
+
+        function dateToString(date: string) {
+            console.log(typeof date)
+            let newDate = new Date(date)
+            return newDate.toLocaleDateString('es-ES', {
+                day: 'numeric', year: 'numeric',
+                month: 'short'
+            })
+
         }
 
         async function confirmClear() {
@@ -100,7 +112,9 @@ export default defineComponent({
             turnToCurrent,
             lists,
             toCurrency, 
-            store
+            store, 
+            dateToString
+
         }
     },
     components: {
@@ -122,10 +136,24 @@ export default defineComponent({
     justify-content: space-between;	
     align-content: center;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    border-radius: 10px;
 }
 .collapse{
     width: 100%;
     height: 25px;
 }
+
+.list-card-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width:  100%;
+
+}
+
+.n-collapse-item {
+    width: 100%;
+}
+
 </style>

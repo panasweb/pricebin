@@ -15,6 +15,7 @@ export interface CurrentList {
     list: ListRecord[], 
     total: number
 }
+
 export interface User {
     username: string,
     email: string,

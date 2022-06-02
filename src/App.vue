@@ -19,7 +19,9 @@
             </div>
             <router-link to="/login" v-show="!loggedIn" class="nav-link">Ingresa a tu cuenta</router-link>
             <router-link to="/register" v-show="!loggedIn" class="nav-link cta">Únete a PriceBin</router-link>
-
+            <router-link to="/profile" v-show="loggedIn" class="nav-link img-container">
+              <img :src="avatar" alt="Avatar">
+            </router-link>
           </div>
         </div>
       </nav>

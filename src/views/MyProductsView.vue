@@ -6,7 +6,9 @@
         }">
             <button class="btn btn-primary">Ver listas pasadas</button>
         </router-link>
-        <div class="row">
+
+        <div class="row" style="margin-bottom:25px ;">
+
             <div class="col-2">
                 <h2>Hoy</h2>
             </div>
@@ -24,13 +26,8 @@
             <!-- <button @click="deleteRow(i)">X</button> -->
         </div>
         <div class="list-buttons">
-            <router-link :to="{
-                name: 'create Product'
-            }">
-                <button class="btn btn-primary">Agregar producto</button>
-            </router-link>
             <div>
-                <button class="btn btn-primary" @click="confirmClear">Limpiar Lista</button>
+                <button class="btn btn-secondary" @click="confirmClear">Limpiar Lista</button>
                 <button class="btn btn-primary" @click="saveList">Guardar Lista</button>
             </div>
         </div>
@@ -156,10 +153,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container{
+    margin-top:25px;
+}
 .division {
     width: 100%;
     height: 50%;
     border-bottom: 3px solid black;
     border-radius: 2px;
+}
+button{
+    margin-left: 10px;
+}
+.list-buttons{
+    width: 100%;
+    justify-content: center;
 }
 </style>
