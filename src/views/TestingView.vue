@@ -11,13 +11,16 @@
                 <span v-show="!loggedIn" @click="doLogin">Log in as ericjardon@hotmail.com</span>
             </button>
         </div>
-        <h1>Products CRUD</h1>
-        <div class="">
-            <RegisterPrice />
-        </div>
         <div>
-            <h1>Currency converter</h1>
-            <CurrencySelect />
+            <button @click="getAllUsers">Get users</button>
+            <div v-for="(user, u) in users" :key="u"  class="row">
+                <div class="dummy-container">
+                    <div class="user-card">
+                        <h1>{{user.email}}</h1>
+                        <button @click="deleteUser(user)">X</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +28,7 @@
 <script setup lang="ts">
 import { NSpace, NSelect, NButton, NIcon } from 'naive-ui';
 import { CurrencyExchangeOutlined as cash } from '@vicons/material';
+import { User } from "../types/interfaces/User"
 import { onBeforeMount, onMounted, ref } from 'vue';
 import ProductManager from '@/models/ProductManager';
 import UserManager from '@/models/UserManager';
@@ -38,6 +42,7 @@ import IStore from '@/types/IStore';
 import CurrencySelect from '@/components/CurrencySelect.vue'
 
 const store: IStore | undefined = inject("store")
+const users = ref<User[]>([]);
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
 const products = ref<Product[]>([]);
@@ -65,6 +70,17 @@ onBeforeMount(() => {
         }
     })
 })
+
+async function getAllUsers(){
+    users.value = await UserManager.getAll();
+    console.log(users.value)
+}
+
+async function deleteUser(user){
+    console.log(user._id)
+    const deletedUser = await UserManager.deleteByID(user._id)
+    console.log(deletedUser)
+}
 
 async function setCurrency() {
     let newCurrency = await UserManager.getCurrency(currency.value);
@@ -97,4 +113,20 @@ async function doLogin() {
 </script>
 
 <style scoped>
+
+.dummy-container {
+    height: 350px;
+    width: 300px;
+}
+
+.user-card {
+    position: absolute;
+    width: 300px;
+    height: auto;
+    border-radius: 25px;
+    background-color: white;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    margin-top: 10px;
+    transition: all 0.2s ease-out;
+}
 </style>

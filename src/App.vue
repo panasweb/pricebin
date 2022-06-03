@@ -6,9 +6,7 @@
           <router-link to="/" class="navbar-brand">
             <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
           </router-link>
-          <div class="nav-elements">
-            <CurrencySelect />
-          </div>
+          
           <div class="nav-elements">
             <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
             <router-link to="/myproducts" v-show="loggedIn" class="nav-link">Mi Lista</router-link>

@@ -3,7 +3,7 @@
         <div class="profile">
             <div class="top">
                 <h1>{{ headline }}</h1>
-                <div class="img-container">
+                <div class="img-container animate__animated animate__flipInY">
                     <img :src="avatar" alt="" class="profile-pic">
                 </div>
                 <div class="info">
@@ -75,6 +75,18 @@
         <router-link :to="{ name: 'get Lists' }">
             <a class="btn btn-primary btn-lg">Ver listas pasadas</a>
         </router-link>
+
+        <div class="config">
+            <h4>Configuración</h4>
+            <div class="child">
+                <p>Divisa: </p>
+                <div style="width: 12%; display: flex; margin-left: 1rem;">
+                    <CurrencySelect/>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </template>
@@ -87,7 +99,9 @@ import UserManager from '../models/UserManager';
 import { DEFAULT_AVI } from "../utils/constants";
 import { toCurrency } from '@/utils/misc';
 import IStore from "@/types/IStore";
-import { NSpin } from "naive-ui"
+import { NSpin } from "naive-ui";
+import CurrencySelect from "../components/CurrencySelect.vue"
+
 
 
 const store: IStore | undefined = inject('store');
@@ -201,12 +215,34 @@ function changeStat() {
     margin: 4rem auto;
 }
 
-.statContainer statSub {
+.statContainer .statSub {
     font-size: 1.2rem;
 }
 
 .statContainer .stat {
     font-size: 5rem;
+    font-weight: bold;
+}
+
+.config{
+    padding: 2rem;
+    border: 1px #595C88 solid;
+    max-width: 50%;
+    margin: 4rem auto;
+    border-radius: 0.5rem;
+}
+
+.config h4{
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.config .child{
+    
+    display: flex;
+}
+
+.config p{
     font-weight: bold;
 }
 </style>

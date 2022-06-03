@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-    <h1>{{ msg }}</h1>
+    <h1 class="animate__animated animate__fadeInUp">{{ msg }}</h1>
     <router-link :to="'/products'">
-      <button class="btn btn-primary btn-lg">Compara productos &rarr;</button>
+      <button class="btn btn-primary btn-lg animate__animated animate__fadeInUpBig animate__delay-1s">Compara productos &rarr;</button>
     </router-link>
   </div>
 </template>

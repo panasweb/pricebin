@@ -3,12 +3,12 @@ FRONT END
 
 
 == TODOS:
-- add margins on pages (better look)    @alexis
-- move currencySelect to profile        @alexis
+- add margins on pages (better look)    @alexis x
+- move currencySelect to profile        @alexis x
 - Loading on asynchronous screens
-- admin console to delete users
+- admin console to delete users         @eric
 
-- eliminate waste api calls
+Optional
 - refactor onAuthStateChanged to store.currentUser
 
 

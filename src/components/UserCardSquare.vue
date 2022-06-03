@@ -1,5 +1,5 @@
 <template>
-    <div class="dummy-container animate__animated animate__fadeInUp animate__faster">
+    <div class="dummy-container">
         <router-link :to="`/product/${product._id}`">
             <div class="price-card">
                 <div class="price-card-content">
@@ -109,9 +109,6 @@ export default defineComponent({
     margin-bottom: 2px;
     margin: 0 12px;
     font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 .product-info {
     width: 80%;

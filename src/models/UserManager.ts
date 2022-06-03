@@ -16,6 +16,26 @@ const UserManager = {
             return [false, null];
         }
     },
+    getAll: async function(): Promise<[User]| null>{
+        try{
+            const {data} = await axios.get(url) 
+            return data as [User]
+        }catch(e){
+            console.log(e)
+            return null
+        }
+    },
+    deleteByID: async function(id: string): Promise<void|null>{
+        try{
+            console.log(id)
+            const deleteUser = await axios.get(url + '/delete/' + id);
+            console.log(deleteUser)
+        }catch (e){
+            console.log(e)
+            return null
+        }
+    }
+    ,
     getUser : async function(id:string) : Promise<User | null> {
         if (!id) {
             console.log('No id provided for user');
