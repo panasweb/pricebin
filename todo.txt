@@ -3,10 +3,8 @@ FRONT END
 
 
 == TODOS:
-- add margins on pages (better look)    @alexis x
-- move currencySelect to profile        @alexis x
+- Get Min Price per product
 - Loading on asynchronous screens
-- admin console to delete users         @eric
 
 Optional
 - refactor onAuthStateChanged to store.currentUser
@@ -26,4 +24,7 @@ Optional
     - Past Lists + toggle detail
 - Send Mail (2FA) for new sign-ups [SendGrid]       DONE
 - Verification required for registering Price       DONE
+- add margins on pages (better look)    @alexis x
+- move currencySelect to profile        @alexis x
+- admin console to delete users         @eric
 
