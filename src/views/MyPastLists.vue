@@ -6,7 +6,7 @@
                 <div class="list-card">
                     <div class="list-card-row">
                         <p>Mi lista del {{dateToString(list.date)}}</p>
-                        <p>Total: {{toCurrency(list.total,store)}}</p>
+                        <p>Total: <b>{{toCurrency(list.total,store)}}</b></p>
                         <p>Productos: {{list.list.length}}</p>
                     </div>
                     <div class="list-card-row">

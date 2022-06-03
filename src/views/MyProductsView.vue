@@ -22,8 +22,8 @@
         </div>
         <div class="list-buttons">
             <div>
-                <button class="btn btn-secondary" @click="confirmClear">Limpiar Lista</button>
-                <button class="btn btn-primary" @click="saveList">Guardar Lista</button>
+                <button :disabled="products.length==0" class="btn btn-secondary" @click="confirmClear">Limpiar Lista</button>
+                <button :disabled="products.length==0" class="btn btn-primary" @click="saveList">Guardar Lista</button>
             </div>
         </div>
     </div>

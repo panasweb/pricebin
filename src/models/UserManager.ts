@@ -99,8 +99,6 @@ const UserManager = {
         }
     },
     clearList: async function (email:string) : Promise<User | null> {
-        // updates the list to whatever new list we have. 
-        // For removal of a product, requesting View should filter by index.
         try {
             const {data} = await axios.post(url + 'product/clear', {email})
             return data as User;
@@ -110,7 +108,6 @@ const UserManager = {
             return null;
         }
     },
-
     saveList: async function (email: string, total: number, products: ListRecord[] ) : Promise<User | null>{
         try {
             const {data} = await axios.post(url + 'product/save', {email: email,total: total, list: products})
@@ -132,14 +129,15 @@ const UserManager = {
             return 1
         }
     },
-    getUserStats: async function (UserKey: string|null): Promise<any>{
+    getUserCoolStats: async function (UserKey: string|null): Promise<any>{
         try{
-            const data1 = await axios.post(url + '/stats/recalculate', {UserKey})
+            // const data1 = await axios.post(url + '/stats/recalculate', {UserKey})
             const {data} = await axios.post(url + 'stats/cool', {UserKey})
             return data
         }
         catch(e){
             console.log("API error: ",e)
+            return null;
         }
     }
 }
