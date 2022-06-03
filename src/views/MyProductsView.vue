@@ -1,11 +1,6 @@
 <template>
     <div class="container">
         <h1>Mis productos</h1>
-        <router-link :to="{
-            name: 'get Lists'
-        }">
-            <button class="btn btn-primary">Ver listas pasadas</button>
-        </router-link>
 
         <div class="row" style="margin-bottom:25px ;">
 
