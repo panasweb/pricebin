@@ -110,6 +110,16 @@ const UserManager = {
             return null;
         }
     },
+
+    saveList: async function (email: string, total: number, products: ListRecord[] ) : Promise<User | null>{
+        try {
+            const {data} = await axios.post(url + 'product/save', {email: email,total: total, list: products})
+            return data as User
+        }catch(e){
+            console.log("Api error", e)
+            return null;
+        }
+    },
     getCurrency: async function (toCurrency:string): Promise<number>{
         const fromCurrency = 'MXN'
         try{
@@ -122,10 +132,11 @@ const UserManager = {
             return 1
         }
     },
-    getUserStats: async function (userID: string|null): Promise<void>{
+    getUserStats: async function (UserKey: string|null): Promise<any>{
         try{
-            const {data} = await axios.post(url + 'stats/cool', {userID})
-            // console.log(data)
+            const data1 = await axios.post(url + '/stats/recalculate', {UserKey})
+            const {data} = await axios.post(url + 'stats/cool', {UserKey})
+            return data
         }
         catch(e){
             console.log("API error: ",e)

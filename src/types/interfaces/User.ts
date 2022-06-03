@@ -15,6 +15,7 @@ export interface CurrentList {
     list: ListRecord[], 
     total: number
 }
+
 export interface User {
     username: string,
     email: string,
@@ -23,11 +24,8 @@ export interface User {
     points:number, 
     currentList: CurrentList,
     _id?: string,
-<<<<<<< HEAD
     verified?: boolean,
-=======
     avatar: string
->>>>>>> Profile-dev
 }
 
 export interface UserToCreate {

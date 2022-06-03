@@ -1,7 +1,9 @@
 <template>
     <div class="container">
         <h1>Mis productos</h1>
-        <div class="row">
+
+        <div class="row" style="margin-bottom:25px ;">
+
             <div class="col-2">
                 <h2>Hoy</h2>
             </div>
@@ -19,13 +21,9 @@
             <!-- <button @click="deleteRow(i)">X</button> -->
         </div>
         <div class="list-buttons">
-            <router-link :to="{
-                name: 'create Product'
-            }">
-                <button class="btn btn-primary">Agregar producto</button>
-            </router-link>
             <div>
-                <button class="btn btn-primary" @click="confirmClear">Limpiar Lista</button>
+                <button class="btn btn-secondary" @click="confirmClear">Limpiar Lista</button>
+                <button class="btn btn-primary" @click="saveList">Guardar Lista</button>
             </div>
         </div>
     </div>
@@ -38,6 +36,7 @@ import ListRecord from '../types/ListRecord'
 import UserManager from '@/models/UserManager'
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router'
+import ListManager from '@/models/ListManager';
 import {toCurrency} from "@/utils/misc"
 import IStore from '@/types/IStore';
 
@@ -48,6 +47,7 @@ export default defineComponent({
 
     const currentEmail = ref<string | null>(null);
         const products = ref<ListRecord[]>([])
+        const id = ref<string | null| undefined>(null)
         const router = useRouter();
         
         const total = computed(() => {
@@ -62,7 +62,9 @@ export default defineComponent({
             let user = await UserManager.getByEmail(email)
             if (user) {
                 products.value = user.currentList.list
+                id.value = user._id
             }
+            
             // else, display error
         }
 
@@ -86,6 +88,20 @@ export default defineComponent({
             }
         }
 
+        async function saveList() {
+            if( !auth.currentUser) {
+                redirect();
+                return;
+            }
+            console.log("Salvando Lista");
+            if(id.value){
+                await ListManager.saveList(id.value, products.value);
+                //confirmClear()
+                await UserManager.clearList(auth.currentUser.email!);
+                await fetchProducts(auth.currentUser.email!);
+            }
+            
+        }
 
         async function deleteRow(index: number) {
             let newList = products.value.filter((p, i) => i != index); // remove 1 element from index
@@ -121,6 +137,7 @@ export default defineComponent({
             products,
             deleteRow,
             confirmClear,
+            saveList,
             toCurrency,
         }
     },
@@ -131,10 +148,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container{
+    margin-top:25px;
+}
 .division {
     width: 100%;
     height: 50%;
     border-bottom: 3px solid black;
     border-radius: 2px;
+}
+button{
+    margin-left: 10px;
+}
+.list-buttons{
+    width: 100%;
+    justify-content: center;
 }
 </style>
