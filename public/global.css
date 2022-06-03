@@ -1,13 +1,8 @@
 .btn.btn-primary{
     background-color: #F76D66;
-    border: #F76D66 1px solid;
+    border: #F76D66;
 }
 
-.btn.btn-secondary{
-    background-color: #FFFFFF;
-    border: #595c88 1px solid;
-    color: black;
-}
 div.headline {
     text-align: center;
     width: 100%;

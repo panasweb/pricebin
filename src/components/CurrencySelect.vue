@@ -1,6 +1,6 @@
 <template>
     <n-space vertical>
-        <n-select :value="currency" :bordered="false" @update:value="changeHandler" size="small" :options="CURRENCY_OPTIONS" :theme-overrides="selectThemeOverrides"/>
+        <n-select :value="currency" @update:value="changeHandler" size="small" :options="CURRENCY_OPTIONS" :theme-overrides="selectThemeOverrides"/>
     </n-space>
     <n-button @click="setCurrency" color="#f76d66" size="small" :disabled="disableBtn">
         <div>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { NSpace, NSelect, NButton, NIcon, SelectOption, SelectProps, GlobalThemeOverrides } from 'naive-ui';
+import { NSpace, NSelect, NButton, NIcon, SelectOption, SelectProps } from 'naive-ui';
 import { CURRENCY_OPTIONS } from '../utils/constants';
 import { CurrencyExchangeOutlined as cash } from '@vicons/material';
 import { inject, ref } from "vue"

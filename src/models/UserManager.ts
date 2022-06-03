@@ -121,15 +121,6 @@ const UserManager = {
             console.log("Currency API error: ",e)
             return 1
         }
-    },
-    getUserStats: async function (userID: string|null): Promise<void>{
-        try{
-            const {data} = await axios.post(url + 'stats/cool', {userID})
-            // console.log(data)
-        }
-        catch(e){
-            console.log("API error: ",e)
-        }
     }
 }
 

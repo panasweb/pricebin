@@ -39,11 +39,9 @@ import UserManager from './models/UserManager';
 import CurrencySelect from './components/CurrencySelect.vue';
 import { NMessageProvider } from 'naive-ui';
 import UnverifiedUserModal from './components/UnverifiedUserModal.vue';
-import { DEFAULT_AVI } from '@/utils/constants';
 
 const loggedIn = ref<boolean>(false);
 const currentEmail = ref<string | null>(null);
-const avatar = ref<string>(DEFAULT_AVI);
 const store: IStore | undefined = inject('store');
 const router = useRouter();
 const showModal = ref(false);
@@ -81,9 +79,6 @@ onBeforeMount(() => {
       if (store?.setCurrentUser) {
         store.setCurrentUser(currentUser);
       }
-      if(currentUser?.avatar) {
-        avatar.value = currentUser.avatar;
-      }
     }
   })
 })
@@ -101,15 +96,4 @@ async function doLogout() {
 </script>
 <style>
 @import './styles/App.css';
-
-.img-container{
-    display: inline-block;
-    padding: 0.5rem;
-    border-radius: 50%;
-    background-color: #ffffff;
-}
-
-.img-container img{
-    width: 80%;
-}
 </style>
