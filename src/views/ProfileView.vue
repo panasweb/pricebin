@@ -31,19 +31,19 @@
     </div>
     <div v-else-if="statSelected == 4">
         <h6 class="statSub">Tu gasto promedio por <u>lista</u> es de :</h6>
-        <h4 class="stat">${{userLogStats["listAverage"]}}</h4>
+        <h4 class="stat">{{toCurrency(parseInt(userLogStats["listAverage"]), store)}}</h4>
     </div>
     <div v-else-if="statSelected == 5">
         <h6 class="statSub">Tu gasto promedio <u>mensual</u> es de :</h6>
-        <h4 class="stat">${{userLogStats["monthlyAverage"]}}</h4>
+        <h4 class="stat">{{toCurrency(parseInt(userLogStats["monthlyAverage"]),store)}}</h4>
     </div>
     <div v-else-if="statSelected == 6">
         <h6 class="statSub">Tu gasto promedio <u>semanal</u> es de :</h6>
-        <h4 class="stat">${{userLogStats["weeklyAverage"]}}</h4>
+        <h4 class="stat">{{toCurrency(parseInt(userLogStats["weeklyAverage"]),store)}}</h4>
     </div>
     <div v-else-if="statSelected == 7">
         <h6 class="statSub">Tu gasto <u>total</u> es de :</h6>
-        <h4 class="stat">${{userLogStats["globalTotal"]}}</h4>
+        <h4 class="stat">{{toCurrency(parseInt(userLogStats["globalTotal"]),store)}}</h4>
     </div>
     <div v-else-if="statSelected == 8">
         <h6 class="statSub">Te uniste a Pricebin el:</h6>
@@ -63,22 +63,26 @@
     <hr>
   </div>
   
-  <a v-if="!statsRender" class="btn btn-primary btn-lg" @click="getCoolStats" >Ver mis stats</a>
-  <a class="btn btn-secondary btn-lg">Ver mi historial de listas</a>
-    
+  <a v-if="!statsRender" class="btn btn-primary btn-lg" @click="getCoolStats" >Ver mis stats</a>  
+<router-link :to="{name: 'get Lists'}">
+        <a class="btn btn-primary btn-lg">Ver listas pasadas</a>
+</router-link>
 </div>
   
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, defineComponent, ref } from 'vue';
+import { onBeforeMount, defineComponent, ref, inject } from 'vue';
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router';
 import UserManager from '../models/UserManager';
 import { DEFAULT_AVI } from "../utils/constants";
+import { toCurrency } from '@/utils/misc';
+import IStore from "@/types/IStore";
 
+
+const store: IStore | undefined = inject('store');
 const currentEmail = ref<string | null>(null);
-
 const router = useRouter();
 const avatar = ref<string>(DEFAULT_AVI);
 const headline = ref<string>('Mi perfil');
@@ -122,11 +126,9 @@ async function getCoolStats(): Promise<void>{
     const stats = await UserManager.getUserStats(userData!._id!);
 
     userLogStats.value = userData!.UserLog!
-    console.log(userLogStats.value.start)
     userLogStats.value.start = new Date(userLogStats!.value.start);
-    favStore.value = ("favStore" in userLogStats.value) ? userLogStats.value.favStore : "No tienes tienda favorita (aún)";
-    favProduct.value = ("favProduct" in userLogStats.value) ? userLogStats.value.favProduct : "No tienes un producto favorito (aún)";
-    return stats
+    favStore.value = ("favStore" in stats) ? stats["favStore"] : "No tienes tienda favorita (aún)";
+    favProduct.value = ("favProduct" in stats) ? stats["favProduct"] : "No tienes un producto favorito (aún)";
 }
 
 function changeStat(){
