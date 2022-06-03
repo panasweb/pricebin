@@ -1,12 +1,12 @@
 <template>
     <div class="container">
-        <h1>Mis Listas pasadas</h1>
+        <h1 style="margin-top: 30px; margin-bottom: 30px;">Mis listas pasadas</h1>
         <div v-for="(list, j) in lists" :key="j"  class="row">
             <NCollapse arrow-placement="right">
-                <div class="list-card">
+                <div class="list-card animate__animated animate__fadeInUp animate__faster">
                     <div class="list-card-row">
                         <p>Mi lista del {{dateToString(list.date)}}</p>
-                        <p>Total: {{toCurrency(list.total,store)}}</p>
+                        <p>Total: <b>{{toCurrency(list.total,store)}}</b></p>
                         <p>Productos: {{list.list.length}}</p>
                     </div>
                     <div class="list-card-row">
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 
-import { onBeforeMount, defineComponent, ref, computed } from 'vue'
+import { onBeforeMount, defineComponent, ref } from 'vue'
 import ProductList from '@/models/classes/ProductList';
 import UserManager from '@/models/UserManager';
 const currentId= ref<string | null>(null);
@@ -131,13 +131,13 @@ export default defineComponent({
 }
 .list-card{
     margin: 10px;
-    padding: 10px;
-    box-shadow: 5px 10px 18px #888888;
+    padding: 20px;
+    box-shadow: 0 2px 2px 0px #888888;
     justify-content: space-between;	
     align-content: center;
     display: flex;
     flex-direction: column;
-    border-radius: 10px;
+    border-radius: 0.5rem;
 }
 .collapse{
     width: 100%;

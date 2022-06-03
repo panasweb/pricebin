@@ -1,20 +1,29 @@
-FRONT END TODOS:
-- Store for Currency and currentUser (is Admin?) DONE
--  Buttons for delete Product 
-- Admin checks to display delete buttons  DONE
-- Buttons for delete Price for Admin users DONE
 
-0. Add No results to productList
-1. Set Currency and add currency converter API calls
+FRONT END
+
+
+== TODOS:
+- add margins on pages (better look)    @alexis x
+- move currencySelect to profile        @alexis x
+- Loading on asynchronous screens
+- admin console to delete users         @eric
+
+Optional
+- refactor onAuthStateChanged to store.currentUser
+
+
+== DONE   (6jun)
+- Store for Currency and currentUser (is Admin?)    DONE
+-  Buttons for delete Product 
+- Admin checks to display delete buttons            DONE
+- Buttons for delete Price for Admin users          DONE
+-  Add No results to productList                    DONE
+- Set Currency, add currency converter API calls    DONE
     - Mi Lista
     - Signos de Currency (diccionario en constants)
-    - Refactorizar sin Set currency?
+- New Views:                                        DONE
+    - User Stats + Currency Selection               
+    - Past Lists + toggle detail
+- Send Mail (2FA) for new sign-ups [SendGrid]       DONE
+- Verification required for registering Price       DONE
 
-4. New Views:
-    - User Stats + Currency Selection
-    - Past Lists
-    - Single Past List
-
-5. Improve styles / Redesign
-
-6. Send Mail (2FA) for non-google sign-ups [SendGrid]

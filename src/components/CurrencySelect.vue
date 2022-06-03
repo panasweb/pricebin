@@ -7,7 +7,7 @@
             <n-icon>
                 <cash />
             </n-icon>
-            Set currency
+            Aplicar
         </div>
     </n-button>
 </template>
@@ -67,4 +67,9 @@ async function setCurrency() {
 </script>
 
 <style scoped>
+
+.n-base-label .n-base-selection-label{
+    width: 10% !important;
+}
+
 </style>

@@ -10,6 +10,7 @@ export const DEFAULT_STORE : IStore = {
     currencyRate: 1,
     currentUser: null
 }
+export const SUPERUSER = 'geebproject@gmail.com';
 
 interface CurrencyOption {
     label: string,
