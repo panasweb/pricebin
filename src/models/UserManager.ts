@@ -28,7 +28,7 @@ const UserManager = {
     deleteByID: async function(id: string): Promise<void|null>{
         try{
             console.log(id)
-            const deleteUser = await axios.get(url + '/delete/' + id);
+            const deleteUser = await axios.get(url + 'delete/' + id);
             console.log(deleteUser)
         }catch (e){
             console.log(e)

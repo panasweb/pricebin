@@ -56,7 +56,7 @@ async function fetchUsers() {
 async function deleteUser(index: number) {
     console.log("Try delete",users.value[index].email );
     if (confirm(`¿Borrar usuario? ${users.value[index].email}`) == true) {
-        await UserManager.deleteUser(users.value[index]);
+        await UserManager.deleteByID(users.value[index]._id);
         //users.value.filter((u, i) => i != index); // remove 1 element from index
         await fetchUsers();
     }

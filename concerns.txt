@@ -1,0 +1,4 @@
+1. How to fetch a limited number of records (or conventions for rendering from a fetch with many results)
+    - Fetch with limit to first 100 records
+    - Fetch only from a given category
+
