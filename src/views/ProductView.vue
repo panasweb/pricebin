@@ -56,7 +56,15 @@
             </div>
 
           </div>
-          <button class="add col" @click="addToList(p)">+</button>
+          <div class="quantity col">
+              <button class="add col" @click="lessFunction(p.store)">-</button>
+              <p>{{quantity.get(p.store)}}</p>
+            <button class="add col" @click="addFunction(p.store)">+</button>
+          </div>
+          <div class="col">
+            <button class="btn btn-secondary quantity" @click="addToList(p)">Añadir a lista</button>
+          </div>
+          
           <div v-if="isAdmin" class="del-price-btn">
             <button @click="deletePrice(p)">Borrar precio</button>
           </div>
@@ -109,6 +117,7 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
 const sortedPrices = ref<Price[]>([]);
+const quantity = ref <Map<string, number>>(new Map());
 
 const store: IStore | undefined = inject('store');
 
@@ -174,6 +183,10 @@ onBeforeMount(async () => {
     if (user) {
       // Update vote buttons color
       await updateHasVoted(priceIds);
+      //Initialize numbers arrays for priceIds with 1
+      currentP.value!.prices!.forEach((pid) => {
+        quantity.value.set(pid.store, 0);
+      });
 
       // Set Admin Privileges
       const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
@@ -310,13 +323,34 @@ async function addToList(price: Price): Promise<void> {
       storeName: price.store,
       brandName: currentP!.value?.brand,
       amount: price.amount,
-      quantity: 1,
+      quantity: quantity.value.get(price.store) as number,
     };
     console.log(productRecord);
     await UserManager.addProduct(productRecord, auth.currentUser!.email!);
     redirectToList();
   }
 }
+
+async function addFunction(store: string): Promise<void> {
+  if (quantity.value != undefined && quantity.value.has(store)) {
+    let temp: number = quantity.value.get(store)!;
+    quantity.value.set(store, temp + 1);
+  }
+  console.log(quantity.value.get(store));
+  return;
+}
+async function lessFunction(store: string): Promise<void>{
+  if (quantity.value != undefined && quantity.value.has(store) && quantity.value.get(store)! > 0) {
+    let temp: number = quantity.value.get(store)!;
+    quantity.value.set(store, temp - 1);
+  }
+  console.log(quantity.value.get(store));
+  return;
+}
+
+
+
+
 </script>
 
 <style scoped>
@@ -424,6 +458,13 @@ span {
 
 .priceInfo {
   text-align: inherit;
+}
+
+.quantity{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 @media only screen and (max-width: 700px) {
