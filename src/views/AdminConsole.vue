@@ -27,13 +27,14 @@ import { auth, logOut } from '@/services/auth';
 import IStore from '@/types/IStore';
 import UserManager from '@/models/UserManager';
 import CurrencySelect from '@/components/CurrencySelect.vue';
-import { NMessageProvider } from 'naive-ui';
+import { NMessageProvider, useMessage } from 'naive-ui';
 import { SUPERUSER } from '@/utils/constants'
 
 const router = useRouter();
 const users = ref<User[]>([]);
 const isLoading = ref<boolean>(true);
 const store: IStore | undefined = inject('store');
+const message = useMessage();
 
 function redirectHome() {
     router.push({ name: "home", replace: true });
@@ -56,9 +57,12 @@ async function fetchUsers() {
 async function deleteUser(index: number) {
     console.log("Try delete",users.value[index].email );
     if (confirm(`¿Borrar usuario? ${users.value[index].email}`) == true) {
-        await UserManager.deleteByID(users.value[index]._id);
-        //users.value.filter((u, i) => i != index); // remove 1 element from index
-        await fetchUsers();
+        const api_res = await UserManager.deleteByID(users.value[index]._id);
+        if (!api_res) {
+            message.error("No se pudo borrar usuario.");
+        }else {
+            await fetchUsers();
+        }        
     }
 }
 
