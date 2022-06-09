@@ -12,7 +12,7 @@
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
         <h3 v-if="currentP">
           Precio mas bajo: <span>
-            {{ toCurrency(minPrice, store) }}
+            {{ toCurrency(minPrice as number, store) }}
           </span>
 
         </h3>

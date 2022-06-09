@@ -3,7 +3,7 @@ FRONT END
 
 
 == TODOS:
-- Get Min Price per product
+- Type filter on search
 - Loading on asynchronous screens
 
 Optional
@@ -11,6 +11,7 @@ Optional
 
 
 == DONE   (6jun)
+- Get Min Price per product                         DONE
 - Store for Currency and currentUser (is Admin?)    DONE
 -  Buttons for delete Product 
 - Admin checks to display delete buttons            DONE

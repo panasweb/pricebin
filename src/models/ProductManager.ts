@@ -74,15 +74,22 @@ const ProductManager = {
         }
 
     },
-    searchProducts: async function (query: string): Promise<Product[]> {
+    searchProducts: async function (productName: string, typeFilter:string): Promise<Product[]> {
         // Search by name for now
-        if (!query) {
+        if (!productName && typeFilter==='') {
             return await this.getAll();
         }
 
         const endpoint = url + "by-name";
         try {
-            const { data } = await axios.post(endpoint, { name: query });
+            const query : any = {
+                name:productName
+            }
+            if (typeFilter) {
+                query.type = typeFilter;
+            }
+            console.log("Send query", query);
+            const { data } = await axios.post(endpoint, query);
             return data as Product[];
         } catch (e) {
             console.error("API error", e);
