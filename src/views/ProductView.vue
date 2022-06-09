@@ -12,7 +12,7 @@
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
         <h3 v-if="currentP">
           Precio mas bajo: <span>
-            {{ toCurrency(currentP!.prices[0].amount, store) }}
+            {{ toCurrency(minPrice as number, store) }}
           </span>
 
         </h3>
@@ -104,7 +104,7 @@ import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
 import { NIcon } from "naive-ui";
-import { serializePrices, byVotesThenDateThenAmount, toCurrency } from '../utils/misc'
+import { serializePrices, byVotesThenDateThenAmount, toCurrency, getMinPrice } from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -117,6 +117,7 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
 const sortedPrices = ref<Price[]>([]);
+const minPrice = ref<number | null>(null);
 const quantity = ref <Map<string, number>>(new Map());
 
 const store: IStore | undefined = inject('store');
@@ -150,6 +151,7 @@ async function fetchProduct(): Promise<string[]> {
   );
 
   priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
+  minPrice.value = getMinPrice(currentP.value!.prices!);
 
   setPrices(); // update sortedPrices.value
 

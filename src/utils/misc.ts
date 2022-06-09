@@ -29,6 +29,16 @@ export const formatAmt = (amount: number | string): string => {
     }
 }
 
+export const getMinPrice = (prices: Price[]) : number | null => {
+    if (!prices.length) return null;
+    let minprice : number = prices[0].amount;
+    prices.forEach(price => {
+        minprice = Math.min(price.amount, minprice);
+    })
+
+    return minprice;
+}
+
 export const serializePrices = (prices: Price[], priceVotes: Record<string, number>): Price[] => {
 
     if (!priceVotes) {

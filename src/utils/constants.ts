@@ -31,6 +31,28 @@ export const CURRENCY_OPTIONS : SelectMixedOption[] = [
 ] 
 export const PRODUCT_TYPES : string[] = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
 
+const _options : SelectMixedOption[] = PRODUCT_TYPES.map(productType => (
+    {
+        label: productType,
+        value: productType
+    }
+));
+const anyOption : SelectMixedOption = {
+    label: 'Cualquier tipo',
+    value: '',
+}
+_options.unshift(anyOption);
+
+export const TYPES_OPTIONS : SelectMixedOption[] = _options;
+
+
+export enum TYPES_ENUM {
+    Despensa = 0,
+    Electronicos = 1,
+    Farmacia = 2,
+    BanoyLimpieza=3
+}
+
 export const CURRENCY_SYMBOLS : Record<string,string> = {
     'USD': "$",
     'MXN': '$',
