@@ -3,7 +3,7 @@ import { Product } from '@/types/interfaces/Product'
 import Price from '@/types/interfaces/Price'
 
 
-const url = process.env.REACT_APP_API_URL+ '/products/';
+const url = process.env.VUE_APP__API_URL+ '/products/';
 
 const ProductManager = {
     getAll: async function (): Promise<Product[]> {
