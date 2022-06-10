@@ -27,7 +27,7 @@
                 placeholder="-19.0"
             />
 
-            <label for="brand">Colonia:</label>
+            <label for="brand">Sucursal:</label>
             <input 
                 v-model="colonia" 
                 type="text" 
@@ -174,8 +174,8 @@ export default defineComponent({
             }
 
             if (!colonia.value) {
-                console.error("No hay una colonia");
-                alertMsg.value = "Ingresa la colonia."
+                console.error("No hay una sucursal");
+                alertMsg.value = "Ingresa la sucursal."
                 return;
             }
 
