@@ -76,6 +76,10 @@
             <a class="btn btn-primary btn-lg">Ver listas pasadas</a>
         </router-link>
 
+        <router-link v-if="isAdmin" class="nav-link cta" :to="{name: 'add store'}">
+                <a class="btn btn-primary btn-lg">Agrega nueva tienda</a>
+        </router-link>
+
         <div class="config">
             <h4>Configuración</h4>
             <div class="child">
@@ -84,8 +88,8 @@
                     <CurrencySelect />
                 </div>
             </div>
-
         </div>
+        
 
     </div>
 
@@ -96,7 +100,7 @@ import { onBeforeMount, ref, inject, onMounted } from 'vue';
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router';
 import UserManager from '../models/UserManager';
-import { DEFAULT_AVI } from "../utils/constants";
+import { DEFAULT_AVI, ADMIN_RANK } from "../utils/constants";
 import { toCurrency } from '@/utils/misc';
 import IStore from "@/types/IStore";
 import { NSpin } from "naive-ui";
@@ -115,6 +119,7 @@ const userLogStats = ref<any>({});
 const statsRender = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const statSelected = ref<number>(1);
+const isAdmin = ref<boolean>(false);
 
 function redirect() {
     router.push({ name: 'login', replace: true });
@@ -126,7 +131,7 @@ function togleRenderStats(): void {
 
 
 
-onBeforeMount(() => {
+ onBeforeMount(async () => {
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             redirect();
@@ -147,6 +152,14 @@ onBeforeMount(() => {
             isLoading.value = false;
         }
     })
+    // Set Admin Privileges
+    const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+    if (!adminUser) {
+        console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+        return;
+    }
+    isAdmin.value = adminUser.rank === ADMIN_RANK
+    console.log("isAdmin?", isAdmin.value);
 })
 
 
@@ -159,9 +172,14 @@ async function getCoolStats(): Promise<void> {
     const stats = await UserManager.getUserCoolStats(userData!._id!);
 
     userLogStats.value = userData!.UserLog!
-    userLogStats.value.start = new Date(userLogStats!.value.start); // default to now() if no .start
-    favStore.value = stats["favStore"] ? stats["favStore"] : "No tienes tienda favorita (aún)";
-    favProduct.value = stats["favProduct"] ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+
+    userLogStats.value.start = new Date(userLogStats!.value.start);
+
+    favStore.value =  stats ? stats["favStore"] : "No tienes tienda favorita (aún)";
+    
+    favProduct.value =  stats ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+    
+    
     // API returns null if no lists 
 }
 

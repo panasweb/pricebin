@@ -8,7 +8,8 @@ export const DEFAULT_PRODUCT_IMG = '/logos/default_product-32x32.png';
 export const DEFAULT_STORE : IStore = {
     currency: 'MXN',
     currencyRate: 1,
-    currentUser: null
+    currentUser: null,
+    currentLocation: null,    
 }
 export const SUPERUSER = 'geebproject@gmail.com';
 
