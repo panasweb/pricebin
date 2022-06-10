@@ -25,11 +25,14 @@ const UserManager = {
             return null
         }
     },
-    deleteByID: async function(id: string): Promise<void|null>{
+    deleteByID: async function(id: string, currentUser: User): Promise<string|null>{
         try{
             console.log(id)
-            const deleteUser = await axios.get(url + '/delete/' + id);
-            console.log(deleteUser)
+            const response = await axios.post(url + 'delete/' + id, {
+                sudo:'sudo',
+            });
+            console.log("delete response:", response);
+            return response.data as string;
         }catch (e){
             console.log(e)
             return null
@@ -145,7 +148,7 @@ const UserManager = {
             return data[`${fromCurrency}_${toCurrency}`] as number;
         }
         catch(e){
-            console.log("Currency API error: ",e)
+            console.log("Currency Converter API error: ", e)
             return 1
         }
     },

@@ -44,10 +44,14 @@
             <FormAlert :msg="alertMsg" />
 
             <div class="submit">
-                <button class="btn btn-primary w-100" type="submit">Registrar Precio</button>
+                <button :disabled="isLoading" class="btn btn-primary w-100" type="submit">
+                    <n-spin :show="isLoading" size="small" stroke="#fff">
+                        <p>Registrar Precio</p>
+                    </n-spin>
+                </button>
             </div>
         </form>
-        <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal"/>
+        <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal" />
     </div>
 </template>
 
@@ -68,12 +72,13 @@ import { useRouter, useRoute } from 'vue-router'
 import { auth } from '../services/auth'
 import IStore from '@/types/IStore'
 import UnverifiedUserModal from '@/components/UnverifiedUserModal.vue'
-
+import { NSpin } from "naive-ui"
 
 export default defineComponent({
     components: {
         FormAlert,
-        UnverifiedUserModal
+        UnverifiedUserModal,
+        NSpin
     },
     props: {
         title: { type: String as PropType<string>, required: false }
@@ -86,7 +91,8 @@ export default defineComponent({
         const brandList = ref<Brand[]>([]);
         const hasProduct = ref<boolean>(false);
         const customTitle = ref<string>(props.title || 'Registrar Nuevo Producto');  // either comes from Add to List or register Product
-        const showModal = ref(false);
+        const showModal = ref<boolean>(false);
+        const isLoading = ref<boolean>(false);
 
         // Store data
         const store: IStore | undefined = inject('store');
@@ -173,7 +179,6 @@ export default defineComponent({
         // On Form submit
         async function onSubmit(): Promise<void> {
             alertMsg.value = '';
-
             // Verified check
             if (!isVerified()) {
                 doShowModal();
@@ -181,17 +186,19 @@ export default defineComponent({
             }
 
             console.log("New product")
-
+            isLoading.value=true;
 
             if (!productInput.value) {
                 console.error("No Store selected");
                 alertMsg.value = "Ingresa el nombre de producto."
+                isLoading.value=false;
                 return;
             }
 
             if (!storeInput.value) {
                 console.error("No Store selected");
                 alertMsg.value = "Selecciona el nombre de Tienda."
+                isLoading.value=false;
                 return;
             }
 
@@ -199,6 +206,7 @@ export default defineComponent({
             if (Number.isNaN(amt) || amt <= 0) {
                 console.error("Amount is not a number");
                 alertMsg.value = "Ingresa un monto válido."
+                isLoading.value=false;
                 return;
             }
 
@@ -218,6 +226,7 @@ export default defineComponent({
                     store = newStore as Store;
                 } else {
                     console.log("Error creating store");
+                    isLoading.value=false;
                     return;
                 }
             }
@@ -245,10 +254,12 @@ export default defineComponent({
                 const [created, newProd] = await ProductManager.create(newProduct);
 
                 if (created) {
+                    isLoading.value=false;
                     redirectToProduct(newProd!);
                 } else {
                     console.log("Error registrando nuevo producto");
                     alertMsg.value = "Error registrando el producto. Intenta de nuevo."
+                    isLoading.value=false;
                     return;
                 }
 
@@ -258,10 +269,12 @@ export default defineComponent({
 
                 const [created, newProd] = await ProductManager.addPrice(prefill.productId, price);
                 if (created) {
+                    isLoading.value=false;
                     redirectToProduct(newProd!);
                 } else {
                     console.log("Error registrando nuevo producto");
                     alertMsg.value = "Error añadiendo precio. Intenta de nuevo."
+                    isLoading.value=false;
                     return;
                 }
             }
@@ -270,7 +283,7 @@ export default defineComponent({
         return {
             amount, productInput, productTypeInput, brandInput, storeInput, customTitle,
             productList, storeList, brandList, PRODUCT_TYPES, alertMsg, hasProduct,
-            onSubmit, showModal, onCloseModal,
+            onSubmit, showModal, onCloseModal, isLoading
         }
     }
 })

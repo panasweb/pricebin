@@ -13,39 +13,39 @@
         </div>
 
         <div v-if="statsRender" class="statContainer">
-            <div v-if="statSelected == 1">
+            <div class="stat-container" v-if="statSelected == 1">
                 <h6 class="statSub">Has creado</h6>
                 <h4 class="stat">{{ userLogStats["nLists"] }} Listas</h4>
             </div>
-            <div v-else-if="statSelected == 2">
+            <div class="stat-container" v-else-if="statSelected == 2">
                 <h6 class="statSub">Tienes:</h6>
                 <h4 class="stat">{{ userLogStats["nMonths"] }}</h4>
                 <h6 v-if="userLogStats['nMonths'] != 1" class="statSub">Meses en Pricebin</h6>
                 <h6 v-else class="statSub">Mes en Pricebin</h6>
             </div>
-            <div v-else-if="statSelected == 3">
+            <div class="stat-container" v-else-if="statSelected == 3">
                 <h6 class="statSub">Tienes:</h6>
                 <h4 class="stat">{{ userLogStats["nWeeks"] }}</h4>
                 <h6 v-if="userLogStats['nWeeks'] != 1" class="statSub">Semanas en Pricebin</h6>
                 <h6 v-else class="statSub">Semana en Pricebin</h6>
             </div>
-            <div v-else-if="statSelected == 4">
+            <div class="stat-container" v-else-if="statSelected == 4">
                 <h6 class="statSub">Tu gasto promedio por <u>lista</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["listAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 5">
+            <div class="stat-container" v-else-if="statSelected == 5">
                 <h6 class="statSub">Tu gasto promedio <u>mensual</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["monthlyAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 6">
+            <div class="stat-container" v-else-if="statSelected == 6">
                 <h6 class="statSub">Tu gasto promedio <u>semanal</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["weeklyAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 7">
+            <div class="stat-container" v-else-if="statSelected == 7">
                 <h6 class="statSub">Tu gasto <u>total</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["globalTotal"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 8">
+            <div class="stat-container" v-else-if="statSelected == 8">
                 <h6 class="statSub">Te uniste a Pricebin el:</h6>
                 <h4 class="stat">{{ userLogStats["start"].toLocaleDateString('es-MX', {
                         year: 'numeric', month: 'long',
@@ -53,11 +53,11 @@
                     })
                 }}</h4>
             </div>
-            <div v-else-if="statSelected == 9">
+            <div class="stat-container" v-else-if="statSelected == 9">
                 <h6 class="statSub">Tu tienda favorita es:</h6>
                 <h4 class="stat">{{ favStore }}</h4>
             </div>
-            <div v-else-if="statSelected == 10">
+            <div class="stat-container" v-else-if="statSelected == 10">
                 <h6 class="statSub">Tu producto favorito es:</h6>
                 <h4 class="stat">{{ favProduct }}</h4>
             </div>
@@ -72,20 +72,24 @@
                 <p>Ver mis stats</p>
             </n-spin>
         </button>
-        <router-link :to="{ name: 'get Lists' }">
+        <router-link class="nav-link cta" :to="{ name: 'get Lists' }">
             <a class="btn btn-primary btn-lg">Ver listas pasadas</a>
+        </router-link>
+
+        <router-link v-if="isAdmin" class="nav-link cta" :to="{name: 'add store'}">
+                <a class="btn btn-primary btn-lg">Agrega nueva tienda</a>
         </router-link>
 
         <div class="config">
             <h4>Configuración</h4>
             <div class="child">
                 <p>Divisa: </p>
-                <div style="width: 12%; display: flex; margin-left: 1rem;">
+                <div class="currency-select-container">
                     <CurrencySelect />
                 </div>
             </div>
-
         </div>
+        
 
     </div>
 
@@ -96,7 +100,7 @@ import { onBeforeMount, ref, inject, onMounted } from 'vue';
 import { auth } from '../services/auth';
 import { useRouter } from 'vue-router';
 import UserManager from '../models/UserManager';
-import { DEFAULT_AVI } from "../utils/constants";
+import { DEFAULT_AVI, ADMIN_RANK } from "../utils/constants";
 import { toCurrency } from '@/utils/misc';
 import IStore from "@/types/IStore";
 import { NSpin } from "naive-ui";
@@ -115,6 +119,7 @@ const userLogStats = ref<any>({});
 const statsRender = ref<boolean>(false);
 const isLoading = ref<boolean>(false);
 const statSelected = ref<number>(1);
+const isAdmin = ref<boolean>(false);
 
 function redirect() {
     router.push({ name: 'login', replace: true });
@@ -126,7 +131,7 @@ function togleRenderStats(): void {
 
 
 
-onBeforeMount(() => {
+ onBeforeMount(async () => {
     auth.onAuthStateChanged(async (user) => {
         if (!user) {
             redirect();
@@ -147,6 +152,14 @@ onBeforeMount(() => {
             isLoading.value = false;
         }
     })
+    // Set Admin Privileges
+    const adminUser = await UserManager.getByEmail(auth.currentUser!.email!);
+    if (!adminUser) {
+        console.error("ERROR: CURRENT USER NOT EXISTS IN MONGO");
+        return;
+    }
+    isAdmin.value = adminUser.rank === ADMIN_RANK
+    console.log("isAdmin?", isAdmin.value);
 })
 
 
@@ -159,6 +172,7 @@ async function getCoolStats(): Promise<void> {
     const stats = await UserManager.getUserCoolStats(userData!._id!);
 
     userLogStats.value = userData!.UserLog!
+
     userLogStats.value.start = new Date(userLogStats!.value.start);
 
     favStore.value =  stats ? stats["favStore"] : "No tienes tienda favorita (aún)";
@@ -228,7 +242,7 @@ function changeStat() {
     font-weight: bold;
 }
 
-.config{
+.config {
     padding: 2rem;
     border: 1px #595C88 solid;
     max-width: 50%;
@@ -236,17 +250,32 @@ function changeStat() {
     border-radius: 0.5rem;
 }
 
-.config h4{
+.config h4 {
     text-align: left;
     margin-bottom: 2rem;
 }
 
-.config .child{
-    
+.config .child {
+
     display: flex;
 }
 
-.config p{
+.config p {
     font-weight: bold;
+}
+
+.stat-container {
+    min-height: 250px;
+}
+
+.currency-select-container {
+    width: 12%;
+    display: flex;
+    margin-left: 1rem;
+}
+@media (max-width: 426px) {
+    .config {
+        max-width: 90%;
+    }
 }
 </style>

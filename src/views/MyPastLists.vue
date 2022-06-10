@@ -5,7 +5,7 @@
             <NCollapse arrow-placement="right">
                 <div class="list-card animate__animated animate__fadeInUp animate__faster">
                     <div class="list-card-row">
-                        <p>Mi lista del {{dateToString(list.date)}}</p>
+                        <p>Mi lista del {{dateToString(list.date as string)}}</p>
                         <p>Total: <b>{{toCurrency(list.total,store)}}</b></p>
                         <p>Productos: {{list.list.length}}</p>
                     </div>
@@ -26,7 +26,8 @@
 <script lang="ts">
 
 import { onBeforeMount, defineComponent, ref } from 'vue'
-import ProductList from '@/models/classes/ProductList';
+// import ProductList from '@/models/classes/ProductList';
+import ProductList from '@/types/interfaces/ProductList'
 import UserManager from '@/models/UserManager';
 const currentId= ref<string | null>(null);
 import { auth } from '../services/auth';
@@ -59,7 +60,7 @@ export default defineComponent({
             router.push({ name: 'login', replace: true });
         }
 
-        function dateToString(date: string) {
+        function dateToString(date: string) : string {
             console.log(typeof date)
             let newDate = new Date(date)
             return newDate.toLocaleDateString('es-ES', {
@@ -132,7 +133,7 @@ export default defineComponent({
 .list-card{
     margin: 10px;
     padding: 20px;
-    box-shadow: 0 2px 2px 0px #888888;
+    box-shadow: 4px 8px 18px #8888;
     justify-content: space-between;	
     align-content: center;
     display: flex;

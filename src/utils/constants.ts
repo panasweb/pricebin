@@ -8,7 +8,8 @@ export const DEFAULT_PRODUCT_IMG = '/logos/default_product-32x32.png';
 export const DEFAULT_STORE : IStore = {
     currency: 'MXN',
     currencyRate: 1,
-    currentUser: null
+    currentUser: null,
+    currentLocation: null,    
 }
 export const SUPERUSER = 'geebproject@gmail.com';
 
@@ -30,6 +31,28 @@ export const CURRENCY_OPTIONS : SelectMixedOption[] = [
     {label: 'BTC', value: 'BTC'},
 ] 
 export const PRODUCT_TYPES : string[] = ['Despensa', 'Electrónicos', 'Farmacia', 'Baño y Limpieza']
+
+const _options : SelectMixedOption[] = PRODUCT_TYPES.map(productType => (
+    {
+        label: productType,
+        value: productType
+    }
+));
+const anyOption : SelectMixedOption = {
+    label: 'Cualquier tipo',
+    value: '',
+}
+_options.unshift(anyOption);
+
+export const TYPES_OPTIONS : SelectMixedOption[] = _options;
+
+
+export enum TYPES_ENUM {
+    Despensa = 0,
+    Electronicos = 1,
+    Farmacia = 2,
+    BanoyLimpieza=3
+}
 
 export const CURRENCY_SYMBOLS : Record<string,string> = {
     'USD': "$",

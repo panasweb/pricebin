@@ -3,16 +3,15 @@ FRONT END
 
 
 == TODOS:
-- add margins on pages (better look)    @alexis x
-- move currencySelect to profile        @alexis x
+- Type filter on search
 - Loading on asynchronous screens
-- admin console to delete users         @eric
 
 Optional
 - refactor onAuthStateChanged to store.currentUser
 
 
 == DONE   (6jun)
+- Get Min Price per product                         DONE
 - Store for Currency and currentUser (is Admin?)    DONE
 -  Buttons for delete Product 
 - Admin checks to display delete buttons            DONE
@@ -26,4 +25,7 @@ Optional
     - Past Lists + toggle detail
 - Send Mail (2FA) for new sign-ups [SendGrid]       DONE
 - Verification required for registering Price       DONE
+- add margins on pages (better look)    @alexis x
+- move currencySelect to profile        @alexis x
+- admin console to delete users         @eric
 

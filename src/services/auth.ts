@@ -16,7 +16,6 @@ import { getGravatarURL } from "@/utils/misc";
 import FirebaseAPIResponse from "@/types/FirebaseAPIResponse";
 
 import app from './app'
-import { UserToCreate } from "@/types/interfaces/User";
 
 const provider = new GoogleAuthProvider();
 export const auth = getAuth(app);

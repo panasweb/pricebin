@@ -2,6 +2,7 @@ import Price from '@/types/interfaces/Price';
 import md5 from 'md5'  // must add @types/md5
 import { CURRENCY_SYMBOLS } from './constants';
 import IStore from "@/types/IStore"
+import { exampleProducts } from '@/models/exampleProducts';
 
 export const getGravatarURL = (email: string) => {
     return `https://gravatar.com/avatar/${md5(email)}?s=128`;
@@ -27,6 +28,40 @@ export const formatAmt = (amount: number | string): string => {
     else {
         return Number.parseFloat(amount as string).toFixed(2);
     }
+}
+
+const degreesToRadians = (degrees:number) : number => {
+    return degrees * Math.PI / 180;
+  }
+  
+function distanceInKmBetweenEarthCoordinates(lat1:number, lon1:number, lat2:number, lon2:number) : number {
+    const earthRadiusKm = 6371;
+  
+    const dLat = degreesToRadians(lat2-lat1);
+    const dLon = degreesToRadians(lon2-lon1);
+  
+    lat1 = degreesToRadians(lat1);
+    lat2 = degreesToRadians(lat2);
+  
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    return earthRadiusKm * c;
+}
+
+export function computeDistanceKm(lat1:number, lon1:number, lat2:number, lon2:number):number {
+    return Math.round(distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2))
+}
+
+
+export const getMinPrice = (prices: Price[]) : number | null => {
+    if (!prices.length) return null;
+    let minprice : number = prices[0].amount;
+    prices.forEach(price => {
+        minprice = Math.min(price.amount, minprice);
+    })
+
+    return minprice;
 }
 
 export const serializePrices = (prices: Price[], priceVotes: Record<string, number>): Price[] => {
