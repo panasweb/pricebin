@@ -45,7 +45,7 @@
             <FormAlert :msg="alertMsg" />
 
             <div class="submit">
-                <button class="btn btn-primary w-100" type="submit">Registrar Precio</button>
+                <button class="btn btn-primary w-100" type="submit">Registrar Tienda</button>
             </div>
         </form>
         <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal"/>
