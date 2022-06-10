@@ -33,14 +33,16 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { inject, onBeforeMount, onMounted, ref } from 'vue'
 import ProductCardSquare from '../components/ProductCardSquare.vue'
 import { Product } from '@/types/interfaces/Product';
 import ProductManager from '@/models/ProductManager';
 import { SearchOutlined } from '@vicons/material'
 import { NSpace, NSelect, NInput, NIcon, SelectOption, InputInst } from "naive-ui"
 import { TYPES_OPTIONS } from '../utils/constants';
+import IStore from '@/types/IStore';
 
+const store : IStore | undefined = inject('store');
 const searchValue = ref<string>("");
 const typeFilter = ref<string>('');
 const searchInputRef = ref<InputInst | null>(null);
@@ -86,6 +88,24 @@ async function handleSearch(e: Event) {
     console.log("typeFilter", typeFilter.value);
     products.value = await ProductManager.searchProducts(searchValue.value, typeFilter.value);
     isLoading.value = false;
+}
+
+function getLocation() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+        console.log("Latitude:", position.coords.latitude);
+        console.log("Longitude:", position.coords.longitude);
+        
+        if (store?.setCurrentLocation) {
+            store!.setCurrentLocation(position.coords.latitude, position.coords.longitude)
+        }
+
+    });
+
+  } else { 
+    console.log("Geolocation is not supported by this browser.");
+  }
 }
 
 onBeforeMount(() => {

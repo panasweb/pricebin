@@ -7,7 +7,7 @@ const store : IStore = reactive({
     currency:'MXN',
     currencyRate:1, 
     currentUser: (null as unknown as User), // ts workaround
-
+    currentLocation: (null as unknown as number[]),
     setCurrency(currency:string) {
         this.currency = currency;
     },
@@ -22,6 +22,9 @@ const store : IStore = reactive({
 
     getConvertedAmount(currencyAmount:number){
         return currencyAmount * this.currencyRate;
+    },
+    setCurrentLocation(lat:number,lon:number) {
+        this.currentLocation = [lat, lon];
     }
 })
 

@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LogIn from '../views/LogInView.vue'
 import SignUp from '../views/SignUpView.vue'
 import RegisterPrice from '@/components/RegisterPrice.vue';
+import RegisterStore from '@/components/RegisterStore.vue';
 import NewProductView from '../views/NewProductView.vue'
 import ProductListView from '../views/ProductListView.vue'
 import NotFound from '../views/NotFoundView.vue'
@@ -37,6 +38,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/prices/add',
     name: 'add price',
     component: RegisterPrice,
+    props: true,
+  },
+  {
+    path: '/newStore',
+    name: 'add store',
+    component: RegisterStore,
     props: true,
   },
   {

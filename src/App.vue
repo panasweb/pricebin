@@ -6,7 +6,7 @@
           <router-link to="/" class="navbar-brand">
             <img class="nav-link logo" src="./assets/Logo-Mini.svg" alt="Price Bin Logo">
           </router-link>
-          
+
           <div class="nav-elements">
             <p @click="doLogout" v-show="loggedIn" class="nav-link logout-btn">Cerrar Sesión</p>
             <router-link to="/myproducts" v-show="loggedIn" class="nav-link">Mi Lista</router-link>
@@ -24,7 +24,7 @@
         </div>
       </nav>
     </header>
-    <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal"/>
+    <UnverifiedUserModal v-model:show="showModal" @close="onCloseModal" />
     <router-view />
   </n-message-provider>
 </template>
@@ -78,11 +78,15 @@ onBeforeMount(() => {
       console.log("Logged in as", user.email);
       currentEmail.value = user.email;
       const currentUser = await UserManager.getByEmail(user.email!);
+      // Update nav avatar
+      if (currentUser?.avatar) {
+        avatar.value = currentUser.avatar;
+      } else {
+        avatar.value = DEFAULT_AVI
+      }
+      // Update store
       if (store?.setCurrentUser) {
         store.setCurrentUser(currentUser);
-      }
-      if(currentUser?.avatar) {
-        avatar.value = currentUser.avatar;
       }
     }
   })
@@ -102,14 +106,14 @@ async function doLogout() {
 <style>
 @import './styles/App.css';
 
-.img-container{
-    display: inline-block;
-    padding: 0.5rem;
-    border-radius: 50%;
-    background-color: #ffffff;
+.img-container {
+  display: inline-block;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background-color: #ffffff;
 }
 
-.img-container img{
-    width: 80%;
+.img-container img {
+  width: 80%;
 }
 </style>

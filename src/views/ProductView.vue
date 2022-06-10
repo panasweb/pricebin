@@ -22,10 +22,12 @@
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
+            <div v-if="storesLocation[p.store] !== null" class="distanceToUser">
+              <n-icon size="15" :component="PinDropOutlined"></n-icon>
+              {{ storesLocation[p.store] }} km de ti
+            </div>
           </div>
           <div class="col price">
-            <!-- {{CURRENCY_SYMBOLS[store?.currency||"MXN"]}} 
-            {{ store?.getConvertedAmount ? store?.getConvertedAmount(p.amount).toFixed(2) : p.amount }} -->
             {{ toCurrency(p.amount, store) }}
             <div class="priceInfo">
               <div class="price-date">{{ (p.date as Date).toLocaleDateString('es-ES', {
@@ -57,14 +59,14 @@
 
           </div>
           <div class="quantity col">
-              <button class="add col" @click="lessFunction(p.store)">-</button>
-              <p>{{quantity.get(p.store)}}</p>
+            <button class="add col" @click="lessFunction(p.store)">-</button>
+            <p>{{ quantity.get(p.store) }}</p>
             <button class="add col" @click="addFunction(p.store)">+</button>
           </div>
           <div class="col">
             <button class="btn btn-secondary quantity" @click="addToList(p)">Añadir a lista</button>
           </div>
-          
+
           <div v-if="isAdmin" class="del-price-btn">
             <button @click="deletePrice(p)">Borrar precio</button>
           </div>
@@ -91,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref, inject } from "vue";
+import { onBeforeMount, onMounted, ref, inject } from "vue";
 import { Product } from "../types/interfaces/Product";
 import { DEFAULT_LOGO_SVG, DEFAULT_PRODUCT_IMG, ADMIN_RANK, CURRENCY_SYMBOLS } from "../utils/constants";
 import { useRoute, useRouter } from "vue-router";
@@ -103,9 +105,11 @@ import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
+import Store from '@/types/interfaces/Store'
+import StoreManager from "@/models/StoreManager";
 import { NIcon } from "naive-ui";
-import { serializePrices, byVotesThenDateThenAmount, toCurrency, getMinPrice } from '../utils/misc'
-import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
+import { serializePrices, byVotesThenDateThenAmount, toCurrency, getMinPrice, computeDistanceKm } from '../utils/misc'
+import { DeleteForeverRound, PriceChangeFilled, PinDropOutlined } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
 const route = useRoute();
@@ -117,10 +121,13 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
 const sortedPrices = ref<Price[]>([]);
+const storesLocation = ref<Record<string, number | null>>({});  // maps store name to Km
+const storeData = ref<Store | null>(null);
 const minPrice = ref<number | null>(null);
-const quantity = ref <Map<string, number>>(new Map());
+const quantity = ref<Map<string, number>>(new Map());
 
-const store: IStore | undefined = inject('store');
+
+const store: IStore | undefined = inject('store');  // global state
 
 function redirectProducts() {
   router.push({ name: "products" });
@@ -135,10 +142,23 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
-function setPrices(): void {
+async function setPrices(): Promise<void> {
   sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byVotesThenDateThenAmount);
   console.log("Set sorted prices");
   console.log(sortedPrices.value);
+  const userCoords = store!.currentLocation
+  // Set distances
+  for (const a of sortedPrices.value) {
+    // if (!storesLocation.value[a.store]) {}
+    storeData.value = await StoreManager.getByName(a.store);
+    const storeCoords = storeData!.value!.location
+    if (userCoords && storeCoords) {
+      storesLocation.value[a.store] = computeDistanceKm(storeCoords[0], storeCoords[1], userCoords[0], userCoords[1]);
+    } else {
+      storesLocation.value[a.store] = null;
+    }
+
+  }
 }
 
 async function fetchProduct(): Promise<string[]> {
@@ -150,11 +170,11 @@ async function fetchProduct(): Promise<string[]> {
     (price: Price) => price._id!
   );
 
+  // storeLocation.value = await StoreManager.getByName(currentP.value!.store);
   priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
   minPrice.value = getMinPrice(currentP.value!.prices!);
 
   setPrices(); // update sortedPrices.value
-
   return priceIds;
 }
 
@@ -169,11 +189,32 @@ async function updateHasVoted(priceIds: string[]): Promise<void> {
   });
 }
 
+function getLocation() {
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log("Latitude:", position.coords.latitude);
+      console.log("Longitude:", position.coords.longitude);
+
+      if (store?.setCurrentLocation) {
+        store!.setCurrentLocation(position.coords.latitude, position.coords.longitude)
+      }
+
+    });
+
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+}
+
 onBeforeMount(async () => {
 
   const priceIds = await fetchProduct();
 
   console.dir(currentP.value);
+
+  console.log("Current User Location")
+  console.log(store?.currentLocation);
 
   if (!currentP.value) {
     redirectNotFound();
@@ -214,6 +255,14 @@ onBeforeMount(async () => {
   productFormData.value = JSON.stringify(objectData);
 
 });
+
+onMounted(() => {
+  // ask for location
+  getLocation();
+})
+
+
+
 
 async function deletePrice(price: Price): Promise<void> {
 
@@ -341,7 +390,7 @@ async function addFunction(store: string): Promise<void> {
   console.log(quantity.value.get(store));
   return;
 }
-async function lessFunction(store: string): Promise<void>{
+async function lessFunction(store: string): Promise<void> {
   if (quantity.value != undefined && quantity.value.has(store) && quantity.value.get(store)! > 0) {
     let temp: number = quantity.value.get(store)!;
     quantity.value.set(store, temp - 1);
@@ -462,7 +511,7 @@ span {
   text-align: inherit;
 }
 
-.quantity{
+.quantity {
   display: flex;
   flex-direction: row;
   align-items: center;
