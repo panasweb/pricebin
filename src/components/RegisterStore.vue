@@ -110,7 +110,7 @@ export default defineComponent({
             router.push('/products')
         }
 
-        function isNumeric(n: string) {
+        function isNumeric(n: any) {
             return !isNaN(parseFloat(n)) && isFinite(n);
         }
 
@@ -200,6 +200,7 @@ export default defineComponent({
 
                 if (created) {
                     store = newStore as Store;
+                    redirect('/products');
                 } else {
                     console.log("Error creating store");
                     return;
