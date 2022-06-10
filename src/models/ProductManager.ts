@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { Product } from '@/types/interfaces/Product'
 import Price from '@/types/interfaces/Price'
-require('dotenv').config()
 
-const url = process.env.API_URL+ '/products/';
+
+const url = process.env.REACT_APP_API_URL+ '/products/';
 
 const ProductManager = {
     getAll: async function (): Promise<Product[]> {

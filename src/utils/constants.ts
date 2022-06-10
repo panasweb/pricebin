@@ -1,6 +1,6 @@
 import { SelectMixedOption } from 'naive-ui/lib/select/src/interface';
 import IStore from '../types/IStore';
-export const PRICEBIN_API = process.env.API_URL;
+export const PRICEBIN_API = process.env.REACT_APP_API_URL;
 export const WEEK_MILISECONDS : number = 1000 * 60 * 60 * 24 * 7;
 
 export const DEFAULT_LOGO_SVG = '/logos/default.svg';

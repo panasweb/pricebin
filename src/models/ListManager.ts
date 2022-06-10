@@ -1,9 +1,9 @@
 import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
 import ProductList from './classes/ProductList';
-require('dotenv').config()
 
-const url = process.env.API_URL+ '/lists/';
+
+const url = process.env.REACT_APP_API_URL+ '/lists/';
 
 const UserManager = {
 

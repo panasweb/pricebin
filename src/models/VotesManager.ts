@@ -2,9 +2,8 @@ import axios from 'axios'
 import { StepsInjection } from 'naive-ui/lib/steps/src/Steps';
 import { ScrollbarThemeVars } from 'naive-ui/lib/_internal/scrollbar/styles';
 import Vote from '../types/interfaces/Vote'
-require('dotenv').config()
 
-const url = process.env.API_URL + '/votes/';
+const url = process.env.REACT_APP_API_URL + '/votes/';
 
 interface PriceCount {
     PriceKey: string,

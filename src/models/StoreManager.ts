@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Store from "../types/interfaces/Store";
-require('dotenv').config()
 
-const url = process.env.API_URL +'/stores/';
+
+const url = process.env.REACT_APP_API_URL +'/stores/';
 
 const StoreManager = {
     create : async function(store: Store) : Promise<[boolean, Store | null]> {
