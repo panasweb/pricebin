@@ -38,6 +38,7 @@ yarn lint
 
 
 
-.env
+.env    
+
 VUE_APP__API_URL='http://localhost:3010'
 
