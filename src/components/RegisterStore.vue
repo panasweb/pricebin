@@ -168,7 +168,7 @@ export default defineComponent({
             }
 
             if (!isNumeric(lon.value)){
-                console.error("Lenght is not a number");
+                console.error("longitude is not a number");
                 alertMsg.value = "La longitud debe ser un número."
                 return;
             }
@@ -182,7 +182,7 @@ export default defineComponent({
 
             let storeName = name.value.trim();
             let latitude = parseInt(lat.value.trim());
-            let lenght = parseInt(lon.value.trim());
+            let longitude = parseInt(lon.value.trim());
             let col = colonia.value.trim();
 
             // Find store by name. Create if not exists
@@ -196,7 +196,7 @@ export default defineComponent({
             if (!store) {
                 console.log(`Store ${storeName} not found. Creating store...`);
 
-                const [created, newStore] = await StoreManager.create({ name: storeName, location: [latitude, lenght], branch: col, logo: logo.value });
+                const [created, newStore] = await StoreManager.create({ name: storeName, location: [latitude, longitude], branch: col, logo: logo.value });
 
                 if (created) {
                     store = newStore as Store;

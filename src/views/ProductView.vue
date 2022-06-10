@@ -22,6 +22,7 @@
           <div class="col">
             <img :src="storeLogo" class="logo" />
             <p>{{ p.store }}</p>
+            <p>{{ storesLocation[p.store]}}</p>
           </div>
           <div class="col price">
             <!-- {{CURRENCY_SYMBOLS[store?.currency||"MXN"]}} 
@@ -103,6 +104,8 @@ import UserManager from "@/models/UserManager";
 import ListRecord from "@/types/ListRecord";
 import { onAuthStateChanged } from "@firebase/auth";
 import IStore from "@/types/IStore";
+import Store from '@/types/interfaces/Store'
+import StoreManager from "@/models/StoreManager";
 import { NIcon } from "naive-ui";
 import { serializePrices, byVotesThenDateThenAmount, toCurrency } from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
@@ -117,7 +120,10 @@ const productImg = ref<string>(DEFAULT_PRODUCT_IMG);
 const router = useRouter();
 const isAdmin = ref<boolean>(false);
 const sortedPrices = ref<Price[]>([]);
+const storesLocation = ref<Record<string, number[] | undefined>>({});
+const storeData = ref<Store | null> (null);
 const quantity = ref <Map<string, number>>(new Map());
+
 
 const store: IStore | undefined = inject('store');
 
@@ -134,10 +140,14 @@ function redirectToList() {
   router.push("/myproducts/");
 }
 
-function setPrices(): void {
+async function setPrices(): Promise<void> {
   sortedPrices.value = serializePrices(currentP.value!.prices, priceVotes.value).sort(byVotesThenDateThenAmount);
   console.log("Set sorted prices");
   console.log(sortedPrices.value);
+  for (const a of sortedPrices.value) {
+    storeData.value = await StoreManager.getByName(a.store);
+    storesLocation.value[a.store] = storeData!.value!.location;
+  }
 }
 
 async function fetchProduct(): Promise<string[]> {
@@ -149,10 +159,11 @@ async function fetchProduct(): Promise<string[]> {
     (price: Price) => price._id!
   );
 
+  // storeLocation.value = await StoreManager.getByName(currentP.value!.store);
+  console.log("ID -------------------------", priceIds)
   priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
 
   setPrices(); // update sortedPrices.value
-
   return priceIds;
 }
 
@@ -166,6 +177,7 @@ async function updateHasVoted(priceIds: string[]): Promise<void> {
     hasvoted.value[pid] = result
   });
 }
+
 
 onBeforeMount(async () => {
 
