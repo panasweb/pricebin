@@ -13,39 +13,39 @@
         </div>
 
         <div v-if="statsRender" class="statContainer">
-            <div v-if="statSelected == 1">
+            <div class="stat-container" v-if="statSelected == 1">
                 <h6 class="statSub">Has creado</h6>
                 <h4 class="stat">{{ userLogStats["nLists"] }} Listas</h4>
             </div>
-            <div v-else-if="statSelected == 2">
+            <div class="stat-container" v-else-if="statSelected == 2">
                 <h6 class="statSub">Tienes:</h6>
                 <h4 class="stat">{{ userLogStats["nMonths"] }}</h4>
                 <h6 v-if="userLogStats['nMonths'] != 1" class="statSub">Meses en Pricebin</h6>
                 <h6 v-else class="statSub">Mes en Pricebin</h6>
             </div>
-            <div v-else-if="statSelected == 3">
+            <div class="stat-container" v-else-if="statSelected == 3">
                 <h6 class="statSub">Tienes:</h6>
                 <h4 class="stat">{{ userLogStats["nWeeks"] }}</h4>
                 <h6 v-if="userLogStats['nWeeks'] != 1" class="statSub">Semanas en Pricebin</h6>
                 <h6 v-else class="statSub">Semana en Pricebin</h6>
             </div>
-            <div v-else-if="statSelected == 4">
+            <div class="stat-container" v-else-if="statSelected == 4">
                 <h6 class="statSub">Tu gasto promedio por <u>lista</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["listAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 5">
+            <div class="stat-container" v-else-if="statSelected == 5">
                 <h6 class="statSub">Tu gasto promedio <u>mensual</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["monthlyAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 6">
+            <div class="stat-container" v-else-if="statSelected == 6">
                 <h6 class="statSub">Tu gasto promedio <u>semanal</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["weeklyAverage"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 7">
+            <div class="stat-container" v-else-if="statSelected == 7">
                 <h6 class="statSub">Tu gasto <u>total</u> es de :</h6>
                 <h4 class="stat">{{ toCurrency(parseInt(userLogStats["globalTotal"]), store) }}</h4>
             </div>
-            <div v-else-if="statSelected == 8">
+            <div class="stat-container" v-else-if="statSelected == 8">
                 <h6 class="statSub">Te uniste a Pricebin el:</h6>
                 <h4 class="stat">{{ userLogStats["start"].toLocaleDateString('es-MX', {
                         year: 'numeric', month: 'long',
@@ -53,11 +53,11 @@
                     })
                 }}</h4>
             </div>
-            <div v-else-if="statSelected == 9">
+            <div class="stat-container" v-else-if="statSelected == 9">
                 <h6 class="statSub">Tu tienda favorita es:</h6>
                 <h4 class="stat">{{ favStore }}</h4>
             </div>
-            <div v-else-if="statSelected == 10">
+            <div class="stat-container" v-else-if="statSelected == 10">
                 <h6 class="statSub">Tu producto favorito es:</h6>
                 <h4 class="stat">{{ favProduct }}</h4>
             </div>
@@ -72,7 +72,7 @@
                 <p>Ver mis stats</p>
             </n-spin>
         </button>
-        <router-link :to="{ name: 'get Lists' }">
+        <router-link class="nav-link cta" :to="{ name: 'get Lists' }">
             <a class="btn btn-primary btn-lg">Ver listas pasadas</a>
         </router-link>
 
@@ -80,8 +80,8 @@
             <h4>Configuración</h4>
             <div class="child">
                 <p>Divisa: </p>
-                <div style="width: 12%; display: flex; margin-left: 1rem;">
-                    <CurrencySelect/>
+                <div class="currency-select-container">
+                    <CurrencySelect />
                 </div>
             </div>
 
@@ -159,7 +159,7 @@ async function getCoolStats(): Promise<void> {
     const stats = await UserManager.getUserCoolStats(userData!._id!);
 
     userLogStats.value = userData!.UserLog!
-    userLogStats.value.start = new Date(userLogStats!.value.start);
+    userLogStats.value.start = new Date(userLogStats!.value.start); // default to now() if no .start
     favStore.value = stats["favStore"] ? stats["favStore"] : "No tienes tienda favorita (aún)";
     favProduct.value = stats["favProduct"] ? stats["favProduct"] : "No tienes un producto favorito (aún)";
     // API returns null if no lists 
@@ -224,7 +224,7 @@ function changeStat() {
     font-weight: bold;
 }
 
-.config{
+.config {
     padding: 2rem;
     border: 1px #595C88 solid;
     max-width: 50%;
@@ -232,17 +232,32 @@ function changeStat() {
     border-radius: 0.5rem;
 }
 
-.config h4{
+.config h4 {
     text-align: left;
     margin-bottom: 2rem;
 }
 
-.config .child{
-    
+.config .child {
+
     display: flex;
 }
 
-.config p{
+.config p {
     font-weight: bold;
+}
+
+.stat-container {
+    min-height: 250px;
+}
+
+.currency-select-container {
+    width: 12%;
+    display: flex;
+    margin-left: 1rem;
+}
+@media (max-width: 426px) {
+    .config {
+        max-width: 90%;
+    }
 }
 </style>

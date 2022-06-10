@@ -12,7 +12,7 @@
         <h3 style="font-weight: bold">{{ currentP?.name }}</h3>
         <h3 v-if="currentP">
           Precio mas bajo: <span>
-            {{ toCurrency(currentP!.prices[0].amount, store) }}
+            {{ toCurrency(minPrice as number, store) }}
           </span>
 
         </h3>
@@ -107,7 +107,7 @@ import IStore from "@/types/IStore";
 import Store from '@/types/interfaces/Store'
 import StoreManager from "@/models/StoreManager";
 import { NIcon } from "naive-ui";
-import { serializePrices, byVotesThenDateThenAmount, toCurrency } from '../utils/misc'
+import { serializePrices, byVotesThenDateThenAmount, toCurrency, getMinPrice } from '../utils/misc'
 import { DeleteForeverRound, PriceChangeFilled } from '@vicons/material'
 
 const storeLogo = ref<string>(DEFAULT_LOGO_SVG);
@@ -122,6 +122,7 @@ const isAdmin = ref<boolean>(false);
 const sortedPrices = ref<Price[]>([]);
 const storesLocation = ref<Record<string, number[] | undefined>>({});
 const storeData = ref<Store | null> (null);
+const minPrice = ref<number | null>(null);
 const quantity = ref <Map<string, number>>(new Map());
 
 
@@ -162,6 +163,7 @@ async function fetchProduct(): Promise<string[]> {
   // storeLocation.value = await StoreManager.getByName(currentP.value!.store);
   console.log("ID -------------------------", priceIds)
   priceVotes.value = await VotesManager.getVoteCounts(priceIds as string[]);
+  minPrice.value = getMinPrice(currentP.value!.prices!);
 
   setPrices(); // update sortedPrices.value
   return priceIds;
