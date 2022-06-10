@@ -78,12 +78,28 @@ onBeforeMount(() => {
       console.log("Logged in as", user.email);
       currentEmail.value = user.email;
       const currentUser = await UserManager.getByEmail(user.email!);
+
       if (store?.setCurrentUser) {
         store.setCurrentUser(currentUser);
       }
       if(currentUser?.avatar) {
         avatar.value = currentUser.avatar;
       }
+      if (window.navigator.geolocation) {
+        window.navigator.geolocation.getCurrentPosition(
+          (position) => {
+            sessionStorage.setItem('userlat', position.coords.latitude.toString());
+            sessionStorage.setItem('userlng', position.coords.longitude.toString());
+          },
+          (error) => {
+            console.log("Error getting position", error);
+          }
+        );
+
+        
+      } 
+
+
     }
   })
 })
