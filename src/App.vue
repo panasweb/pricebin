@@ -80,14 +80,12 @@ onBeforeMount(() => {
       const currentUser = await UserManager.getByEmail(user.email!);
       // Update nav avatar
       if (currentUser?.avatar) {
-        console.log("updating avatar");
         avatar.value = currentUser.avatar;
       } else {
         avatar.value = DEFAULT_AVI
       }
       // Update store
       if (store?.setCurrentUser) {
-        console.log("set current user");
         store.setCurrentUser(currentUser);
       }
     }

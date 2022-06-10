@@ -148,7 +148,7 @@ const UserManager = {
             return data[`${fromCurrency}_${toCurrency}`] as number;
         }
         catch(e){
-            console.log("Currency API error: ",e)
+            console.log("Currency Converter API error: ", e)
             return 1
         }
     },
