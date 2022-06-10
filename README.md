@@ -35,3 +35,9 @@ yarn lint
 ...
 
 [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+.env
+VUE_APP__API_URL='http://localhost:3010'
+
