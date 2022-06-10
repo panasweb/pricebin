@@ -172,9 +172,14 @@ async function getCoolStats(): Promise<void> {
     const stats = await UserManager.getUserCoolStats(userData!._id!);
 
     userLogStats.value = userData!.UserLog!
-    userLogStats.value.start = new Date(userLogStats!.value.start); // default to now() if no .start
-    favStore.value = stats["favStore"] ? stats["favStore"] : "No tienes tienda favorita (aún)";
-    favProduct.value = stats["favProduct"] ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+
+    userLogStats.value.start = new Date(userLogStats!.value.start);
+
+    favStore.value =  stats ? stats["favStore"] : "No tienes tienda favorita (aún)";
+    
+    favProduct.value =  stats ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+    
+    
     // API returns null if no lists 
 }
 

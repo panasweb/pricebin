@@ -59,12 +59,14 @@
 
           </div>
           <div class="quantity col">
-            <button class="add col" @click="lessFunction(p.store)">-</button>
-            <p>{{ quantity.get(p.store) }}</p>
-            <button class="add col" @click="addFunction(p.store)">+</button>
+
+            <button class="quant reduce col" @click="lessFunction(p.store)">-</button>
+            <p>{{quantity.get(p.store)}}</p>
+            <button class="quant add col" @click="addFunction(p.store)">+</button>
+
           </div>
           <div class="col">
-            <button class="btn btn-secondary quantity" @click="addToList(p)">Añadir a lista</button>
+            <button class="btn btn-secondary quantity" name="addList" @click="addToList(p)">Añadir a lista</button>
           </div>
 
           <div v-if="isAdmin" class="del-price-btn">
@@ -457,7 +459,7 @@ async function lessFunction(store: string): Promise<void> {
   font-size: 30px;
 }
 
-.add {
+.quant{
   color: #f76d66;
   font-weight: bolder;
   font-size: 50px;
