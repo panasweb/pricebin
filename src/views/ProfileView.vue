@@ -81,7 +81,7 @@
             <div class="child">
                 <p>Divisa: </p>
                 <div style="width: 12%; display: flex; margin-left: 1rem;">
-                    <CurrencySelect/>
+                    <CurrencySelect />
                 </div>
             </div>
 
@@ -160,8 +160,12 @@ async function getCoolStats(): Promise<void> {
 
     userLogStats.value = userData!.UserLog!
     userLogStats.value.start = new Date(userLogStats!.value.start);
-    favStore.value = stats["favStore"] ? stats["favStore"] : "No tienes tienda favorita (aún)";
-    favProduct.value = stats["favProduct"] ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+
+    favStore.value =  stats ? stats["favStore"] : "No tienes tienda favorita (aún)";
+    
+    favProduct.value =  stats ? stats["favProduct"] : "No tienes un producto favorito (aún)";
+    
+    
     // API returns null if no lists 
 }
 
