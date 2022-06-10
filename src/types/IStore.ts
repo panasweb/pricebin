@@ -9,6 +9,7 @@ export default interface IStore {
     currency: string,
     currencyRate:number,
     currentUser: User | null,
+    currentLocation: number[] | null,
     setCurrency?: currencySetter,
     setCurrentUser?: currentUserSetter,
     setCurrencyRate?: currencyRateSetter,
