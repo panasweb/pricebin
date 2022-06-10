@@ -2,7 +2,8 @@ import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
 import { User, UserToCreate, CurrentList } from "../types/interfaces/User";
 
-const url = 'http://localhost:3010/users/';
+
+const url = process.env.VUE_APP__API_URL + '/users/';
 
 const UserManager = {
     create : async function(user: UserToCreate) : Promise<[boolean, User | null]> {
@@ -143,7 +144,7 @@ const UserManager = {
     getCurrency: async function (toCurrency:string): Promise<number>{
         const fromCurrency = 'MXN'
         try{
-            const {data} = await axios.post('http://localhost:3010/convert', {fromCurrency, toCurrency})
+            const {data} = await axios.post(process.env.VUE_APP__API_URL + '/convert', {fromCurrency, toCurrency})
 
             return data[`${fromCurrency}_${toCurrency}`] as number;
         }

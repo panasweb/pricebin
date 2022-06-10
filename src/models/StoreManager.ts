@@ -1,7 +1,8 @@
 import axios from 'axios'
 import Store from "../types/interfaces/Store";
 
-const url = 'http://localhost:3010/stores/';
+
+const url = process.env.VUE_APP__API_URL +'/stores/';
 
 const StoreManager = {
     create : async function(store: Store) : Promise<[boolean, Store | null]> {

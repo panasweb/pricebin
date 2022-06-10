@@ -3,8 +3,7 @@ import { StepsInjection } from 'naive-ui/lib/steps/src/Steps';
 import { ScrollbarThemeVars } from 'naive-ui/lib/_internal/scrollbar/styles';
 import Vote from '../types/interfaces/Vote'
 
-
-const url = 'http://localhost:3010/votes/';
+const url = process.env.VUE_APP__API_URL + '/votes/';
 
 interface PriceCount {
     PriceKey: string,

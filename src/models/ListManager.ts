@@ -2,12 +2,14 @@ import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
 import ProductList from './classes/ProductList';
 
-const url = 'http://localhost:3010/lists/';
+
+const url = process.env.VUE_APP__API_URL+ '/lists/';
 
 const UserManager = {
 
     saveList: async function (UserKey: string, products: ListRecord[] ) : Promise<ProductList | null>{
         try {
+            console.log(url)
             const {data} = await axios.post(url , {UserKey: UserKey , list: products, date: Date.now()})
             return data as ProductList
         }catch(e){
