@@ -2,9 +2,9 @@ import axios from 'axios'
 import { StepsInjection } from 'naive-ui/lib/steps/src/Steps';
 import { ScrollbarThemeVars } from 'naive-ui/lib/_internal/scrollbar/styles';
 import Vote from '../types/interfaces/Vote'
+require('dotenv').config()
 
-
-const url = 'http://localhost:3010/votes/';
+const url = process.env.API_URL + '/votes/';
 
 interface PriceCount {
     PriceKey: string,

@@ -1,8 +1,9 @@
 import ListRecord from '@/types/ListRecord';
 import axios from 'axios'
 import ProductList from './classes/ProductList';
+require('dotenv').config()
 
-const url = 'http://localhost:3010/lists/';
+const url = process.env.API_URL+ '/lists/';
 
 const UserManager = {
 
