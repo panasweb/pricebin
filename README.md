@@ -2,7 +2,7 @@
 Vue/TypeScript app made to help make students and other budget-constrained people's lives easier.
 
 ![GitHub top language](https://img.shields.io/github/languages/top/panasweb/pricebin)
-![Lines of code](https://tokei.rs/b1/github/panasweb/pricebin?category=code)
+![Lines of code](https://tokei.rs/b1/github/panasweb/pricebin?category=loc)
 
 ## Correr el proyecto (desarrollo):
 ```
